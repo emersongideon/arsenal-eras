@@ -1,0 +1,14 @@
+{
+  "title": "Arsenal Eras - 2003/04 vs 2025/26",
+  "question": "Two Arsenal title teams, 22 years apart. Which one had the harder job?",
+  "seasons": [
+    "2003/04",
+    "2025/26"
+  ],
+  "sources": {
+    "2003/04": "StatsBomb Open Data (github.com/statsbomb/open-data), Premier League competition_id=2, season_id=44.",
+    "2025/26": "Understat (understat.com) per-match xG + player data."
+  },
+  "model": "PoissonRegressor(goals ~ xG) -> independent-Poisson match outcomes -> expected points.",
+  "honesty_note": "Every figure is tagged fact / measured / speculative and never blended."
+}

@@ -1,0 +1,18 @@
+# One-service deploy on Render (https://render.com): builds the React/TS SPA and
+# serves it from the same FastAPI process that exposes the REST API - a single
+# public URL. Push to GitHub, then Render -> New + -> Blueprint -> pick this repo.
+#
+# No database, no secrets, free-tier friendly. The processed JSON is committed,
+# so nothing is downloaded at build time.
+services:
+  - type: web
+    name: arsenal-eras
+    runtime: node                 # provides node (vite build) + python
+    plan: free
+    buildCommand: |
+      npm --prefix web ci && npm --prefix web run build
+      pip install -r backend/requirements.txt
+    startCommand: uvicorn main:app --app-dir backend --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"

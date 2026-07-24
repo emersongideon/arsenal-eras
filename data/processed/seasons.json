@@ -1,0 +1,38 @@
+[
+  {
+    "season": "2003/04",
+    "played": 38,
+    "wins": 26,
+    "draws": 12,
+    "losses": 0,
+    "points": 90,
+    "ppg": 2.368,
+    "goals_for": 73,
+    "goals_against": 26,
+    "goal_difference": 47,
+    "xg_for": 60.87,
+    "xg_against": 30.88,
+    "xg_difference": 29.99,
+    "unbeaten": true,
+    "goals_minus_xg_for": 12.13,
+    "goals_minus_xg_against": -4.88
+  },
+  {
+    "season": "2025/26",
+    "played": 38,
+    "wins": 26,
+    "draws": 7,
+    "losses": 5,
+    "points": 85,
+    "ppg": 2.237,
+    "goals_for": 71,
+    "goals_against": 27,
+    "goal_difference": 44,
+    "xg_for": 77.49,
+    "xg_against": 33.13,
+    "xg_difference": 44.35,
+    "unbeaten": false,
+    "goals_minus_xg_for": -6.49,
+    "goals_minus_xg_against": -6.13
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "category": "speculative",
+  "disclaimer": "This is my speculative extrapolation, not a measurement. It transposes the 2003/04 side into 2025/26 conditions using explicit, adjustable assumptions. The output is a range; treat single numbers with suspicion.",
+  "base_points": 90,
+  "components": [
+    {
+      "name": "Fixture / European load",
+      "band": [
+        -3.0,
+        -1.0
+      ],
+      "assumption": "63 vs 59 games and 15 vs 10 European nights cost 1-3 league points."
+    },
+    {
+      "name": "Competitive depth",
+      "band": [
+        -4.0,
+        0.0
+      ],
+      "assumption": "A deeper, more physical modern division costs 0-4 points off the weaker half."
+    },
+    {
+      "name": "VAR (interactive)",
+      "band": [
+        -6.0,
+        3.0
+      ],
+      "assumption": "Reviewable decisions could help or hurt; you set this one."
+    }
+  ],
+  "var_slider": {
+    "min": -6.0,
+    "max": 3.0,
+    "default": -1.0,
+    "step": 0.5
+  },
+  "default": {
+    "category": "speculative",
+    "base_points": 90,
+    "var_points": -1.0,
+    "range": {
+      "low": 82.0,
+      "high": 88.0
+    },
+    "midpoint": 85.0
+  },
+  "samples": [
+    {
+      "category": "speculative",
+      "base_points": 90,
+      "var_points": -6.0,
+      "range": {
+        "low": 77.0,
+        "high": 83.0
+      },
+      "midpoint": 80.0
+    },
+    {
+      "category": "speculative",
+      "base_points": 90,
+      "var_points": -1.0,
+      "range": {
+        "low": 82.0,
+        "high": 88.0
+      },
+      "midpoint": 85.0
+    },
+    {
+      "category": "speculative",
+      "base_points": 90,
+      "var_points": 3.0,
+      "range": {
+        "low": 86.0,
+        "high": 92.0
+      },
+      "midpoint": 89.0
+    }
+  ]
+}

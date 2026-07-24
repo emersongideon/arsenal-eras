@@ -1,0 +1,6 @@
+# API layer. Runs on Python 3.12+. The analysis package (pandas/numpy/sklearn)
+# is only needed to REBUILD data; the API itself reuses one small pure-python
+# function from analysis.era, so scikit-learn et al. are not required at runtime.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4

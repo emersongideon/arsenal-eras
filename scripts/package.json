@@ -1,0 +1,13 @@
+{
+  "name": "arsenal-eras-fetch",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "One-off data fetcher: pulls Arsenal 2025/26 data from Understat via local Chrome. Output is committed, so this rarely needs running.",
+  "scripts": {
+    "fetch": "node fetch_understat.mjs"
+  },
+  "dependencies": {
+    "puppeteer-core": "^23.0.0"
+  }
+}
