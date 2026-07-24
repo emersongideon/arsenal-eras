@@ -185,16 +185,17 @@ the job.
 # 1. Analysis layer + (re)build the processed data. The StatsBomb cache downloads
 #    on first run; the Understat cache is already committed.
 python3.12 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python -m analysis.build            # writes data/processed/*.json (+ web/public/data)
-pytest -q                           # 14 unit tests
+pip install -r requirements-dev.txt   # app deps + pytest/ruff
+python -m analysis.build              # writes data/processed/*.json (+ web/public/data)
+pytest -q                             # 14 unit tests
+ruff check analysis backend tests     # lint (zero warnings)
 
 # 2. API  ->  http://localhost:8000
 pip install -r backend/requirements.txt
 uvicorn main:app --app-dir backend --reload --port 8000
 
 # 3. Web  ->  http://localhost:5173   (second terminal; /api is proxied to :8000)
-cd web && npm install && npm run dev
+cd web && npm install && npm run dev  # `npm run lint` / `npm run format` also available
 ```
 
 To refresh the 2025/26 data from Understat: `cd scripts && npm install && npm run fetch`.

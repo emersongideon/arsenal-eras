@@ -1,0 +1,5 @@
+# Dev-only tooling (tests + linter/formatter). Not needed to run the app,
+# only to run the test suite and the code-quality checks.
+-r requirements.txt
+pytest==8.3.4
+ruff==0.8.4
