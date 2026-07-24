@@ -8,10 +8,12 @@ IMPORTANT - intellectual-honesty categories:
     numbers come from explicit assumptions, never from the xG model. Every
     assumption is returned alongside the number so the UI can show it.
 """
+
 from __future__ import annotations
 
 from . import config as C
 from . import facts
+
 # NOTE: `transforms` (and thus pandas) is imported lazily inside
 # schedule_difficulty_lever so that the API - which only needs the pure-python
 # thought_experiment() below - can import this module without pandas installed.
@@ -69,9 +71,11 @@ def schedule_difficulty_lever(matches_by_season: dict) -> dict:
     """
     from .transforms import schedule_difficulty  # lazy: keeps pandas off the API path
 
-    out = {"category": "measured", "headline":
-           "How many points each side took off the division's weaker half.",
-           "by_season": {}}
+    out = {
+        "category": "measured",
+        "headline": "How many points each side took off the division's weaker half.",
+        "by_season": {},
+    }
     for season, df in matches_by_season.items():
         out["by_season"][season] = schedule_difficulty(
             df, facts.bottom_half_teams(season), facts.top_teams(season)
@@ -85,8 +89,8 @@ def schedule_difficulty_lever(matches_by_season: dict) -> dict:
 # ---------------------------------------------------------------------------
 # Fixed assumption bands for the two non-interactive levers. Each is a plausible
 # points adjustment applied to the Invincibles if dropped into 2025/26 conditions.
-FATIGUE_BAND = (-3.0, -1.0)   # heavier fixture/European load costs 1-3 pts
-DEPTH_BAND = (-4.0, 0.0)      # a deeper, more physical modern division costs 0-4 pts
+FATIGUE_BAND = (-3.0, -1.0)  # heavier fixture/European load costs 1-3 pts
+DEPTH_BAND = (-4.0, 0.0)  # a deeper, more physical modern division costs 0-4 pts
 
 # The interactive lever: VAR impact, in league points. The user drags this.
 VAR_SLIDER = {"min": -6.0, "max": 3.0, "default": -1.0, "step": 0.5}
@@ -124,17 +128,29 @@ def thought_experiment_spec(base_points: int) -> dict:
         ),
         "base_points": base_points,
         "components": [
-            {"name": "Fixture / European load", "band": list(FATIGUE_BAND),
-             "assumption": "63 vs 59 games and 15 vs 10 European nights cost 1-3 league points."},
-            {"name": "Competitive depth", "band": list(DEPTH_BAND),
-             "assumption": "A deeper, more physical modern division costs 0-4 points off the weaker half."},
-            {"name": "VAR (interactive)", "band": [VAR_SLIDER["min"], VAR_SLIDER["max"]],
-             "assumption": "Reviewable decisions could help or hurt; you set this one."},
+            {
+                "name": "Fixture / European load",
+                "band": list(FATIGUE_BAND),
+                "assumption": "63 vs 59 games and 15 vs 10 European nights cost 1-3 league points.",
+            },
+            {
+                "name": "Competitive depth",
+                "band": list(DEPTH_BAND),
+                "assumption": "A deeper, more physical modern division costs 0-4 points "
+                "off the weaker half.",
+            },
+            {
+                "name": "VAR (interactive)",
+                "band": [VAR_SLIDER["min"], VAR_SLIDER["max"]],
+                "assumption": "Reviewable decisions could help or hurt; you set this one.",
+            },
         ],
         "var_slider": VAR_SLIDER,
         "default": default,
         # A few precomputed points on the slider so the client can sanity-check
         # its own arithmetic against the server's.
-        "samples": [thought_experiment(base_points, v)
-                    for v in (VAR_SLIDER["min"], VAR_SLIDER["default"], VAR_SLIDER["max"])],
+        "samples": [
+            thought_experiment(base_points, v)
+            for v in (VAR_SLIDER["min"], VAR_SLIDER["default"], VAR_SLIDER["max"])
+        ],
     }

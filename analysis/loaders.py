@@ -9,6 +9,7 @@ Canonical per-player DataFrame columns:
     season, player, position, apps, minutes, shots, goals, xg,
     assists, xa, npg, npxg
 """
+
 from __future__ import annotations
 
 import json
@@ -37,6 +38,7 @@ def _sb_json(rel_url: str, cache: Path) -> object:
     cache.write_bytes(raw)
     return json.loads(raw)
 
+
 # Understat uses short club names for a handful of teams; map them to the same
 # canonical names used in facts.FINAL_TABLE so joins/filters line up.
 UNDERSTAT_NAME_FIX = {
@@ -60,9 +62,7 @@ def load_statsbomb_matches(raw: Path = C.RAW) -> pd.DataFrame:
     xGF / xGA are summed from every shot event's `statsbomb_xg`, split by team.
     """
     comp, season = C.SB_COMPETITION_ID, C.SB_SEASON_ID
-    matches = _sb_json(
-        f"matches/{comp}/{season}.json", raw / f"matches_{comp}_{season}.json"
-    )
+    matches = _sb_json(f"matches/{comp}/{season}.json", raw / f"matches_{comp}_{season}.json")
     matches.sort(key=lambda m: m["match_date"])
 
     rows = []
@@ -87,35 +87,43 @@ def load_statsbomb_matches(raw: Path = C.RAW) -> pd.DataFrame:
             else:
                 xga += xg
 
-        rows.append({
-            "season": C.S0304,
-            "match_no": i,
-            "date": m["match_date"],
-            "opponent": opponent,
-            "venue": venue,
-            "gf": int(gf),
-            "ga": int(ga),
-            "result": _result(gf, ga),
-            "points": C.POINTS[_result(gf, ga)],
-            "xgf": round(xgf, 4),
-            "xga": round(xga, 4),
-        })
+        rows.append(
+            {
+                "season": C.S0304,
+                "match_no": i,
+                "date": m["match_date"],
+                "opponent": opponent,
+                "venue": venue,
+                "gf": int(gf),
+                "ga": int(ga),
+                "result": _result(gf, ga),
+                "points": C.POINTS[_result(gf, ga)],
+                "xgf": round(xgf, 4),
+                "xga": round(xga, 4),
+            }
+        )
     return pd.DataFrame(rows)
 
 
 def load_statsbomb_players(raw: Path = C.RAW) -> pd.DataFrame:
     """Per-player 2003/04 shooting aggregates from StatsBomb events + lineups."""
     comp, season = C.SB_COMPETITION_ID, C.SB_SEASON_ID
-    matches = _sb_json(
-        f"matches/{comp}/{season}.json", raw / f"matches_{comp}_{season}.json"
-    )
+    matches = _sb_json(f"matches/{comp}/{season}.json", raw / f"matches_{comp}_{season}.json")
     agg: dict[str, dict] = {}
 
     def rec(name: str) -> dict:
-        return agg.setdefault(name, {
-            "player": name, "position_minutes": {},
-            "minutes": 0.0, "shots": 0, "goals": 0, "xg": 0.0, "apps": 0,
-        })
+        return agg.setdefault(
+            name,
+            {
+                "player": name,
+                "position_minutes": {},
+                "minutes": 0.0,
+                "shots": 0,
+                "goals": 0,
+                "xg": 0.0,
+                "apps": 0,
+            },
+        )
 
     for m in matches:
         mid = m["match_id"]
@@ -147,23 +155,36 @@ def load_statsbomb_players(raw: Path = C.RAW) -> pd.DataFrame:
 
     rows = []
     for r in agg.values():
-        pos = (max(r["position_minutes"].items(), key=lambda kv: kv[1])[0]
-               if r["position_minutes"] else "Unknown")
-        rows.append({
-            "season": C.S0304, "player": r["player"], "position": pos,
-            "apps": r["apps"], "minutes": round(r["minutes"], 1),
-            "shots": r["shots"], "goals": r["goals"], "xg": round(r["xg"], 3),
-            # StatsBomb aggregation here is shooting-only; assist/npx fields are
-            # NaN (not available) so dtypes stay numeric when concatenated with
-            # the Understat frame.
-            "assists": float("nan"), "xa": float("nan"),
-            "npg": float("nan"), "npxg": float("nan"),
-        })
+        pos = (
+            max(r["position_minutes"].items(), key=lambda kv: kv[1])[0]
+            if r["position_minutes"]
+            else "Unknown"
+        )
+        rows.append(
+            {
+                "season": C.S0304,
+                "player": r["player"],
+                "position": pos,
+                "apps": r["apps"],
+                "minutes": round(r["minutes"], 1),
+                "shots": r["shots"],
+                "goals": r["goals"],
+                "xg": round(r["xg"], 3),
+                # StatsBomb aggregation here is shooting-only; assist/npx fields are
+                # NaN (not available) so dtypes stay numeric when concatenated with
+                # the Understat frame.
+                "assists": float("nan"),
+                "xa": float("nan"),
+                "npg": float("nan"),
+                "npxg": float("nan"),
+            }
+        )
     return pd.DataFrame(rows)
 
 
 def _minutes_from_positions(positions: list) -> float:
     """Minutes on the pitch from lineup position stints (90-min regulation base)."""
+
     def to_min(mmss: str) -> float:
         mm, ss = mmss.split(":")
         return int(mm) + int(ss) / 60.0
@@ -202,18 +223,21 @@ def load_understat_matches(path: Path = C.UNDERSTAT_FILE) -> pd.DataFrame:
         ga = int(d["goals"]["a"]) if is_home else int(d["goals"]["h"])
         xgf = float(d["xG"]["h"]) if is_home else float(d["xG"]["a"])
         xga = float(d["xG"]["a"]) if is_home else float(d["xG"]["h"])
-        rows.append({
-            "season": C.S2526,
-            "match_no": i,
-            "date": d["datetime"][:10],
-            "opponent": opponent,
-            "venue": venue,
-            "gf": gf, "ga": ga,
-            "result": _result(gf, ga),
-            "points": C.POINTS[_result(gf, ga)],
-            "xgf": round(xgf, 4),
-            "xga": round(xga, 4),
-        })
+        rows.append(
+            {
+                "season": C.S2526,
+                "match_no": i,
+                "date": d["datetime"][:10],
+                "opponent": opponent,
+                "venue": venue,
+                "gf": gf,
+                "ga": ga,
+                "result": _result(gf, ga),
+                "points": C.POINTS[_result(gf, ga)],
+                "xgf": round(xgf, 4),
+                "xga": round(xga, 4),
+            }
+        )
     return pd.DataFrame(rows)
 
 
@@ -226,18 +250,20 @@ def load_understat_players(path: Path = C.UNDERSTAT_FILE) -> pd.DataFrame:
     data = json.loads(path.read_text())
     rows = []
     for p in data["players"]:
-        rows.append({
-            "season": C.S2526,
-            "player": p["player_name"],
-            "position": p.get("position", "Unknown"),
-            "apps": int(p["games"]),
-            "minutes": float(p["time"]),
-            "shots": int(p["shots"]),
-            "goals": int(p["goals"]),
-            "xg": round(float(p["xG"]), 3),
-            "assists": int(p["assists"]),
-            "xa": round(float(p["xA"]), 3),
-            "npg": int(p["npg"]),
-            "npxg": round(float(p["npxG"]), 3),
-        })
+        rows.append(
+            {
+                "season": C.S2526,
+                "player": p["player_name"],
+                "position": p.get("position", "Unknown"),
+                "apps": int(p["games"]),
+                "minutes": float(p["time"]),
+                "shots": int(p["shots"]),
+                "goals": int(p["goals"]),
+                "xg": round(float(p["xG"]), 3),
+                "assists": int(p["assists"]),
+                "xa": round(float(p["xA"]), 3),
+                "npg": int(p["npg"]),
+                "npxg": round(float(p["npxG"]), 3),
+            }
+        )
     return pd.DataFrame(rows)

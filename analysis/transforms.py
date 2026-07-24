@@ -1,4 +1,5 @@
 """Cleaning, joining and aggregation on the canonical frames (pandas)."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -24,11 +25,16 @@ def season_summary(matches: pd.DataFrame) -> dict:
     return {
         "season": g["season"].iloc[0],
         "played": played,
-        "wins": wins, "draws": draws, "losses": losses,
+        "wins": wins,
+        "draws": draws,
+        "losses": losses,
         "points": points,
         "ppg": round(points / played, 3),
-        "goals_for": gf, "goals_against": ga, "goal_difference": gf - ga,
-        "xg_for": round(xgf, 2), "xg_against": round(xga, 2),
+        "goals_for": gf,
+        "goals_against": ga,
+        "goal_difference": gf - ga,
+        "xg_for": round(xgf, 2),
+        "xg_against": round(xga, 2),
         "xg_difference": round(xgf - xga, 2),
         "unbeaten": losses == 0,
         # Finishing / defending vs expectation (descriptive):
@@ -75,14 +81,13 @@ def player_table(players: pd.DataFrame) -> pd.DataFrame:
     return df.sort_values(["season", "xg"], ascending=[True, False]).reset_index(drop=True)
 
 
-def schedule_difficulty(
-    matches: pd.DataFrame, bottom_half: set[str], top: set[str]
-) -> dict:
+def schedule_difficulty(matches: pd.DataFrame, bottom_half: set[str], top: set[str]) -> dict:
     """Points-per-game split by opponent strength (a competitive-depth proxy).
 
     Uses a merge-free membership filter on the pre-computed final-table sets.
     Returns PPG vs bottom-half (11th-20th) and vs the top rivals (2nd-6th).
     """
+
     def ppg(sub: pd.DataFrame) -> float:
         return round(sub["points"].sum() / len(sub), 3) if len(sub) else 0.0
 

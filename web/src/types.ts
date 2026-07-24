@@ -40,23 +40,6 @@ export interface MatchRow {
   cum_points: number;
 }
 
-export interface PlayerRow {
-  season: Season;
-  player: string;
-  position: string;
-  apps: number;
-  minutes: number;
-  shots: number;
-  goals: number;
-  xg: number;
-  assists: number | null;
-  xa: number | null;
-  goals_minus_xg: number;
-  xg_per_90: number;
-  goals_per_90: number;
-  xg_per_shot: number;
-}
-
 export interface ModelMatch {
   match_no: number;
   date: string;
@@ -161,7 +144,6 @@ export interface Dataset {
   meta: Meta;
   seasons: SeasonSummary[];
   matches: MatchRow[];
-  players: PlayerRow[];
   model: Record<Season, ModelResult>;
   era: EraData;
   te: ThoughtExperimentSpec;

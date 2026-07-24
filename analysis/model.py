@@ -26,6 +26,7 @@ Assumptions (stated, because this is the measured core):
     real scorelines are mildly correlated - see README "what I'd add").
   * xG is a sufficient single predictor of the scoring rate.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -41,12 +42,13 @@ MAX_GOALS = 10  # truncation for the scoreline grid; P(>10) is negligible
 @dataclass
 class GoalModel:
     """A fitted xG->goals Poisson GLM plus its calibration diagnostics."""
+
     model: PoissonRegressor
     intercept: float
     coef: float
     n_obs: int
-    pred_goal_sum: float   # sum of predicted goals over training rows
-    actual_goal_sum: int   # sum of actual goals over training rows
+    pred_goal_sum: float  # sum of predicted goals over training rows
+    actual_goal_sum: int  # sum of actual goals over training rows
 
     def rate(self, xg: np.ndarray | float) -> np.ndarray:
         """Calibrated scoring rate lambda for given xG value(s)."""
@@ -79,15 +81,16 @@ def fit_goal_model(matches: pd.DataFrame) -> GoalModel:
     )
 
 
-def match_outcome_probs(lam_for: float, lam_against: float,
-                        max_goals: int = MAX_GOALS) -> tuple[float, float, float]:
+def match_outcome_probs(
+    lam_for: float, lam_against: float, max_goals: int = MAX_GOALS
+) -> tuple[float, float, float]:
     """P(win), P(draw), P(loss) for one match under independent Poisson goals."""
     k = np.arange(0, max_goals + 1)
     pf = poisson.pmf(k, lam_for)
     pa = poisson.pmf(k, lam_against)
-    joint = np.outer(pf, pa)                 # joint[i, j] = P(GF=i, GA=j)
+    joint = np.outer(pf, pa)  # joint[i, j] = P(GF=i, GA=j)
     p_win = float(np.tril(joint, -1).sum())  # i > j
-    p_draw = float(np.trace(joint))          # i == j
+    p_draw = float(np.trace(joint))  # i == j
     p_loss = float(np.triu(joint, 1).sum())  # i < j
     return p_win, p_draw, p_loss
 
@@ -97,7 +100,8 @@ def expected_points_table(matches: pd.DataFrame, gm: GoalModel) -> pd.DataFrame:
     out = matches.copy()
     lam_f = gm.rate(out["xgf"].to_numpy())
     lam_a = gm.rate(out["xga"].to_numpy())
-    probs = [match_outcome_probs(f, a) for f, a in zip(lam_f, lam_a)]
+    # lam_f and lam_a are the same length (one rate per match); strict=True asserts it.
+    probs = [match_outcome_probs(f, a) for f, a in zip(lam_f, lam_a, strict=True)]
     out["lambda_for"] = np.round(lam_f, 3)
     out["lambda_against"] = np.round(lam_a, 3)
     out["p_win"] = [round(p[0], 3) for p in probs]
@@ -128,9 +132,24 @@ def season_model_result(matches: pd.DataFrame) -> dict:
             "calibration_pred_goal_sum": round(gm.pred_goal_sum, 1),
             "calibration_actual_goal_sum": gm.actual_goal_sum,
         },
-        "matches": tbl[[
-            "match_no", "date", "opponent", "venue", "gf", "ga", "result",
-            "points", "xgf", "xga", "lambda_for", "lambda_against",
-            "p_win", "p_draw", "p_loss", "xpts",
-        ]].to_dict(orient="records"),
+        "matches": tbl[
+            [
+                "match_no",
+                "date",
+                "opponent",
+                "venue",
+                "gf",
+                "ga",
+                "result",
+                "points",
+                "xgf",
+                "xga",
+                "lambda_for",
+                "lambda_against",
+                "p_win",
+                "p_draw",
+                "p_loss",
+                "xpts",
+            ]
+        ].to_dict(orient="records"),
     }

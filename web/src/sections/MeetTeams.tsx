@@ -13,12 +13,22 @@ function TeamCard({ s }: { s: SeasonSummary }) {
   return (
     <div className={`card team-card ${cls}`}>
       <span className="rail" />
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+        }}
+      >
         <span className="season-tag">{s.season}</span>
         {s.unbeaten && <span className="season-tag">UNBEATEN</span>}
       </div>
-      <div className="big-num" style={{ margin: "6px 0 2px" }}>{s.points}</div>
-      <div className="dim" style={{ marginBottom: 14, fontSize: 14 }}>league points</div>
+      <div className="big-num" style={{ margin: "6px 0 2px" }}>
+        {s.points}
+      </div>
+      <div className="dim" style={{ marginBottom: 14, fontSize: 14 }}>
+        league points
+      </div>
       {rows.map(([k, v]) => (
         <div className="statline" key={k}>
           <span className="k">{k}</span>
@@ -37,9 +47,9 @@ export function MeetTeams({ seasons }: { seasons: SeasonSummary[] }) {
       <Reveal>
         <h2>Five points apart on paper. Worlds apart in style.</h2>
         <p className="lead narrow" style={{ margin: "0 0 8px" }}>
-          Let the raw contrast breathe. The 2003/04 side never lost; the 2025/26
-          side lost five and still won comfortably - because everyone behind them
-          was further back. Same club, same colour, two very different title runs.
+          Let the raw contrast breathe. The 2003/04 side never lost; the 2025/26 side lost
+          five and still won comfortably - because everyone behind them was further back.
+          Same club, same colour, two very different title runs.
         </p>
       </Reveal>
       <Reveal delay={80}>

@@ -12,16 +12,15 @@ export function Act2({ model }: { model: Record<Season, ModelResult> }) {
           <CategoryBadge category="measured" />
         </div>
         <div className="method narrow">
-          <strong>The method.</strong> Goals are rare, roughly
-          independent events, so each team's goals in a match are modelled as a
-          Poisson process. I don't assume "goals = xG"; instead I fit a Poisson
-          regression (<code>scikit-learn PoissonRegressor</code>) that maps each
-          match's xG onto a scoring <em>rate</em>, calibrated separately per season
-          because the two xG providers differ. From the two rates I compute the
-          probability of a win, draw and loss, and turn those into{" "}
-          <strong>expected points</strong>. Summed over 38 games, that's how many
-          points the underlying performances merited - stripping out finishing
-          luck, goalkeeping heroics and late winners.
+          <strong>The method.</strong> Goals are rare, roughly independent events, so each
+          team's goals in a match are modelled as a Poisson process. I don't assume "goals
+          = xG"; instead I fit a Poisson regression (
+          <code>scikit-learn PoissonRegressor</code>) that maps each match's xG onto a
+          scoring <em>rate</em>, calibrated separately per season because the two xG
+          providers differ. From the two rates I compute the probability of a win, draw
+          and loss, and turn those into <strong>expected points</strong>. Summed over 38
+          games, that's how many points the underlying performances merited - stripping
+          out finishing luck, goalkeeping heroics and late winners.
         </div>
       </Reveal>
 
@@ -38,12 +37,11 @@ export function Act2({ model }: { model: Record<Season, ModelResult> }) {
       <Reveal delay={80}>
         <p className="narrow" style={{ marginBottom: 24 }}>
           <strong>Both title teams beat their expected points</strong> - and by a lot.
-          That's the signature of champions: they win the tight games the model
-          calls coin-flips. The 2003/04 side over-performed by{" "}
+          That's the signature of champions: they win the tight games the model calls
+          coin-flips. The 2003/04 side over-performed by{" "}
           <b>{model["2003/04"].points_over_expected}</b> points, the 2025/26 side by{" "}
-          <b>{model["2025/26"].points_over_expected}</b>. Different routes to it,
-          though - one out-finished its chances, the other out-defended and out-nerved
-          the room.
+          <b>{model["2025/26"].points_over_expected}</b>. Different routes to it, though -
+          one out-finished its chances, the other out-defended and out-nerved the room.
         </p>
       </Reveal>
 
@@ -51,7 +49,10 @@ export function Act2({ model }: { model: Record<Season, ModelResult> }) {
         {seasons.map((s, i) => (
           <Reveal key={s} delay={i * 90}>
             <div className={`chart-card ${seasonClass(s)}`}>
-              <p className="chart-title" style={{ color: s === "2003/04" ? "#8a6610" : "#d90007" }}>
+              <p
+                className="chart-title"
+                style={{ color: s === "2003/04" ? "#8a6610" : "#d90007" }}
+              >
                 {s} · every match
               </p>
               <p className="chart-sub">
@@ -71,8 +72,8 @@ export function Act2({ model }: { model: Record<Season, ModelResult> }) {
           Sanity check: for each season the model's total predicted goals equals the
           actual goals scored ({model["2003/04"].model.calibration_actual_goal_sum} and{" "}
           {model["2025/26"].model.calibration_actual_goal_sum} respectively), so it's
-          calibrated, not hand-tuned. Assumption I'm making: the two teams' goal
-          counts in a match are independent - a known simplification.
+          calibrated, not hand-tuned. Assumption I'm making: the two teams' goal counts in
+          a match are independent - a known simplification.
         </p>
       </Reveal>
     </Section>

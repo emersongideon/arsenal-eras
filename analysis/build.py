@@ -10,6 +10,7 @@ Outputs (all consumed by the API / frontend):
   thought_experiment.json Act 4 speculative range + slider spec
   meta.json              provenance for the whole build
 """
+
 from __future__ import annotations
 
 import json
@@ -49,9 +50,7 @@ def run() -> dict:
     era_payload = {
         "var": era.var_lever(),
         "fixture_load": era.fixture_load_lever(),
-        "schedule_difficulty": era.schedule_difficulty_lever(
-            {C.S0304: m0304, C.S2526: m2526}
-        ),
+        "schedule_difficulty": era.schedule_difficulty_lever({C.S0304: m0304, C.S2526: m2526}),
     }
 
     # --- thought experiment (Act 4) ---------------------------------------
@@ -73,11 +72,13 @@ def run() -> dict:
             "seasons": [C.S0304, C.S2526],
             "sources": {
                 "2003/04": "StatsBomb Open Data (github.com/statsbomb/open-data), "
-                           "Premier League competition_id=2, season_id=44.",
+                "Premier League competition_id=2, season_id=44.",
                 "2025/26": "Understat (understat.com) per-match xG + player data.",
             },
-            "model": "PoissonRegressor(goals ~ xG) -> independent-Poisson match outcomes -> expected points.",
-            "honesty_note": "Every figure is tagged fact / measured / speculative and never blended.",
+            "model": "PoissonRegressor(goals ~ xG) -> independent-Poisson match "
+            "outcomes -> expected points.",
+            "honesty_note": "Every figure is tagged fact / measured / speculative "
+            "and never blended.",
         },
     }
     # Canonical location, plus a baked copy in the web app's public dir so the
@@ -91,8 +92,9 @@ def run() -> dict:
     return {
         "matches": len(matches),
         "players": len(players_tbl),
-        "model": {s: (r["actual_points"], r["expected_points"])
-                  for s, r in model_by_season.items()},
+        "model": {
+            s: (r["actual_points"], r["expected_points"]) for s, r in model_by_season.items()
+        },
         "written": list(outputs),
     }
 

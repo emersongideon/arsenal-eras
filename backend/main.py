@@ -6,6 +6,7 @@ package, the single source of truth for that arithmetic).
 
 Run:  uvicorn main:app --app-dir backend --port 8000
 """
+
 from __future__ import annotations
 
 import sys
@@ -17,7 +18,11 @@ from fastapi.staticfiles import StaticFiles
 
 import db
 from models import (
-    HealthResponse, Match, Player, SeasonSummary, ThoughtExperimentResult,
+    HealthResponse,
+    Match,
+    Player,
+    SeasonSummary,
+    ThoughtExperimentResult,
 )
 
 # Make the repo-root `analysis` package importable so the API can reuse the
@@ -30,10 +35,13 @@ app = FastAPI(
     title="Arsenal Eras API",
     version="1.0.0",
     description="2003/04 vs 2025/26 - expected-points model, era levers, and a "
-                "clearly-labelled speculative thought experiment.",
+    "clearly-labelled speculative thought experiment.",
 )
 app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_methods=["GET"], allow_headers=["*"],
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
 )
 
 CONN = db.build_connection()
@@ -100,7 +108,8 @@ def era() -> dict:
 def thought_experiment(
     var_points: float = Query(
         era_mod.VAR_SLIDER["default"],
-        ge=era_mod.VAR_SLIDER["min"], le=era_mod.VAR_SLIDER["max"],
+        ge=era_mod.VAR_SLIDER["min"],
+        le=era_mod.VAR_SLIDER["max"],
         description="VAR points assumption (the interactive lever).",
     ),
 ) -> dict:

@@ -1,0 +1,16 @@
+# Tooling config for the Python analysis + API layers.
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# pycodestyle/pyflakes (E,F), isort (I), pyupgrade (UP),
+# flake8-bugbear (B), and flake8-simplify (SIM).
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.isort]
+# backend/ runs with `--app-dir backend`, so these import as top-level modules.
+known-first-party = ["analysis", "config", "db", "models"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

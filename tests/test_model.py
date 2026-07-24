@@ -1,4 +1,5 @@
 """Unit tests for the expected-points model."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -43,19 +44,21 @@ def _toy_matches() -> pd.DataFrame:
     rng = np.random.default_rng(0)
     xgf = rng.uniform(0.5, 2.5, size=20)
     xga = rng.uniform(0.5, 2.0, size=20)
-    return pd.DataFrame({
-        "season": ["TEST"] * 20,
-        "match_no": range(1, 21),
-        "date": ["2020-01-01"] * 20,
-        "opponent": [f"Team {i}" for i in range(20)],
-        "venue": ["H", "A"] * 10,
-        "gf": np.round(xgf).astype(int),
-        "ga": np.round(xga).astype(int),
-        "result": ["W"] * 20,
-        "points": [3] * 20,
-        "xgf": xgf,
-        "xga": xga,
-    })
+    return pd.DataFrame(
+        {
+            "season": ["TEST"] * 20,
+            "match_no": range(1, 21),
+            "date": ["2020-01-01"] * 20,
+            "opponent": [f"Team {i}" for i in range(20)],
+            "venue": ["H", "A"] * 10,
+            "gf": np.round(xgf).astype(int),
+            "ga": np.round(xga).astype(int),
+            "result": ["W"] * 20,
+            "points": [3] * 20,
+            "xgf": xgf,
+            "xga": xga,
+        }
+    )
 
 
 def test_goal_model_is_calibrated():
@@ -73,7 +76,7 @@ def test_rate_monotonic_in_xg():
 
 def test_season_model_result_shape():
     res = model.season_model_result(_toy_matches())
-    assert res["actual_points"] == 60          # 20 wins in the toy data
+    assert res["actual_points"] == 60  # 20 wins in the toy data
     assert 0 <= res["expected_points"] <= 60
     assert len(res["matches"]) == 20
     assert {"xpts", "p_win", "lambda_for"} <= res["matches"][0].keys()

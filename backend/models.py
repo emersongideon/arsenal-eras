@@ -1,4 +1,5 @@
 """Typed pydantic request/response models for the API."""
+
 from __future__ import annotations
 
 from pydantic import BaseModel, Field
@@ -62,6 +63,7 @@ class Player(BaseModel):
 
 class ThoughtExperimentResult(BaseModel):
     """Live Act-4 recompute for a given VAR assumption."""
+
     category: str = "speculative"
     base_points: int
     var_points: float

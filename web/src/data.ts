@@ -8,7 +8,6 @@ import type {
   MatchRow,
   Meta,
   ModelResult,
-  PlayerRow,
   Season,
   SeasonSummary,
   TeResult,
@@ -24,16 +23,15 @@ async function getJSON<T>(name: string): Promise<T> {
 }
 
 export async function loadDataset(): Promise<Dataset> {
-  const [meta, seasons, matches, players, model, era, te] = await Promise.all([
+  const [meta, seasons, matches, model, era, te] = await Promise.all([
     getJSON<Meta>("meta.json"),
     getJSON<SeasonSummary[]>("seasons.json"),
     getJSON<MatchRow[]>("matches.json"),
-    getJSON<PlayerRow[]>("players.json"),
     getJSON<Record<Season, ModelResult>>("model.json"),
     getJSON<EraData>("era.json"),
     getJSON<ThoughtExperimentSpec>("thought_experiment.json"),
   ]);
-  return { meta, seasons, matches, players, model, era, te };
+  return { meta, seasons, matches, model, era, te };
 }
 
 // Client-side mirror of analysis.era.thought_experiment - the single source of

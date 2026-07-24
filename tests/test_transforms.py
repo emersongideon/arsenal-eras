@@ -1,4 +1,5 @@
 """Unit tests for the data-transform and era functions."""
+
 from __future__ import annotations
 
 import pandas as pd
@@ -8,15 +9,50 @@ from analysis import era, transforms
 
 
 def _matches() -> pd.DataFrame:
-    return pd.DataFrame([
-        # season, match_no, date, opponent, venue, gf, ga, result, points, xgf, xga
-        {"season": "S", "match_no": 1, "date": "d", "opponent": "Weak FC", "venue": "H",
-         "gf": 3, "ga": 0, "result": "W", "points": 3, "xgf": 2.0, "xga": 0.5},
-        {"season": "S", "match_no": 2, "date": "d", "opponent": "Big FC", "venue": "A",
-         "gf": 1, "ga": 1, "result": "D", "points": 1, "xgf": 1.0, "xga": 1.2},
-        {"season": "S", "match_no": 3, "date": "d", "opponent": "Weak FC", "venue": "A",
-         "gf": 0, "ga": 2, "result": "L", "points": 0, "xgf": 0.7, "xga": 1.9},
-    ])
+    return pd.DataFrame(
+        [
+            # season, match_no, date, opponent, venue, gf, ga, result, points, xgf, xga
+            {
+                "season": "S",
+                "match_no": 1,
+                "date": "d",
+                "opponent": "Weak FC",
+                "venue": "H",
+                "gf": 3,
+                "ga": 0,
+                "result": "W",
+                "points": 3,
+                "xgf": 2.0,
+                "xga": 0.5,
+            },
+            {
+                "season": "S",
+                "match_no": 2,
+                "date": "d",
+                "opponent": "Big FC",
+                "venue": "A",
+                "gf": 1,
+                "ga": 1,
+                "result": "D",
+                "points": 1,
+                "xgf": 1.0,
+                "xga": 1.2,
+            },
+            {
+                "season": "S",
+                "match_no": 3,
+                "date": "d",
+                "opponent": "Weak FC",
+                "venue": "A",
+                "gf": 0,
+                "ga": 2,
+                "result": "L",
+                "points": 0,
+                "xgf": 0.7,
+                "xga": 1.9,
+            },
+        ]
+    )
 
 
 def test_season_summary_counts():
@@ -47,16 +83,29 @@ def test_rolling_form_and_cumulative_points():
 
 
 def test_player_table_derived_columns():
-    players = pd.DataFrame([{
-        "season": "S", "player": "Striker", "position": "F", "apps": 10,
-        "minutes": 900.0, "shots": 30, "goals": 12, "xg": 9.0,
-        "assists": 2.0, "xa": 1.5, "npg": 10.0, "npxg": 7.0,
-    }])
+    players = pd.DataFrame(
+        [
+            {
+                "season": "S",
+                "player": "Striker",
+                "position": "F",
+                "apps": 10,
+                "minutes": 900.0,
+                "shots": 30,
+                "goals": 12,
+                "xg": 9.0,
+                "assists": 2.0,
+                "xa": 1.5,
+                "npg": 10.0,
+                "npxg": 7.0,
+            }
+        ]
+    )
     t = transforms.player_table(players)
     row = t.iloc[0]
-    assert row["goals_minus_xg"] == pytest.approx(3.0)          # 12 - 9
-    assert row["xg_per_90"] == pytest.approx(0.9)               # 9 / 900 * 90
-    assert row["xg_per_shot"] == pytest.approx(0.3)             # 9 / 30
+    assert row["goals_minus_xg"] == pytest.approx(3.0)  # 12 - 9
+    assert row["xg_per_90"] == pytest.approx(0.9)  # 9 / 900 * 90
+    assert row["xg_per_shot"] == pytest.approx(0.3)  # 9 / 30
 
 
 def test_schedule_difficulty_filters_by_opponent():
@@ -64,7 +113,7 @@ def test_schedule_difficulty_filters_by_opponent():
     # Two games vs Weak FC (3pts + 0pts) => 1.5 ppg over 2 games
     assert sd["games_vs_bottom_half"] == 2
     assert sd["ppg_vs_bottom_half"] == pytest.approx(1.5)
-    assert sd["points_dropped_vs_bottom_half"] == 3            # 6 available - 3 taken
+    assert sd["points_dropped_vs_bottom_half"] == 3  # 6 available - 3 taken
     assert sd["games_vs_top_rivals"] == 1
 
 

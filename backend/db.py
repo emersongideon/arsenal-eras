@@ -6,6 +6,7 @@ goes into typed columns; the nested analytical documents (model, era, thought
 experiment, meta) go into a small key/value `documents` table as JSON. Both are
 retrieved via SQL - SQLite is genuinely the query layer here, not decoration.
 """
+
 from __future__ import annotations
 
 import json
@@ -64,8 +65,10 @@ def build_connection() -> sqlite3.Connection:
     insert("matches", _load("matches.json"))
     insert("players", _load("players.json"))
     for key in ("model", "era", "thought_experiment", "meta"):
-        cur.execute("INSERT INTO documents (key, json) VALUES (?, ?)",
-                    (key, json.dumps(_load(f"{key}.json"))))
+        cur.execute(
+            "INSERT INTO documents (key, json) VALUES (?, ?)",
+            (key, json.dumps(_load(f"{key}.json"))),
+        )
 
     conn.commit()
     return conn
