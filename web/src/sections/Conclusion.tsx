@@ -15,7 +15,7 @@ export function Conclusion({ model }: { model: Record<Season, ModelResult> }) {
       <Reveal delay={80}>
         <div className="verdict" style={{ marginTop: 26 }}>
           <div className="col s0304">
-            <h3 style={{ color: "#a97e17" }}>The case for 2003/04</h3>
+            <h3 style={{ color: "#8a6610" }}>The case for 2003/04</h3>
             <ul>
               <li><b>Zero defeats in 38.</b> The hardest thing to do in football is
                 not lose, ever. Nobody has done it since.</li>

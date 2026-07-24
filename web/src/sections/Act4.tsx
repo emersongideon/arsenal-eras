@@ -52,7 +52,7 @@ export function Act4({ spec }: { spec: ThoughtExperimentSpec }) {
               value={varPoints}
               onChange={(e) => setVarPoints(Number(e.target.value))}
             />
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: "#8a939f" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: "#5e6772" }}>
               <span>VAR hurts them ({spec.var_slider.min})</span>
               <span>VAR helps them (+{spec.var_slider.max})</span>
             </div>

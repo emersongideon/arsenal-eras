@@ -8,6 +8,7 @@ import { Act2 } from "./sections/Act2";
 import { Act3 } from "./sections/Act3";
 import { Act4 } from "./sections/Act4";
 import { Conclusion } from "./sections/Conclusion";
+import { GitHubLink } from "./components/ui";
 
 const SECTIONS = [
   ["hook", "Hook"],
@@ -62,6 +63,7 @@ export default function App() {
 
   return (
     <>
+      <GitHubLink variant="header" />
       <NavDots />
       <Hero meta={data.meta} />
       <MeetTeams seasons={data.seasons} />
@@ -84,6 +86,9 @@ export default function App() {
             <span style={{ color: "#7fd3c1" }}>fact</span> ·{" "}
             <span style={{ color: "#9ab4ff" }}>measured</span> ·{" "}
             <span style={{ color: "#e6a256" }}>speculative</span> and never blended.
+          </div>
+          <div style={{ marginTop: 14 }}>
+            <GitHubLink variant="footer" />
           </div>
         </div>
       </footer>

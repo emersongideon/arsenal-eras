@@ -51,14 +51,14 @@ export function Act2({ model }: { model: Record<Season, ModelResult> }) {
         {seasons.map((s, i) => (
           <Reveal key={s} delay={i * 90}>
             <div className={`chart-card ${seasonClass(s)}`}>
-              <p className="chart-title" style={{ color: s === "2003/04" ? "#a97e17" : "#ef0107" }}>
+              <p className="chart-title" style={{ color: s === "2003/04" ? "#8a6610" : "#d90007" }}>
                 {s} · every match
               </p>
               <p className="chart-sub">
                 Each dot is a game: xG created vs conceded. Below the dashed line =
-                deserved to win. <span style={{ color: "#1a9850" }}>green W</span>,{" "}
-                <span style={{ color: "#f0a202" }}>amber D</span>,{" "}
-                <span style={{ color: "#d7301f" }}>red L</span>.
+                deserved to win. <span style={{ color: "#15803d" }}>green W</span>,{" "}
+                <span style={{ color: "#b45309" }}>amber D</span>,{" "}
+                <span style={{ color: "#c0392b" }}>red L</span>.
               </p>
               <MatchXgScatter res={model[s]} />
             </div>

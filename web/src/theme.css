@@ -1,8 +1,10 @@
 :root {
   /* Team identities - used consistently in every chart and stat. */
-  --gold: #c8971f;        /* 2003/04 Invincibles */
+  --gold: #c8971f;        /* 2003/04 Invincibles (fills / rails / dark-bg text) */
+  --gold-text: #8a6610;   /* darker gold for text on light bg (WCAG AA 5.3:1) */
   --gold-soft: #f4e9cf;
-  --red: #ef0107;         /* 2025/26 (Arsenal red) */
+  --red: #ef0107;         /* 2025/26 Arsenal red (fills / rails / large & dark-bg text) */
+  --red-text: #d90007;    /* darker red for small text on light bg (WCAG AA 5.3:1) */
   --red-soft: #fde3e4;
 
   /* Intellectual-honesty categories. */
@@ -15,7 +17,7 @@
 
   --ink: #12151b;
   --body: #384049;
-  --muted: #6b7480;
+  --muted: #5e6772;       /* WCAG AA on white and on --bg (>=5.4:1) */
   --line: #e5e8ec;
   --bg: #f7f8fa;
   --card: #ffffff;
@@ -92,14 +94,14 @@ a { color: var(--measured); }
 .team-card.s0304 .rail { background: var(--gold); }
 .team-card.s2526 .rail { background: var(--red); }
 .team-card .season-tag { font-weight: 800; font-size: 14px; letter-spacing: .04em; }
-.team-card.s0304 .season-tag { color: var(--gold); }
-.team-card.s2526 .season-tag { color: var(--red); }
+.team-card.s0304 .season-tag { color: var(--gold-text); }
+.team-card.s2526 .season-tag { color: var(--red-text); }
 .statline { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--line); }
 .statline:last-child { border-bottom: none; }
 .statline .k { color: var(--muted); font-size: 14px; }
 .statline .v { font-weight: 750; font-size: 20px; color: var(--ink); font-variant-numeric: tabular-nums; }
 .big-num { font-family: var(--serif); font-size: clamp(44px, 8vw, 68px); font-weight: 700; line-height: 1; }
-.s0304 .big-num { color: var(--gold); }
+.s0304 .big-num { color: var(--gold-text); }
 .s2526 .big-num { color: var(--red); }
 
 /* ---------- Chart shell ---------- */
@@ -183,14 +185,40 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: ri
 th:first-child, td:first-child { text-align: left; }
 th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
 
+/* ---------- View source on GitHub ---------- */
+.gh-link { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; font-weight: 600; }
+.gh-header {
+  position: fixed; top: 14px; right: 14px; z-index: 60;
+  background: rgba(255, 255, 255, .93); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  color: var(--ink); border: 1px solid var(--line); border-radius: 999px;
+  padding: 8px 14px; font-size: 13px; box-shadow: var(--shadow);
+}
+.gh-header:hover { border-color: var(--muted); }
+.gh-footer { color: #d7dde5; font-size: 13.5px; }
+.gh-footer:hover { color: #fff; text-decoration: underline; }
+
 /* ---------- Footer ---------- */
-footer { background: #12151b; color: #aab2bd; padding: 44px 20px; font-size: 13.5px; }
+footer { background: #12151b; color: #aeb6c1; padding: 44px 20px; font-size: 13.5px; }
 footer a { color: #d7dde5; }
 footer .wrap { display: grid; gap: 8px; }
 
 /* ---------- Responsive ---------- */
+/* Belt-and-suspenders: never allow horizontal scroll on a phone. */
+html, body { max-width: 100%; overflow-x: hidden; }
+
 @media (max-width: 760px) {
   body { font-size: 16px; }
   .grid2, .grid3, .verdict { grid-template-columns: 1fr; }
   .nav-dots { display: none; }
+  .section { padding: clamp(44px, 8vw, 72px) 16px; }
+}
+
+@media (max-width: 480px) {
+  /* Header link becomes an icon-only pill to stay clear of the headline. */
+  .gh-header { top: 10px; right: 10px; padding: 8px; }
+  .gh-header .gh-text { display: none; }
+  h1 { font-size: 30px; }
+  /* Shrink recharts axis tick labels so multi-word categories don't clip. */
+  .recharts-cartesian-axis-tick-value tspan,
+  .recharts-legend-item-text { font-size: 10px !important; }
 }

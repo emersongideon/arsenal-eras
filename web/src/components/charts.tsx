@@ -20,7 +20,7 @@ import { SEASON_COLOR } from "./ui";
 
 const GOLD = SEASON_COLOR["2003/04"];
 const RED = SEASON_COLOR["2025/26"];
-const AXIS = "#8a939f";
+const AXIS = "#5e6772"; // WCAG AA for axis tick/label text on white
 const GRID = "#eceef1";
 
 /** Act 1 - cumulative points across the 38-game league season (a "title race"). */
@@ -101,7 +101,8 @@ export function ExpectedPointsChart({ model }: { model: Record<Season, ModelResu
 
 /** Act 2 - per-match xG-for vs xG-against, one season, coloured by result. */
 export function MatchXgScatter({ res }: { res: ModelResult }) {
-  const color = (r: string) => (r === "W" ? "#1a9850" : r === "D" ? "#f0a202" : "#d7301f");
+  // Accessible W/D/L colours (each >=5:1 on white, so they double as legend text).
+  const color = (r: string) => (r === "W" ? "#15803d" : r === "D" ? "#b45309" : "#c0392b");
   const data = res.matches.map((m) => ({
     xgf: m.xgf, xga: m.xga, opponent: m.opponent, result: m.result,
     score: `${m.gf}-${m.ga}`, xpts: m.xpts,
@@ -229,7 +230,7 @@ export function RangeBar({
           fontSize: 11, color: "#12151b", fontWeight: 700, whiteSpace: "nowrap",
         }}>actual 90</div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#8a939f" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#5e6772" }}>
         <span>{absMin}</span><span>{absMax} pts</span>
       </div>
     </div>
