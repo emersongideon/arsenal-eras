@@ -40,12 +40,12 @@ The measured core (Act 2) answers *"how many points did each team actually deser
    independent events - the textbook Poisson use-case. Expected goals (xG) already
    estimates the *mean* goals a team should score, which maps directly onto the Poisson
    rate λ.
-2. **Calibrate, don't assume.** Rather than treat `goals = xG`, we fit a Poisson GLM
+2. **Calibrate, don't assume.** Rather than treat `goals = xG`, I fit a Poisson GLM
    (`scikit-learn PoissonRegressor`) of **actual goals on xG**, separately per season
    (StatsBomb and Understat use different xG models, so their xG→goals scaling differs).
    Fitting on both perspectives of every match - goals-for vs xG-for and goals-against
    vs xG-against - gives 2×38 = 76 observations per season.
-3. **Rates → points.** From the two calibrated rates we treat the scorelines as
+3. **Rates → points.** From the two calibrated rates I treat the scorelines as
    independent Poisson variables, compute P(win)/P(draw)/P(loss), and sum
    `3·P(win) + 1·P(draw)` over 38 games into **expected points**.
 
@@ -83,7 +83,7 @@ Factual attribution, and the seasons each source covers:
 - 2003/04 **minutes** are derived from lineup stints on a 90-minute regulation baseline.
 - 2025/26 **shots**: Understat's `playersData` exposes raw shot totals directly, so -
   contrary to what the team-page HTML table (which only shows `Sh90`) suggests - **no
-  Sh90×minutes derivation was needed**; we use the real totals.
+  Sh90×minutes derivation was needed**; I use the real totals.
 - The two seasons use **different xG models**, so cross-era xG is compared with that
   caveat (the model is calibrated per-season for exactly this reason).
 

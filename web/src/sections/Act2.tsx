@@ -14,10 +14,10 @@ export function Act2({ model }: { model: Record<Season, ModelResult> }) {
         <div className="method narrow">
           <strong>The method.</strong> Goals are rare, roughly
           independent events, so each team's goals in a match are modelled as a
-          Poisson process. We don't assume "goals = xG"; instead we fit a Poisson
+          Poisson process. I don't assume "goals = xG"; instead I fit a Poisson
           regression (<code>scikit-learn PoissonRegressor</code>) that maps each
           match's xG onto a scoring <em>rate</em>, calibrated separately per season
-          because the two xG providers differ. From the two rates we compute the
+          because the two xG providers differ. From the two rates I compute the
           probability of a win, draw and loss, and turn those into{" "}
           <strong>expected points</strong>. Summed over 38 games, that's how many
           points the underlying performances merited - stripping out finishing
@@ -71,7 +71,7 @@ export function Act2({ model }: { model: Record<Season, ModelResult> }) {
           Sanity check: for each season the model's total predicted goals equals the
           actual goals scored ({model["2003/04"].model.calibration_actual_goal_sum} and{" "}
           {model["2025/26"].model.calibration_actual_goal_sum} respectively), so it's
-          calibrated, not hand-tuned. Assumption we're making: the two teams' goal
+          calibrated, not hand-tuned. Assumption I'm making: the two teams' goal
           counts in a match are independent - a known simplification.
         </p>
       </Reveal>

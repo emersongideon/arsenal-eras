@@ -35,7 +35,7 @@ export function Act3({ era }: { era: EraData }) {
             so a chunk of 2025/26's marginal calls - tight offsides, handball penalties -
             simply couldn't have been reviewed 22 years earlier.</p>
           <p className="dim" style={{ fontSize: 14, marginBottom: 8 }}>
-            We can't measure a counterfactual, so this is a directional estimate only:
+            I can't measure a counterfactual, so this is a directional estimate only:
           </p>
           <div style={{ fontSize: 15 }}>
             Estimated net league-points swing:{" "}
