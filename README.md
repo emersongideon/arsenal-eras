@@ -10,7 +10,10 @@ explicit separation of **fact**, **measured model output**, and **speculation**.
 
 ![Hook](docs/hero.png)
 
-> **Live demo:** _deploy with the one-click Render blueprint below and drop the URL here._
+> **Live demo:** https://emersongideon.github.io/arsenal-eras/
+>
+> **New here?** [`WALKTHROUGH.md`](WALKTHROUGH.md) explains every part in plain English -
+> the data pipeline, the Poisson model (and how to defend it), the API, and the frontend.
 
 ---
 
