@@ -12,8 +12,8 @@ export function DataSources() {
         </div>
         <p className="lead narrow">
           Two eras, two shot-data providers, plus public records for the league tables,
-          squads and fixtures. Naming it up front is the point - you should be able to
-          check anything here.
+          squads and fixtures. We name every source up front - you should be able to check
+          anything we show you.
         </p>
       </Reveal>
 

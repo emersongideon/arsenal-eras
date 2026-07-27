@@ -7,7 +7,7 @@ import {
 import { CategoryBadge, Reveal, Section } from "../components/ui";
 import type { Circumstances } from "../types";
 
-/** A short "suggested reading", visually marked as interpretation, not fact. */
+/** Our reading of a sub-layer, marked interpretation and kept apart from the fact. */
 function Reading({ children }: { children: React.ReactNode }) {
   return (
     <div className="reading">
@@ -28,11 +28,11 @@ export function SectionB({ c }: { c: Circumstances }) {
       <Reveal>
         <h2>The field each title was won against</h2>
         <p className="lead narrow">
-          A points total is only as impressive as the league it was won in. Four measured
-          angles on how hard each field was to beat - the chasing pack, the winning
-          margin, the shape of the whole table, and how settled the squad was. Each comes
-          with a suggested reading, labelled as interpretation so you can take it or leave
-          it.
+          A points total is only as impressive as the league it was won in. We take four
+          measured angles on how hard each field was to beat - the chasing pack, the
+          winning margin, the shape of the whole table, and how settled the squad was.
+          Under each, we give our reading of what it means, labelled interpretation and
+          kept strictly apart from the measurement.
         </p>
       </Reveal>
 

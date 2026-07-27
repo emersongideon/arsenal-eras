@@ -1,15 +1,15 @@
 # Walkthrough - how this project works, and how to explain it
 
-This is a plain-English tour of the codebase, written so I (and any reviewer) can
+This is a plain-English tour of the codebase, written so we (and any reviewer) can
 follow what every part does and **why** it's built that way. For each major
 component there's a "what it does", the "key decisions", and a "be ready to
 explain" list.
 
-**How this was built, honestly:** I designed and directed this project with AI
-assistance (I used an AI coding tool the way you'd use a very fast pair-programmer).
-I made the decisions - data sources, the model, the honesty framing, the scope -
-and I understand every piece well enough to defend it, which is the point of this
-document. I'm describing it that way openly; nothing here pretends to be written
+**How this was built, honestly:** We designed and directed this project with AI
+assistance (we used an AI coding tool the way you'd use a very fast pair-programmer).
+We made the decisions - data sources, the model, the honesty framing, the scope -
+and we understand every piece well enough to defend it, which is the point of this
+document. We're describing it that way openly; nothing here pretends to be written
 without tooling.
 
 ---
@@ -65,7 +65,7 @@ the two seasons can be compared fairly.
   one row per match with `gf, ga` (goals), `xgf, xga` (expected goals for/against),
   `venue`, `result`, `points`. This "canonical schema" is the join that makes the
   comparison possible.
-  - 2003/04 comes from **StatsBomb open data** (shot-by-shot events). I sum each
+  - 2003/04 comes from **StatsBomb open data** (shot-by-shot events). We sum each
     shot's xG per team to get match xG, and derive minutes from the lineup data.
     StatsBomb files are downloaded on demand and cached (the 106 MB of events is
     git-ignored; the loader re-fetches if missing).
@@ -83,7 +83,7 @@ the two seasons can be compared fairly.
 - **Normalise to a shared schema early.** The messiness of each source is contained
   inside `loaders.py`; everything downstream works on clean, identical DataFrames.
 - **Cache everything; commit the small processed outputs.** The app never needs the
-  network. A fresh clone rebuilds byte-identical numbers (I verified this).
+  network. A fresh clone rebuilds byte-identical numbers (we verified this).
 - **Facts live in code with citations,** not hard-coded inside calculations, so the
   "fact" category is genuinely checkable.
 
@@ -106,9 +106,9 @@ This is the "measured" core (Sections A and D). It answers: *given the quality o
 chances each team created and conceded, how many points did they actually deserve?*
 
 ### The idea in one paragraph
-Each match, a team scores some goals. Goals are rare, countable events, so I model
+Each match, a team scores some goals. Goals are rare, countable events, so we model
 the number of goals a team scores as a **Poisson distribution** whose average rate
-(lambda, λ) comes from expected goals (xG). From each team's rate I compute the
+(lambda, λ) comes from expected goals (xG). From each team's rate we compute the
 probability the match is a win, draw, or loss, convert that to **expected points**
 (3 × P(win) + 1 × P(draw)), and add it up over all 38 games. Comparing that total to
 the points they actually won shows whether they over- or under-performed what their
@@ -127,22 +127,22 @@ chances deserved.
    be indefensible over 38 games).
 
 ### How it's actually fit (the scikit-learn part)
-I do **not** just assume `goals = xG`. Instead I fit a **Poisson regression**
+we do **not** just assume `goals = xG`. Instead we fit a **Poisson regression**
 (`sklearn.linear_model.PoissonRegressor`) of *actual goals* on *xG*:
 
-- **Training data:** for each match I use **both perspectives** - (xG-for → goals
+- **Training data:** for each match we use **both perspectives** - (xG-for → goals
   scored) and (xG-against → goals conceded). That's 2 × 38 = **76 data points** per
-  season, which is why I fit each season separately (and because the two xG providers
+  season, which is why we fit each season separately (and because the two xG providers
   differ, calibrating separately is correct).
 - **What it learns:** the mapping λ = exp(intercept + coef × xG). It's a *generalised
   linear model* with a log link, which is the standard form for Poisson regression.
   This **calibrates** xG to that source's goals - if a provider's xG systematically
   runs a bit high or low, the fit absorbs it.
-- **`alpha = 1e-6`:** `alpha` is scikit-learn's L2 regularisation strength. I set it
-  almost to zero on purpose - I want a plain maximum-likelihood fit (calibration),
+- **`alpha = 1e-6`:** `alpha` is scikit-learn's L2 regularisation strength. We set it
+  almost to zero on purpose - we want a plain maximum-likelihood fit (calibration),
   not shrinkage, because with one feature and a clear relationship there's nothing to
   regularise against.
-- **From rates to points** (`match_outcome_probs`): given λ_for and λ_against, I build
+- **From rates to points** (`match_outcome_probs`): given λ_for and λ_against, we build
   the grid of scorelines with `scipy.stats.poisson`, and sum the probabilities where
   the home team scores more (win), equal (draw), or fewer (loss). Expected points =
   3 × P(win) + 1 × P(draw). The grid is truncated at 10 goals per side (the
@@ -162,12 +162,12 @@ the tight games:
   close games despite under-shooting their xG.
 
 ### Limitations (say these before a reviewer does)
-- **Independence assumption.** I treat the two teams' goal counts in a match as
+- **Independence assumption.** we treat the two teams' goal counts in a match as
   independent. In reality they're mildly correlated (game state - a team that's
   winning defends deeper). The classic fix is a **Dixon-Coles adjustment** or a
-  **bivariate Poisson**; I'd add that with more time.
-- **In-sample calibration only.** With 38 games I fit and evaluate on the same data.
-  I'd want cross-validation / a hold-out on a larger dataset before making strong
+  **bivariate Poisson**; we'd add that with more time.
+- **In-sample calibration only.** With 38 games we fit and evaluate on the same data.
+  We'd want cross-validation / a hold-out on a larger dataset before making strong
   claims.
 - **Point estimate, no error bars.** "Expected points" is a single number; the honest
   version simulates each match from its λ to get a confidence band. Noted in the
@@ -178,7 +178,7 @@ the tight games:
 
 ### Be ready to explain
 - *Why not logistic regression / a classifier for W/D/L?* Because goals carry more
-  information than the result, and modelling the goal process (Poisson) lets me derive
+  information than the result, and modelling the goal process (Poisson) lets us derive
   the outcome probabilities *and* respects that a 3-0 and a 1-0 are different evidence.
 - *Why fit a regression at all instead of using xG directly as λ?* Calibration across
   two different xG sources, and to avoid baking in "goals = xG" as an assumption.
@@ -235,11 +235,11 @@ A small **FastAPI** service that serves the processed data. Endpoints are in the
 
 ### Key decisions
 - **No database of record.** The data is tiny and read-only, so a stateful database
-  would be pure overhead. SQLite-in-memory gives me genuine SQL (a skill I wanted to
+  would be pure overhead. SQLite-in-memory gives us genuine SQL (a skill we wanted to
   show) without any of that weight.
 - **The API needs no pandas/scikit-learn at runtime.** It's a pure read-only query
   layer over the pre-built JSON, so its dependencies stay minimal (just FastAPI +
-  pydantic). I verified it boots from a clean checkout with only
+  pydantic). We verified it boots from a clean checkout with only
   `backend/requirements.txt` installed.
 
 ### Be ready to explain
@@ -323,13 +323,13 @@ The raw xG numbers aren't directly compared. The model is **calibrated per seaso
 each is mapped to its own goals, and the README/UI flag it explicitly. The comparison
 is of *expected points* (a calibrated output), plus clearly-labelled context.
 
-**"The independence assumption is wrong."** Agreed, and I say so. Real scorelines are
+**"The independence assumption is wrong."** Agreed, and we say so. Real scorelines are
 mildly correlated; the standard fixes are Dixon-Coles or a bivariate Poisson. For this
 scope the simpler model is defensible, and the limitation is documented.
 
 **"You're missing rival xG / physical tracking data for 2003/04 - isn't that a hole?"**
 It's a deliberate one. Rival-team xG doesn't exist that far back, and physical-tracking
-data has no 2003/04 equivalent, so instead of inventing a comparison I use actual points
+data has no 2003/04 equivalent, so instead of inventing a comparison we use actual points
 for the chasing pack and exclude tracking data entirely, with the gap stated in the UI.
 Cutting a metric you can't source for both eras is more credible than fabricating one -
 that discipline is the point of the whole piece.
@@ -342,13 +342,13 @@ numbers are shared; the reading is labelled as a judgement you can disagree with
 role asks for, and to offer a programmatic way to query the data. The static site is
 the primary deliverable; the API is an honest bonus, not a prop.
 
-**"How much of this did the AI write?"** I directed it with AI assistance and reviewed
+**"How much of this did the AI write?"** we directed it with AI assistance and reviewed
 and understand all of it - which is what this document demonstrates. The decisions
 (sources, model, honesty framing, scope) are mine; the AI accelerated the typing.
 
 ---
 
-## 9. What I'd change with more time
+## 9. What we'd change with more time
 - Bivariate Poisson / Dixon-Coles to drop the independence assumption.
 - Cross-validation and uncertainty bands (simulate each match from its λ).
 - More seasons/teams (the pipeline is parameterised on competition/season/team).

@@ -49,12 +49,12 @@ The measured core (Sections A and D) answers *"how many points did each team act
    independent events - the textbook Poisson use-case. Expected goals (xG) already
    estimates the *mean* goals a team should score, which maps directly onto the Poisson
    rate λ.
-2. **Calibrate, don't assume.** Rather than treat `goals = xG`, I fit a Poisson GLM
+2. **Calibrate, don't assume.** Rather than treat `goals = xG`, we fit a Poisson GLM
    (`scikit-learn PoissonRegressor`) of **actual goals on xG**, separately per season
    (StatsBomb and Understat use different xG models, so their xG→goals scaling differs).
    Fitting on both perspectives of every match - goals-for vs xG-for and goals-against
    vs xG-against - gives 2×38 = 76 observations per season.
-3. **Rates → points.** From the two calibrated rates I treat the scorelines as
+3. **Rates → points.** From the two calibrated rates we treat the scorelines as
    independent Poisson variables, compute P(win)/P(draw)/P(loss), and sum
    `3·P(win) + 1·P(draw)` over 38 games into **expected points**.
 
@@ -66,7 +66,7 @@ their chances; the 2025/26 side (+15.8) by *out-defending* and holding its nerve
 the GLM is calibrated, not hand-tuned (see `analysis.ipynb`).
 
 **Stated assumptions:** goals are Poisson; the two teams' goal counts in a match are
-independent (a known simplification - see *What I'd add*); xG is a sufficient single
+independent (a known simplification - see *What we'd add*); xG is a sufficient single
 predictor of scoring rate.
 
 ---
@@ -169,11 +169,11 @@ queries. SQLite earns its place as the query layer without the overhead of a sta
 
 ## How this maps to the Research Engineer role
 
-I built this as a self-contained demonstration of the exact skill set the role calls
+We built this as a self-contained demonstration of the exact skill set the role calls
 for - end-to-end, from data acquisition to a deployed full-stack product - and to show
-*how I think*, not just what I can wire together.
+*how we think*, not just what we can wire together.
 
-| What the role asks for | Where I demonstrate it |
+| What the role asks for | Where we demonstrate it |
 |---|---|
 | **Python + the PyData stack** | `analysis/` package and `analysis.ipynb`: pandas (groupby/merge/rolling), numpy, scikit-learn, scipy, matplotlib |
 | **SQL** | `backend/db.py`: processed data loaded into SQLite and served through hand-written SQL queries |
@@ -187,10 +187,10 @@ for - end-to-end, from data acquisition to a deployed full-stack product - and t
 | **Football knowledge & passion** | the question, the framing, and the reading of the results |
 
 **On deep learning (a *desirable*, not a requirement).** This dataset is 38 matches per
-season, so I deliberately used a calibrated Poisson GLM rather than a neural network -
-the right tool for the data. I'd reach for deep learning where the role actually points
+season, so we deliberately used a calibrated Poisson GLM rather than a neural network -
+the right tool for the data. We'd reach for deep learning where the role actually points
 (sequence models over event streams, Geometric Deep Learning on player-graph / tracking
-data); see *What I'd add* for where that fits. Knowing *when not to* deep-learn is part of
+data); see *What we'd add* for where that fits. Knowing *when not to* deep-learn is part of
 the job.
 
 ---
@@ -240,10 +240,10 @@ demonstrate the FastAPI/SQL layer and to serve the data programmatically.
 
 ---
 
-## What I'd add with more time
+## What we'd add with more time
 
 - **Deep learning where the data justifies it.** With event/tracking data (not just
-  38 match-level xG totals), this is where I'd apply the techniques the role centres on:
+  38 match-level xG totals), this is where we'd apply the techniques the role centres on:
   a **Transformer** over possession/event sequences to model chance quality in context,
   or **Geometric Deep Learning** on the player-position graph for pitch control - using
   **PyTorch**. On this small, aggregate dataset a calibrated GLM is the honest choice;

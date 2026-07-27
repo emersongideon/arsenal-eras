@@ -88,9 +88,9 @@ export function Conclusion({
             different obstacles. The rest is a values judgement, and it should stay one.
           </p>
           <p style={{ marginTop: 18, fontStyle: "italic" }}>
-            The personal footnote the model isn't allowed to have: as an Arsenal fan, both
-            titles are sweet - but 2003/04 is the one that made me a fan in the first
-            place, so I know which way my heart votes even if the numbers won't.
+            The footnote the model isn't allowed to have: as Arsenal fans, both titles are
+            sweet - but 2003/04 is the one that made us fans in the first place, so we
+            know which way our hearts vote even if the numbers won't.
           </p>
         </div>
       </Reveal>

@@ -59,7 +59,7 @@ export function SectionD({
           The expected-points model (a Poisson model fit on each season's shots) says how
           many points the underlying performances deserved. Both sides beat it - the mark
           of a champion who wins tight games. But "beating your xG" means more against a
-          harder field. So read the over-performance next to the circumstances.
+          harder field, so we read the over-performance next to the circumstances.
         </p>
       </Reveal>
 
