@@ -29,6 +29,12 @@ export function SectionD({
       note: "fact",
     },
     {
+      label: "Title-race pressure index",
+      a: `${s["2003/04"].pressure_index}`,
+      b: `${s["2025/26"].pressure_index}`,
+      note: "measured",
+    },
+    {
       label: "Squad retained from prior year",
       a: `${s["2003/04"].retention_pct}%`,
       b: `${s["2025/26"].retention_pct}%`,

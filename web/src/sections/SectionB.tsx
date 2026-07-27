@@ -1,9 +1,4 @@
-import {
-  ChasingPackChart,
-  LeagueShapeChart,
-  MarginChart,
-  SquadContinuityChart,
-} from "../components/charts";
+import { FieldPressureChart, SquadContinuityChart } from "../components/charts";
 import { CategoryBadge, Reveal, Section } from "../components/ui";
 import type { Circumstances } from "../types";
 
@@ -18,115 +13,70 @@ function Reading({ children }: { children: React.ReactNode }) {
 }
 
 export function SectionB({ c }: { c: Circumstances }) {
-  const m = c.margin_to_second.by_season;
-  const sh = c.league_shape.by_season;
+  const f = c.field_strength.by_season;
   const ct = c.squad_continuity.by_season;
-  const cp = c.chasing_pack.by_season;
+  const morePressure = Math.round(
+    (f["2025/26"].pressure_index / f["2003/04"].pressure_index - 1) * 100
+  );
 
   return (
     <Section id="circumstances" eyebrow="Section B · How hard was the task?">
       <Reveal>
         <h2>The field each title was won against</h2>
         <p className="lead narrow">
-          A points total is only as impressive as the league it was won in. We take four
-          measured angles on how hard each field was to beat - the chasing pack, the
-          winning margin, the shape of the whole table, and how settled the squad was.
-          Under each, we give our reading of what it means, labelled interpretation and
-          kept strictly apart from the measurement.
+          A points total is only as impressive as the league it was won in. We measure
+          that two ways: how much title-race pressure the rest of the table applied, and
+          how settled a squad each side did it with. Each comes with our reading, labelled
+          interpretation and kept strictly apart from the measurement.
         </p>
       </Reveal>
 
-      {/* B1 - chasing pack */}
+      {/* B1 - field strength via the pressure index */}
       <Reveal delay={60}>
         <div className="card sublayer">
           <div className="sublayer-head">
-            <h3>1. Strength of the chasing pack</h3>
-            <CategoryBadge category="fact" />
-          </div>
-          <p>
-            How good were the teams Arsenal had to hold off? Both runners-up were strong:
-            Chelsea reached <b>{m["2003/04"].runner_up_points}</b> points in 2003/04,
-            Manchester City <b>{m["2025/26"].runner_up_points}</b> in 2025/26 - almost
-            identical. {c.chasing_pack.xg_note}
-          </p>
-          <ChasingPackChart bySeason={cp} />
-          <Reading>
-            The pack Arsenal beat was about as strong in both eras - a top rival on ~78-79
-            points either way. On this measure the task looks comparable, not easier in
-            one era.
-          </Reading>
-        </div>
-      </Reveal>
-
-      {/* B2 - margin */}
-      <Reveal delay={60}>
-        <div className="card sublayer">
-          <div className="sublayer-head">
-            <h3>2. The winning margin</h3>
-            <CategoryBadge category="fact" />
-          </div>
-          <p>
-            How much daylight was there at the top? The Invincibles finished{" "}
-            <b>{m["2003/04"].margin} points</b> clear of Chelsea; the 2025/26 side won by{" "}
-            <b>{m["2025/26"].margin}</b> over City.
-          </p>
-          <MarginChart bySeason={m} />
-          <Reading>
-            Same-sized rival, smaller cushion. Against a comparably strong runner-up the
-            2025/26 title was the tighter race - fewer points in hand meant less room for
-            a slip.
-          </Reading>
-        </div>
-      </Reveal>
-
-      {/* B3 - league shape */}
-      <Reveal delay={60}>
-        <div className="card sublayer">
-          <div className="sublayer-head">
-            <h3>3. The shape of the league</h3>
+            <h3>1. The strength of the field - a title-race pressure index</h3>
             <CategoryBadge category="measured" />
           </div>
           <p>
-            Was the division top-heavy or deep? Points spread from 1st to 20th was{" "}
-            <b>{sh["2003/04"].spread}</b> in 2003/04 (std {sh["2003/04"].std}) and{" "}
-            <b>{sh["2025/26"].spread}</b> in 2025/26 (std {sh["2025/26"].std}). Each bar
-            is a team; the champion is highlighted, the dashed line is the safety cut-off.
+            "Chelsea got 79, City got 78" is shallow - a team 30 points back was never a
+            threat. So instead of quoting the pack's points, we score the pressure the{" "}
+            <em>whole</em> table applied. Each of the 19 rivals contributes{" "}
+            <code>exp(-gap / {c.field_strength.tau})</code>, where <code>gap</code> is its
+            points behind Arsenal: a rival level on points counts 1, one that finishes ~10
+            back counts about a third, a distant one counts nothing. Summed, it reads as
+            the effective number of genuine title threats.
           </p>
-          <div className="grid2" style={{ marginTop: 8 }}>
-            <div>
-              <p className="chart-title" style={{ color: "#8a6610" }}>
-                2003/04
-              </p>
-              <LeagueShapeChart
-                season="2003/04"
-                points={sh["2003/04"].points}
-                relegationCutoff={sh["2003/04"].relegation_cutoff}
-              />
-            </div>
-            <div>
-              <p className="chart-title" style={{ color: "#d90007" }}>
-                2025/26
-              </p>
-              <LeagueShapeChart
-                season="2025/26"
-                points={sh["2025/26"].points}
-                relegationCutoff={sh["2025/26"].relegation_cutoff}
-              />
-            </div>
-          </div>
+          <FieldPressureChart bySeason={f} />
+          <p className="dim" style={{ fontSize: 14, marginTop: 12 }}>
+            Pressure index (higher = harder):{" "}
+            <b style={{ color: "#8a6610" }}>{f["2003/04"].pressure_index}</b> in 2003/04
+            vs <b style={{ color: "#d90007" }}>{f["2025/26"].pressure_index}</b> in
+            2025/26. The 2nd-placed side finished {f["2003/04"].margin} points back in
+            2003/04 but only {f["2025/26"].margin} back in 2025/26; nobody came within 10
+            points of the Invincibles, whereas Manchester City closed to within{" "}
+            {f["2025/26"].margin} of the 2025/26 side. The ranking holds at every decay
+            scale we tried (
+            {Object.entries(f["2003/04"].pressure_by_tau)
+              .map(([t]) => `τ=${t}`)
+              .join(", ")}
+            ), so it isn't an artefact of that one parameter.
+          </p>
           <Reading>
-            2025/26 had the wider spread - a longer tail of weak teams to take points off,
-            but also a slightly more stretched table. Read it as a league where the very
-            top still had to be near-perfect to pull clear.
+            By this measure the 2025/26 champions faced roughly{" "}
+            <b>{morePressure}% more title-race pressure</b> than the Invincibles. The
+            Invincibles were more dominant on the raw table, but they pulled clear of a
+            field that never truly closed in; the 2025/26 side had to win the title with a
+            genuine rival breathing down its neck to the final weeks.
           </Reading>
         </div>
       </Reveal>
 
-      {/* B4 - squad continuity */}
+      {/* B2 - squad continuity */}
       <Reveal delay={60}>
         <div className="card sublayer">
           <div className="sublayer-head">
-            <h3>4. How settled was the squad?</h3>
+            <h3>2. How settled was the squad?</h3>
             <CategoryBadge category="measured" />
           </div>
           <p>
@@ -141,16 +91,16 @@ export function SectionB({ c }: { c: Circumstances }) {
           <Reading>
             The 2025/26 title was won with a materially less settled squad - a rebuild
             bedding in on the fly, versus a machine in its third season together. That
-            makes the task of repeating results harder, not easier.
+            makes producing results harder, not easier.
           </Reading>
         </div>
       </Reveal>
 
       <Reveal delay={60}>
         <p className="narrow dim handoff">
-          Add it up: a comparably strong rival, a tighter margin, a deeper tail, and a far
-          more rebuilt squad point to a genuinely hard task in 2025/26. But there is one
-          more strain a table can't show - the toll of the calendar itself. ↓
+          So the field: a comparably strong rival that pressed far harder, integrated by a
+          far more rebuilt squad. But there's one more strain a table can't show - the
+          toll of the calendar itself. ↓
         </p>
       </Reveal>
     </Section>

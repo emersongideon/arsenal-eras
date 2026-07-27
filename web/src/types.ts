@@ -76,19 +76,18 @@ export interface ModelResult {
 }
 
 // --- Section B: circumstances ---------------------------------------------
+export interface PressureContribution {
+  pos: number;
+  team: string;
+  points: number;
+  gap: number;
+  pressure: number;
+}
+
 export interface Circumstances {
-  chasing_pack: {
+  field_strength: {
+    tau: number;
     xg_note: string;
-    by_season: Record<
-      Season,
-      {
-        top4: { pos: number; team: string; points: number }[];
-        champion_points: number;
-        runner_up_points: number;
-      }
-    >;
-  };
-  margin_to_second: {
     by_season: Record<
       Season,
       {
@@ -97,21 +96,11 @@ export interface Circumstances {
         runner_up: string;
         runner_up_points: number;
         margin: number;
-      }
-    >;
-  };
-  league_shape: {
-    by_season: Record<
-      Season,
-      {
-        points: number[];
-        champion: number;
-        bottom: number;
-        spread: number;
-        std: number;
-        top6_mean: number;
-        mid_mean: number;
-        relegation_cutoff: number;
+        pressure_index: number;
+        teams_within_10: number;
+        teams_within_15: number;
+        pressure_by_tau: Record<string, number>;
+        contributions: PressureContribution[];
       }
     >;
   };
@@ -177,7 +166,7 @@ export interface Synthesis {
       points_over_expected: number;
       runner_up_points: number;
       margin_to_second: number;
-      league_points_std: number;
+      pressure_index: number;
       retention_pct: number;
       incoming: number;
     }

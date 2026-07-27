@@ -1,15 +1,32 @@
 """Section B - "How hard was the task?" (the circumstances each title was won in).
 
-Four measured sub-layers, all FACT or MEASURED (never fabricated):
-  1. chasing_pack   - points of the teams that finished 2nd-4th
-  2. margin_to_second - how close the title race was
-  3. league_shape   - spread of points across the whole table (top-heavy vs deep)
-  4. squad_continuity - how much the squad changed vs the prior season
+Two sub-layers:
+  1. field_strength  - a title-race PRESSURE INDEX over the whole table (all 19
+     rivals), weighting each rival by how close they finished. This merges the
+     shallow "who came 2nd/3rd/4th", "winning margin" and "points spread" views
+     into one analytical number.
+  2. squad_continuity - how much the squad changed vs the prior season.
 
 Rival-team xG is NOT available for 2003/04 (Understat starts 2014/15; StatsBomb's
-free data only covers Arsenal's own matches), so the chasing-pack comparison uses
-actual points/goals for both eras and flags the xG gap. Suggested readings are
-returned separately and labelled as interpretation by the frontend.
+free data only covers Arsenal's own matches), so the field is measured on actual
+points for both eras.
+
+The pressure index
+------------------
+A rival exerts real title pressure only when it finishes close on points; a team
+30 points back was never a threat. So we weight each rival's contribution by an
+exponential decay of its points gap to the champion:
+
+    pressure_i = exp(-gap_i / TAU),   gap_i = champion_points - rival_points
+    PRESSURE_INDEX = sum over all 19 rivals of pressure_i
+
+`TAU` (points) sets how quickly pressure fades with distance. A rival level on
+points contributes 1.0; one TAU points back contributes 1/e ~= 0.37; far-off teams
+contribute ~0. The index reads as "the effective number of genuine title threats",
+distance-discounted. It is highest when several teams finish near the champion -
+exactly the situation that makes a title hard to win. To show it isn't an artefact
+of the TAU choice, the index is also reported at a few TAU values (the ordering
+between the two seasons holds throughout).
 """
 
 from __future__ import annotations
@@ -20,60 +37,57 @@ from . import facts, sources
 from .config import S0304, S2526
 
 SEASONS = (S0304, S2526)
+PRESSURE_TAU = 10.0  # points: decay scale for title-race pressure
+TAU_GRID = (7.0, 10.0, 13.0)  # robustness check
 
 
-def chasing_pack() -> dict:
-    """Points of the top four finishers each season (actual results).
+def _pressure_index(champ_points: int, rival_points: list[int], tau: float) -> float:
+    gaps = champ_points - np.asarray(rival_points, dtype=float)
+    return float(np.exp(-gaps / tau).sum())
 
-    xG for rival teams is unavailable for 2003/04, so this is points-based for both.
-    """
+
+def field_strength() -> dict:
+    """Title-race pressure index over the whole 20-team table, per season."""
     out = {
-        "metric": "chasing_pack",
+        "metric": "field_strength",
+        "tau": PRESSURE_TAU,
         "xg_note": (
             "Rival-team xG exists for 2025/26 (Understat) but not for 2003/04, so the "
-            "chasing pack is compared on actual points - the fair like-for-like measure."
+            "field is measured on actual points - the fair like-for-like measure."
         ),
         "by_season": {},
     }
     for s in SEASONS:
         table = facts.FINAL_TABLE[s]
+        champ_team, champ_pts = table[0]
+        rivals = table[1:]  # the other 19 teams
+        rival_pts = [p for _, p in rivals]
+
+        contributions = []
+        for pos, (team, pts) in enumerate(rivals, start=2):
+            gap = champ_pts - pts
+            contributions.append({
+                "pos": pos,
+                "team": team,
+                "points": pts,
+                "gap": gap,
+                "pressure": round(float(np.exp(-gap / PRESSURE_TAU)), 3),
+            })
+
         out["by_season"][s] = {
-            "top4": [{"pos": i + 1, "team": t, "points": p} for i, (t, p) in enumerate(table[:4])],
-            "champion_points": table[0][1],
-            "runner_up_points": table[1][1],
-        }
-    return out
-
-
-def margin_to_second() -> dict:
-    """Champion's points minus the runner-up's (title-race closeness)."""
-    out = {"metric": "margin_to_second", "by_season": {}}
-    for s in SEASONS:
-        table = facts.FINAL_TABLE[s]
-        out["by_season"][s] = {
-            "champion": table[0][0],
-            "champion_points": table[0][1],
-            "runner_up": table[1][0],
-            "runner_up_points": table[1][1],
-            "margin": table[0][1] - table[1][1],
-        }
-    return out
-
-
-def league_shape() -> dict:
-    """Distribution of points across all 20 teams (top-heavy vs deep league)."""
-    out = {"metric": "league_shape", "by_season": {}}
-    for s in SEASONS:
-        pts = np.array([p for _, p in facts.FINAL_TABLE[s]], dtype=float)
-        out["by_season"][s] = {
-            "points": [int(p) for p in pts],
-            "champion": int(pts[0]),
-            "bottom": int(pts[-1]),
-            "spread": int(pts[0] - pts[-1]),  # 1st minus 20th
-            "std": round(float(pts.std(ddof=0)), 1),  # dispersion of the whole table
-            "top6_mean": round(float(pts[:6].mean()), 1),
-            "mid_mean": round(float(pts[6:14].mean()), 1),  # 7th-14th, the "middle"
-            "relegation_cutoff": int(pts[16]),  # 17th = last safe place
+            "champion": champ_team,
+            "champion_points": champ_pts,
+            "runner_up": rivals[0][0],
+            "runner_up_points": rivals[0][1],
+            "margin": champ_pts - rivals[0][1],
+            "pressure_index": round(_pressure_index(champ_pts, rival_pts, PRESSURE_TAU), 2),
+            "teams_within_10": int(sum(1 for c in contributions if c["gap"] <= 10)),
+            "teams_within_15": int(sum(1 for c in contributions if c["gap"] <= 15)),
+            # ordering between seasons should be stable across these decay scales:
+            "pressure_by_tau": {
+                int(t): round(_pressure_index(champ_pts, rival_pts, t), 2) for t in TAU_GRID
+            },
+            "contributions": contributions,
         }
     return out
 
@@ -100,9 +114,7 @@ def squad_continuity() -> dict:
 def build() -> dict:
     """Assemble the whole Section-B payload."""
     return {
-        "chasing_pack": chasing_pack(),
-        "margin_to_second": margin_to_second(),
-        "league_shape": league_shape(),
+        "field_strength": field_strength(),
         "squad_continuity": squad_continuity(),
         "sources": {
             "final_tables": [facts.SOURCES["pl_2003_04"], facts.SOURCES["pl_2025_26"]],

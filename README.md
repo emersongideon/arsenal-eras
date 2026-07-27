@@ -7,7 +7,7 @@ which squad was better, it's **which era faced the harder task, and how well eac
 met it**.
 
 It reads start-to-finish as a guided argument that builds: Hook → Data sources →
-**A. The surface** → **B. How hard was the task?** (chasing pack, margin, league shape,
+**A. The surface** → **B. How hard was the task?** (a title-race pressure index +
 squad continuity) → **C. The physical toll** (age, fixture congestion) → **D. Synthesis**
 → **E. Verdict** - built on real shot data, an expected-points model, and an explicit
 separation of **fact / measured / interpretation**.
@@ -115,7 +115,7 @@ analysis/            data + model layer (importable, tested)
   loaders.py         raw StatsBomb / Understat  ->  canonical pandas frames
   transforms.py      groupby / merge / rolling aggregations
   model.py           PoissonRegressor xG->goals  ->  expected points
-  circumstances.py   Section B: chasing pack, margin, league shape, squad continuity
+  circumstances.py   Section B: title-race pressure index + squad continuity
   physical.py        Section C: minutes-weighted age + fixture congestion
   synthesis.py       Section D: model output re-read against the circumstances
   facts.py           cited final league tables
@@ -149,7 +149,7 @@ queries. SQLite earns its place as the query layer without the overhead of a sta
 | `GET /api/matches?season=` | per-match rows incl. rolling form (SQL) |
 | `GET /api/players?season=&min_shots=&sort_by=` | player aggregates (SQL) |
 | `GET /api/model?season=` | expected-points output + calibration |
-| `GET /api/circumstances` | Section B: chasing pack, margin, league shape, squad continuity |
+| `GET /api/circumstances` | Section B: title-race pressure index + squad continuity |
 | `GET /api/physical` | Section C: minutes-weighted age + fixture congestion |
 | `GET /api/synthesis` | Section D: model output re-read against the circumstances |
 

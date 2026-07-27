@@ -9,18 +9,29 @@ from analysis import circumstances, physical, sources, synthesis
 from analysis.config import S0304, S2526
 
 
-def test_margin_to_second_matches_final_tables():
-    m = circumstances.margin_to_second()["by_season"]
+def test_field_strength_margin_matches_final_tables():
+    f = circumstances.field_strength()["by_season"]
     # Arsenal 90 - Chelsea 79 = 11; Arsenal 85 - Man City 78 = 7.
-    assert m[S0304]["margin"] == 11
-    assert m[S2526]["margin"] == 7
+    assert f[S0304]["margin"] == 11
+    assert f[S2526]["margin"] == 7
+    # 19 rivals contribute to the pressure index each season.
+    assert len(f[S0304]["contributions"]) == 19
 
 
-def test_league_shape_spread_is_first_minus_last():
-    shape = circumstances.league_shape()["by_season"]
-    assert shape[S0304]["spread"] == 90 - 33
-    assert shape[S2526]["spread"] == 85 - 20
-    assert len(shape[S0304]["points"]) == 20
+def test_pressure_index_higher_for_more_bunched_field():
+    f = circumstances.field_strength()["by_season"]
+    # 2025/26's chasing pack finished closer, so it faced more title-race pressure,
+    # and that ordering must hold across every decay scale (not a TAU artefact).
+    assert f[S2526]["pressure_index"] > f[S0304]["pressure_index"]
+    for tau, cpi in f[S2526]["pressure_by_tau"].items():
+        assert cpi > f[S0304]["pressure_by_tau"][tau]
+
+
+def test_pressure_contribution_decays_with_gap():
+    # A closer rival (smaller gap) must contribute more pressure than a distant one.
+    contribs = circumstances.field_strength()["by_season"][S2526]["contributions"]
+    by_gap = sorted(contribs, key=lambda c: c["gap"])
+    assert by_gap[0]["pressure"] > by_gap[-1]["pressure"]
 
 
 def test_squad_continuity_counts_reconcile():

@@ -118,93 +118,54 @@ export function OutputBars({ seasons }: { seasons: SeasonSummary[] }) {
 // Section B - circumstances
 // ===========================================================================
 
-/** Points of the champion + chasing pack (2nd-4th), both seasons. */
-export function ChasingPackChart({
+const ORDINALS = ["2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
+
+/** Title-race pressure by finishing position: each rival's exp(-gap/tau) weight,
+ *  both seasons. A higher, slower-decaying curve = a more pressured title. */
+export function FieldPressureChart({
   bySeason,
 }: {
-  bySeason: Circumstances["chasing_pack"]["by_season"];
+  bySeason: Circumstances["field_strength"]["by_season"];
 }) {
-  const labels = ["Champion", "2nd", "3rd", "4th"];
-  const data = labels.map((label, i) => ({
-    label,
-    "2003/04": bySeason["2003/04"].top4[i].points,
-    "2025/26": bySeason["2025/26"].top4[i].points,
+  const n = ORDINALS.length; // top rivals (2nd..9th); the tail is ~0
+  const data = Array.from({ length: n }, (_, i) => ({
+    label: ORDINALS[i],
+    "2003/04": bySeason["2003/04"].contributions[i].pressure,
+    "2025/26": bySeason["2025/26"].contributions[i].pressure,
   }));
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
+      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 20, left: -8 }}>
         <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey="label" stroke={AXIS} tick={{ fontSize: 12 }} />
-        <YAxis stroke={AXIS} tick={{ fontSize: 12 }} domain={[0, 100]} />
+        <XAxis
+          dataKey="label"
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          label={{
+            value: "rival's finishing position",
+            position: "bottom",
+            offset: 6,
+            fill: AXIS,
+            fontSize: 12,
+          }}
+        />
+        <YAxis
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          domain={[0, 0.55]}
+          label={{
+            value: "pressure weight",
+            angle: -90,
+            position: "insideLeft",
+            offset: 14,
+            fill: AXIS,
+            fontSize: 12,
+          }}
+        />
         <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
         <Legend verticalAlign="top" height={30} />
         <Bar dataKey="2003/04" fill={GOLD} radius={[4, 4, 0, 0]} />
         <Bar dataKey="2025/26" fill={RED} radius={[4, 4, 0, 0]} />
-      </BarChart>
-    </ResponsiveContainer>
-  );
-}
-
-/** Champion vs runner-up points - the size of the title-winning cushion. */
-export function MarginChart({
-  bySeason,
-}: {
-  bySeason: Circumstances["margin_to_second"]["by_season"];
-}) {
-  const data = (Object.keys(bySeason) as Season[]).map((s) => ({
-    season: s,
-    Champion: bySeason[s].champion_points,
-    "Runner-up": bySeason[s].runner_up_points,
-  }));
-  return (
-    <ResponsiveContainer width="100%" height={280}>
-      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
-        <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
-        <YAxis stroke={AXIS} tick={{ fontSize: 12 }} domain={[0, 100]} />
-        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
-        <Legend verticalAlign="top" height={30} />
-        <Bar dataKey="Champion" radius={[4, 4, 0, 0]}>
-          {data.map((d) => (
-            <Cell key={d.season} fill={SEASON_COLOR[d.season]} />
-          ))}
-        </Bar>
-        <Bar dataKey="Runner-up" fill="#9aa4b2" radius={[4, 4, 0, 0]} />
-      </BarChart>
-    </ResponsiveContainer>
-  );
-}
-
-/** One season's full 20-team points distribution (top-heavy vs deep). */
-export function LeagueShapeChart({
-  season,
-  points,
-  relegationCutoff,
-}: {
-  season: Season;
-  points: number[];
-  relegationCutoff: number;
-}) {
-  const data = points.map((p, i) => ({ rank: i + 1, points: p }));
-  const color = SEASON_COLOR[season];
-  return (
-    <ResponsiveContainer width="100%" height={220}>
-      <BarChart data={data} margin={{ top: 6, right: 10, bottom: 4, left: -18 }}>
-        <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey="rank" stroke={AXIS} tick={{ fontSize: 10 }} interval={1} />
-        <YAxis stroke={AXIS} tick={{ fontSize: 11 }} domain={[0, 100]} />
-        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
-        <ReferenceLine
-          y={relegationCutoff}
-          stroke="#c0392b"
-          strokeDasharray="4 4"
-          label={{ value: "safety", position: "right", fill: "#c0392b", fontSize: 10 }}
-        />
-        <Bar dataKey="points" radius={[3, 3, 0, 0]}>
-          {data.map((d) => (
-            <Cell key={d.rank} fill={d.rank === 1 ? color : "#c3c9d2"} />
-          ))}
-        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );

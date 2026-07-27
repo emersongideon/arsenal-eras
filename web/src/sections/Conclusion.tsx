@@ -48,9 +48,11 @@ export function Conclusion({
             <h3 style={{ color: "#d90007" }}>The case for 2025/26</h3>
             <ul>
               <li>
-                <b>A tighter race:</b> won by only {s["2025/26"].margin_to_second} points
-                over a Manchester City side ({s["2025/26"].runner_up_points} pts) every
-                bit as strong as the Invincibles' Chelsea.
+                <b>A field that pressed harder:</b> won by only{" "}
+                {s["2025/26"].margin_to_second} points over a Manchester City side (
+                {s["2025/26"].runner_up_points} pts), with a title-race pressure index of{" "}
+                {s["2025/26"].pressure_index} against the Invincibles'{" "}
+                {s["2003/04"].pressure_index} - a rival that never truly let go.
               </li>
               <li>
                 <b>Won while rebuilding:</b> just {s["2025/26"].retention_pct}% of the

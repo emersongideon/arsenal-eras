@@ -1,145 +1,308 @@
 {
-  "chasing_pack": {
-    "metric": "chasing_pack",
-    "xg_note": "Rival-team xG exists for 2025/26 (Understat) but not for 2003/04, so the chasing pack is compared on actual points - the fair like-for-like measure.",
-    "by_season": {
-      "2003/04": {
-        "top4": [
-          {
-            "pos": 1,
-            "team": "Arsenal",
-            "points": 90
-          },
-          {
-            "pos": 2,
-            "team": "Chelsea",
-            "points": 79
-          },
-          {
-            "pos": 3,
-            "team": "Manchester United",
-            "points": 75
-          },
-          {
-            "pos": 4,
-            "team": "Liverpool",
-            "points": 60
-          }
-        ],
-        "champion_points": 90,
-        "runner_up_points": 79
-      },
-      "2025/26": {
-        "top4": [
-          {
-            "pos": 1,
-            "team": "Arsenal",
-            "points": 85
-          },
-          {
-            "pos": 2,
-            "team": "Manchester City",
-            "points": 78
-          },
-          {
-            "pos": 3,
-            "team": "Manchester United",
-            "points": 71
-          },
-          {
-            "pos": 4,
-            "team": "Aston Villa",
-            "points": 65
-          }
-        ],
-        "champion_points": 85,
-        "runner_up_points": 78
-      }
-    }
-  },
-  "margin_to_second": {
-    "metric": "margin_to_second",
+  "field_strength": {
+    "metric": "field_strength",
+    "tau": 10.0,
+    "xg_note": "Rival-team xG exists for 2025/26 (Understat) but not for 2003/04, so the field is measured on actual points - the fair like-for-like measure.",
     "by_season": {
       "2003/04": {
         "champion": "Arsenal",
         "champion_points": 90,
         "runner_up": "Chelsea",
         "runner_up_points": 79,
-        "margin": 11
+        "margin": 11,
+        "pressure_index": 0.85,
+        "teams_within_10": 0,
+        "teams_within_15": 2,
+        "pressure_by_tau": {
+          "7": 0.38,
+          "10": 0.85,
+          "13": 1.45
+        },
+        "contributions": [
+          {
+            "pos": 2,
+            "team": "Chelsea",
+            "points": 79,
+            "gap": 11,
+            "pressure": 0.333
+          },
+          {
+            "pos": 3,
+            "team": "Manchester United",
+            "points": 75,
+            "gap": 15,
+            "pressure": 0.223
+          },
+          {
+            "pos": 4,
+            "team": "Liverpool",
+            "points": 60,
+            "gap": 30,
+            "pressure": 0.05
+          },
+          {
+            "pos": 5,
+            "team": "Newcastle United",
+            "points": 56,
+            "gap": 34,
+            "pressure": 0.033
+          },
+          {
+            "pos": 6,
+            "team": "Aston Villa",
+            "points": 56,
+            "gap": 34,
+            "pressure": 0.033
+          },
+          {
+            "pos": 7,
+            "team": "Charlton Athletic",
+            "points": 53,
+            "gap": 37,
+            "pressure": 0.025
+          },
+          {
+            "pos": 8,
+            "team": "Bolton Wanderers",
+            "points": 53,
+            "gap": 37,
+            "pressure": 0.025
+          },
+          {
+            "pos": 9,
+            "team": "Fulham",
+            "points": 52,
+            "gap": 38,
+            "pressure": 0.022
+          },
+          {
+            "pos": 10,
+            "team": "Birmingham City",
+            "points": 50,
+            "gap": 40,
+            "pressure": 0.018
+          },
+          {
+            "pos": 11,
+            "team": "Middlesbrough",
+            "points": 48,
+            "gap": 42,
+            "pressure": 0.015
+          },
+          {
+            "pos": 12,
+            "team": "Southampton",
+            "points": 47,
+            "gap": 43,
+            "pressure": 0.014
+          },
+          {
+            "pos": 13,
+            "team": "Portsmouth",
+            "points": 45,
+            "gap": 45,
+            "pressure": 0.011
+          },
+          {
+            "pos": 14,
+            "team": "Tottenham Hotspur",
+            "points": 45,
+            "gap": 45,
+            "pressure": 0.011
+          },
+          {
+            "pos": 15,
+            "team": "Blackburn Rovers",
+            "points": 44,
+            "gap": 46,
+            "pressure": 0.01
+          },
+          {
+            "pos": 16,
+            "team": "Manchester City",
+            "points": 41,
+            "gap": 49,
+            "pressure": 0.007
+          },
+          {
+            "pos": 17,
+            "team": "Everton",
+            "points": 39,
+            "gap": 51,
+            "pressure": 0.006
+          },
+          {
+            "pos": 18,
+            "team": "Leicester City",
+            "points": 33,
+            "gap": 57,
+            "pressure": 0.003
+          },
+          {
+            "pos": 19,
+            "team": "Leeds United",
+            "points": 33,
+            "gap": 57,
+            "pressure": 0.003
+          },
+          {
+            "pos": 20,
+            "team": "Wolverhampton Wanderers",
+            "points": 33,
+            "gap": 57,
+            "pressure": 0.003
+          }
+        ]
       },
       "2025/26": {
         "champion": "Arsenal",
         "champion_points": 85,
         "runner_up": "Manchester City",
         "runner_up_points": 78,
-        "margin": 7
-      }
-    }
-  },
-  "league_shape": {
-    "metric": "league_shape",
-    "by_season": {
-      "2003/04": {
-        "points": [
-          90,
-          79,
-          75,
-          60,
-          56,
-          56,
-          53,
-          53,
-          52,
-          50,
-          48,
-          47,
-          45,
-          45,
-          44,
-          41,
-          39,
-          33,
-          33,
-          33
-        ],
-        "champion": 90,
-        "bottom": 33,
-        "spread": 57,
-        "std": 14.8,
-        "top6_mean": 69.3,
-        "mid_mean": 49.1,
-        "relegation_cutoff": 39
-      },
-      "2025/26": {
-        "points": [
-          85,
-          78,
-          71,
-          65,
-          60,
-          57,
-          54,
-          53,
-          53,
-          52,
-          52,
-          49,
-          49,
-          47,
-          45,
-          44,
-          41,
-          39,
-          22,
-          20
-        ],
-        "champion": 85,
-        "bottom": 20,
-        "spread": 65,
-        "std": 15.4,
-        "top6_mean": 69.3,
-        "mid_mean": 51.1,
-        "relegation_cutoff": 41
+        "margin": 7,
+        "pressure_index": 1.36,
+        "teams_within_10": 1,
+        "teams_within_15": 2,
+        "pressure_by_tau": {
+          "7": 0.68,
+          "10": 1.36,
+          "13": 2.17
+        },
+        "contributions": [
+          {
+            "pos": 2,
+            "team": "Manchester City",
+            "points": 78,
+            "gap": 7,
+            "pressure": 0.497
+          },
+          {
+            "pos": 3,
+            "team": "Manchester United",
+            "points": 71,
+            "gap": 14,
+            "pressure": 0.247
+          },
+          {
+            "pos": 4,
+            "team": "Aston Villa",
+            "points": 65,
+            "gap": 20,
+            "pressure": 0.135
+          },
+          {
+            "pos": 5,
+            "team": "Liverpool",
+            "points": 60,
+            "gap": 25,
+            "pressure": 0.082
+          },
+          {
+            "pos": 6,
+            "team": "Bournemouth",
+            "points": 57,
+            "gap": 28,
+            "pressure": 0.061
+          },
+          {
+            "pos": 7,
+            "team": "Sunderland",
+            "points": 54,
+            "gap": 31,
+            "pressure": 0.045
+          },
+          {
+            "pos": 8,
+            "team": "Brighton & Hove Albion",
+            "points": 53,
+            "gap": 32,
+            "pressure": 0.041
+          },
+          {
+            "pos": 9,
+            "team": "Brentford",
+            "points": 53,
+            "gap": 32,
+            "pressure": 0.041
+          },
+          {
+            "pos": 10,
+            "team": "Chelsea",
+            "points": 52,
+            "gap": 33,
+            "pressure": 0.037
+          },
+          {
+            "pos": 11,
+            "team": "Fulham",
+            "points": 52,
+            "gap": 33,
+            "pressure": 0.037
+          },
+          {
+            "pos": 12,
+            "team": "Newcastle United",
+            "points": 49,
+            "gap": 36,
+            "pressure": 0.027
+          },
+          {
+            "pos": 13,
+            "team": "Everton",
+            "points": 49,
+            "gap": 36,
+            "pressure": 0.027
+          },
+          {
+            "pos": 14,
+            "team": "Leeds United",
+            "points": 47,
+            "gap": 38,
+            "pressure": 0.022
+          },
+          {
+            "pos": 15,
+            "team": "Crystal Palace",
+            "points": 45,
+            "gap": 40,
+            "pressure": 0.018
+          },
+          {
+            "pos": 16,
+            "team": "Nottingham Forest",
+            "points": 44,
+            "gap": 41,
+            "pressure": 0.017
+          },
+          {
+            "pos": 17,
+            "team": "Tottenham Hotspur",
+            "points": 41,
+            "gap": 44,
+            "pressure": 0.012
+          },
+          {
+            "pos": 18,
+            "team": "West Ham United",
+            "points": 39,
+            "gap": 46,
+            "pressure": 0.01
+          },
+          {
+            "pos": 19,
+            "team": "Burnley",
+            "points": 22,
+            "gap": 63,
+            "pressure": 0.002
+          },
+          {
+            "pos": 20,
+            "team": "Wolverhampton Wanderers",
+            "points": 20,
+            "gap": 65,
+            "pressure": 0.002
+          }
+        ]
       }
     }
   },
