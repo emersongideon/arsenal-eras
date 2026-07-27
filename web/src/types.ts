@@ -1,7 +1,7 @@
 // Types mirroring the processed JSON (data/processed/*.json).
 
 export type Season = "2003/04" | "2025/26";
-export type Category = "fact" | "measured" | "speculative";
+export type Category = "fact" | "measured" | "interpretation";
 
 export interface SeasonSummary {
   season: Season;
@@ -75,65 +75,119 @@ export interface ModelResult {
   matches: ModelMatch[];
 }
 
-export interface EraData {
-  var: {
-    category: Category;
-    headline: string;
-    var_introduced: string;
-    assumptions: string[];
-    estimated_points_swing: { low: number; high: number };
-    direction_note: string;
-  };
-  fixture_load: {
-    category: Category;
-    headline: string;
-    by_competition: Record<Season, Record<string, number>>;
-    total: Record<Season, number>;
-    european: Record<Season, number>;
-    delta_total: number;
-    delta_european: number;
-    sources: string[];
-  };
-  schedule_difficulty: {
-    category: Category;
-    headline: string;
+// --- Section B: circumstances ---------------------------------------------
+export interface Circumstances {
+  chasing_pack: {
+    xg_note: string;
     by_season: Record<
       Season,
       {
-        ppg_overall: number;
-        ppg_vs_bottom_half: number;
-        ppg_vs_top_rivals: number;
-        games_vs_bottom_half: number;
-        games_vs_top_rivals: number;
-        points_vs_bottom_half: number;
-        points_dropped_vs_bottom_half: number;
+        top4: { pos: number; team: string; points: number }[];
+        champion_points: number;
+        runner_up_points: number;
       }
     >;
-    sources: string[];
   };
+  margin_to_second: {
+    by_season: Record<
+      Season,
+      {
+        champion: string;
+        champion_points: number;
+        runner_up: string;
+        runner_up_points: number;
+        margin: number;
+      }
+    >;
+  };
+  league_shape: {
+    by_season: Record<
+      Season,
+      {
+        points: number[];
+        champion: number;
+        bottom: number;
+        spread: number;
+        std: number;
+        top6_mean: number;
+        mid_mean: number;
+        relegation_cutoff: number;
+      }
+    >;
+  };
+  squad_continuity: {
+    by_season: Record<
+      Season,
+      {
+        prior_season: string;
+        squad_size: number;
+        retained: number;
+        incoming: number;
+        outgoing: number;
+        retention_pct: number;
+      }
+    >;
+  };
+  sources: { final_tables: string[]; squads: string[] };
 }
 
-export interface ThoughtExperimentSpec {
-  category: Category;
-  disclaimer: string;
-  base_points: number;
-  components: { name: string; band: [number, number]; assumption: string }[];
-  var_slider: { min: number; max: number; default: number; step: number };
-  default: TeResult;
-  samples: TeResult[];
+// --- Section C: physical ---------------------------------------------------
+export interface Physical {
+  squad_age: {
+    by_season: Record<
+      Season,
+      {
+        reference_date: string;
+        minutes_weighted_age: number;
+        simple_mean_age: number;
+        youngest: number;
+        oldest: number;
+        u23_minutes_share: number;
+        over30_minutes_share: number;
+      }
+    >;
+  };
+  fixture_congestion: {
+    note: string;
+    by_season: Record<
+      Season,
+      {
+        total_games: number;
+        span_days: number;
+        games_per_month: { label: string; games: number }[];
+        busiest_month: string;
+        busiest_month_games: number;
+        min_rest_days: number;
+        median_rest_days: number;
+        short_rest_count: number;
+      }
+    >;
+  };
+  tracking_note: string;
+  sources: { fixtures: string[]; birthdates: string };
 }
 
-export interface TeResult {
-  category: Category;
-  base_points: number;
-  var_points: number;
-  range: { low: number; high: number };
-  midpoint: number;
+// --- Section D: synthesis --------------------------------------------------
+export interface Synthesis {
+  by_season: Record<
+    Season,
+    {
+      actual_points: number;
+      expected_points: number;
+      points_over_expected: number;
+      runner_up_points: number;
+      margin_to_second: number;
+      league_points_std: number;
+      retention_pct: number;
+      incoming: number;
+    }
+  >;
 }
 
 export interface Meta {
   title: string;
   question: string;
+  starting_fact: string;
   seasons: Season[];
   sources: Record<string, string>;
   model: string;
@@ -145,6 +199,7 @@ export interface Dataset {
   seasons: SeasonSummary[];
   matches: MatchRow[];
   model: Record<Season, ModelResult>;
-  era: EraData;
-  te: ThoughtExperimentSpec;
+  circumstances: Circumstances;
+  physical: Physical;
+  synthesis: Synthesis;
 }

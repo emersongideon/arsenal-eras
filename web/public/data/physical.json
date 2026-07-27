@@ -1,0 +1,141 @@
+{
+  "squad_age": {
+    "metric": "squad_age",
+    "by_season": {
+      "2003/04": {
+        "reference_date": "2004-01-01",
+        "minutes_weighted_age": 27.8,
+        "simple_mean_age": 27.1,
+        "youngest": 18.4,
+        "oldest": 37.4,
+        "u23_minutes_share": 0.127,
+        "over30_minutes_share": 0.268
+      },
+      "2025/26": {
+        "reference_date": "2026-01-01",
+        "minutes_weighted_age": 26.5,
+        "simple_mean_age": 25.9,
+        "youngest": 16.0,
+        "oldest": 31.8,
+        "u23_minutes_share": 0.051,
+        "over30_minutes_share": 0.147
+      }
+    }
+  },
+  "fixture_congestion": {
+    "metric": "fixture_congestion",
+    "note": "Modern physical-tracking data (distance covered, high-intensity sprints, GPS load, recovery) has no 2003/04 equivalent, so it is not compared here. Only metrics available for both eras - age and fixture dates - are used.",
+    "by_season": {
+      "2003/04": {
+        "total_games": 59,
+        "span_days": 279,
+        "games_per_month": [
+          {
+            "label": "Aug 2003",
+            "games": 5
+          },
+          {
+            "label": "Sep 2003",
+            "games": 5
+          },
+          {
+            "label": "Oct 2003",
+            "games": 5
+          },
+          {
+            "label": "Nov 2003",
+            "games": 6
+          },
+          {
+            "label": "Dec 2003",
+            "games": 8
+          },
+          {
+            "label": "Jan 2004",
+            "games": 6
+          },
+          {
+            "label": "Feb 2004",
+            "games": 8
+          },
+          {
+            "label": "Mar 2004",
+            "games": 6
+          },
+          {
+            "label": "Apr 2004",
+            "games": 6
+          },
+          {
+            "label": "May 2004",
+            "games": 4
+          }
+        ],
+        "busiest_month": "Dec 2003",
+        "busiest_month_games": 8,
+        "min_rest_days": 2,
+        "median_rest_days": 4.0,
+        "short_rest_count": 19
+      },
+      "2025/26": {
+        "total_games": 63,
+        "span_days": 286,
+        "games_per_month": [
+          {
+            "label": "Aug 2025",
+            "games": 3
+          },
+          {
+            "label": "Sep 2025",
+            "games": 5
+          },
+          {
+            "label": "Oct 2025",
+            "games": 6
+          },
+          {
+            "label": "Nov 2025",
+            "games": 6
+          },
+          {
+            "label": "Dec 2025",
+            "games": 8
+          },
+          {
+            "label": "Jan 2026",
+            "games": 9
+          },
+          {
+            "label": "Feb 2026",
+            "games": 6
+          },
+          {
+            "label": "Mar 2026",
+            "games": 7
+          },
+          {
+            "label": "Apr 2026",
+            "games": 7
+          },
+          {
+            "label": "May 2026",
+            "games": 6
+          }
+        ],
+        "busiest_month": "Jan 2026",
+        "busiest_month_games": 9,
+        "min_rest_days": 3,
+        "median_rest_days": 4.0,
+        "short_rest_count": 30
+      }
+    }
+  },
+  "tracking_note": "Modern physical-tracking data (distance covered, high-intensity sprints, GPS load, recovery) has no 2003/04 equivalent, so it is not compared here. Only metrics available for both eras - age and fixture dates - are used.",
+  "sources": {
+    "fixtures": [
+      "https://en.wikipedia.org/wiki/2003%E2%80%9304_Arsenal_F.C._season",
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_Arsenal_F.C._season"
+    ],
+    "birthdates": "Wikipedia player infoboxes"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "chasing_pack": {
+    "metric": "chasing_pack",
+    "xg_note": "Rival-team xG exists for 2025/26 (Understat) but not for 2003/04, so the chasing pack is compared on actual points - the fair like-for-like measure.",
+    "by_season": {
+      "2003/04": {
+        "top4": [
+          {
+            "pos": 1,
+            "team": "Arsenal",
+            "points": 90
+          },
+          {
+            "pos": 2,
+            "team": "Chelsea",
+            "points": 79
+          },
+          {
+            "pos": 3,
+            "team": "Manchester United",
+            "points": 75
+          },
+          {
+            "pos": 4,
+            "team": "Liverpool",
+            "points": 60
+          }
+        ],
+        "champion_points": 90,
+        "runner_up_points": 79
+      },
+      "2025/26": {
+        "top4": [
+          {
+            "pos": 1,
+            "team": "Arsenal",
+            "points": 85
+          },
+          {
+            "pos": 2,
+            "team": "Manchester City",
+            "points": 78
+          },
+          {
+            "pos": 3,
+            "team": "Manchester United",
+            "points": 71
+          },
+          {
+            "pos": 4,
+            "team": "Aston Villa",
+            "points": 65
+          }
+        ],
+        "champion_points": 85,
+        "runner_up_points": 78
+      }
+    }
+  },
+  "margin_to_second": {
+    "metric": "margin_to_second",
+    "by_season": {
+      "2003/04": {
+        "champion": "Arsenal",
+        "champion_points": 90,
+        "runner_up": "Chelsea",
+        "runner_up_points": 79,
+        "margin": 11
+      },
+      "2025/26": {
+        "champion": "Arsenal",
+        "champion_points": 85,
+        "runner_up": "Manchester City",
+        "runner_up_points": 78,
+        "margin": 7
+      }
+    }
+  },
+  "league_shape": {
+    "metric": "league_shape",
+    "by_season": {
+      "2003/04": {
+        "points": [
+          90,
+          79,
+          75,
+          60,
+          56,
+          56,
+          53,
+          53,
+          52,
+          50,
+          48,
+          47,
+          45,
+          45,
+          44,
+          41,
+          39,
+          33,
+          33,
+          33
+        ],
+        "champion": 90,
+        "bottom": 33,
+        "spread": 57,
+        "std": 14.8,
+        "top6_mean": 69.3,
+        "mid_mean": 49.1,
+        "relegation_cutoff": 39
+      },
+      "2025/26": {
+        "points": [
+          85,
+          78,
+          71,
+          65,
+          60,
+          57,
+          54,
+          53,
+          53,
+          52,
+          52,
+          49,
+          49,
+          47,
+          45,
+          44,
+          41,
+          39,
+          22,
+          20
+        ],
+        "champion": 85,
+        "bottom": 20,
+        "spread": 65,
+        "std": 15.4,
+        "top6_mean": 69.3,
+        "mid_mean": 51.1,
+        "relegation_cutoff": 41
+      }
+    }
+  },
+  "squad_continuity": {
+    "metric": "squad_continuity",
+    "by_season": {
+      "2003/04": {
+        "prior_season": "2002/03",
+        "squad_size": 22,
+        "retained": 18,
+        "incoming": 4,
+        "outgoing": 10,
+        "retention_pct": 81.8
+      },
+      "2025/26": {
+        "prior_season": "2024/25",
+        "squad_size": 25,
+        "retained": 16,
+        "incoming": 9,
+        "outgoing": 8,
+        "retention_pct": 64.0
+      }
+    }
+  },
+  "sources": {
+    "final_tables": [
+      "https://en.wikipedia.org/wiki/2003%E2%80%9304_FA_Premier_League",
+      "https://en.wikipedia.org/wiki/2025%E2%80%9326_Premier_League"
+    ],
+    "squads": [
+      "https://en.wikipedia.org/wiki/2002%E2%80%9303_Arsenal_F.C._season",
+      "https://en.wikipedia.org/wiki/2024%E2%80%9325_Arsenal_F.C._season"
+    ]
+  }
+}

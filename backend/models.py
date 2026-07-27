@@ -61,16 +61,6 @@ class Player(BaseModel):
     xg_per_shot: float
 
 
-class ThoughtExperimentResult(BaseModel):
-    """Live Act-4 recompute for a given VAR assumption."""
-
-    category: str = "speculative"
-    base_points: int
-    var_points: float
-    range: dict[str, float]
-    midpoint: float
-
-
 class HealthResponse(BaseModel):
     status: str
     seasons: list[str]

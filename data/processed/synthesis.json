@@ -1,0 +1,24 @@
+{
+  "by_season": {
+    "2003/04": {
+      "actual_points": 90,
+      "expected_points": 69.4,
+      "points_over_expected": 20.6,
+      "runner_up_points": 79,
+      "margin_to_second": 11,
+      "league_points_std": 14.8,
+      "retention_pct": 81.8,
+      "incoming": 4
+    },
+    "2025/26": {
+      "actual_points": 85,
+      "expected_points": 69.2,
+      "points_over_expected": 15.8,
+      "runner_up_points": 78,
+      "margin_to_second": 7,
+      "league_points_std": 15.4,
+      "retention_pct": 64.0,
+      "incoming": 9
+    }
+  }
+}

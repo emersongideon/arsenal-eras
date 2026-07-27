@@ -1,14 +1,15 @@
 {
-  "title": "Arsenal Eras - 2003/04 vs 2025/26",
-  "question": "Two Arsenal title teams, 22 years apart. Which one had the harder job?",
+  "title": "Two Arsenals - which era faced the harder task?",
+  "question": "Two Arsenal title teams, 22 years apart. Which era faced the harder task - and how well did each side meet it?",
+  "starting_fact": "On the raw table the 2003/04 Invincibles were the more dominant league campaign: 90 points, unbeaten. This story is about the difficulty of the task each side faced, not which squad was more talented.",
   "seasons": [
     "2003/04",
     "2025/26"
   ],
   "sources": {
-    "2003/04": "StatsBomb Open Data (github.com/statsbomb/open-data), Premier League competition_id=2, season_id=44.",
-    "2025/26": "Understat (understat.com) per-match xG + player data."
+    "2003/04": "StatsBomb Open Data (Arsenal shot/xG events); final tables, squads and fixtures from Wikipedia.",
+    "2025/26": "Understat (per-match xG + player data); final tables, squads and fixtures from Wikipedia."
   },
   "model": "PoissonRegressor(goals ~ xG) -> independent-Poisson match outcomes -> expected points.",
-  "honesty_note": "Every figure is tagged fact / measured / speculative and never blended."
+  "honesty_note": "Every figure is tagged fact / measured / interpretation and never blended. Metrics without data for both eras are omitted or flagged, never fabricated."
 }

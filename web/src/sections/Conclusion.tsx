@@ -1,14 +1,22 @@
 import { Reveal, Section } from "../components/ui";
-import type { ModelResult, Season } from "../types";
+import type { Physical, Synthesis } from "../types";
 
-export function Conclusion({ model }: { model: Record<Season, ModelResult> }) {
+export function Conclusion({
+  synth,
+  physical,
+}: {
+  synth: Synthesis;
+  physical: Physical;
+}) {
+  const s = synth.by_season;
+  const fc = physical.fixture_congestion.by_season;
   return (
-    <Section id="conclusion" eyebrow="So - which era was harder?">
+    <Section id="verdict" eyebrow="Section E · So, which task was harder?">
       <Reveal>
-        <h2>It depends on what you value. Honestly.</h2>
+        <h2>It depends on what you weigh - and now the evidence is on the table</h2>
         <p className="lead narrow">
           The data doesn't crown a winner, and it would be dishonest to pretend it does.
-          Here's the fair version of each case.
+          Here's the fair version of each case, built from the sections above.
         </p>
       </Reveal>
 
@@ -18,41 +26,46 @@ export function Conclusion({ model }: { model: Record<Season, ModelResult> }) {
             <h3 style={{ color: "#8a6610" }}>The case for 2003/04</h3>
             <ul>
               <li>
-                <b>Zero defeats in 38.</b> The hardest thing to do in football is not
-                lose, ever. Nobody has done it since.
+                <b>Unbeaten.</b> The hardest thing in football is to never lose across 38
+                games - nobody has done it since.
               </li>
               <li>
-                <b>Excellent against everyone.</b> ~2.4 PPG against the top rivals, barely
-                dropping off against the rest - no soft points, no easy nights.
+                <b>The bigger cushion:</b> {s["2003/04"].margin_to_second} points clear,
+                and it beat the model by <b>+{s["2003/04"].points_over_expected}</b> - the
+                larger over-performance of the two.
               </li>
               <li>
-                <b>Out-finished its xG</b> by double figures: elite quality, not just
-                elite volume.
+                <b>A peak sustained:</b> {s["2003/04"].retention_pct}% squad continuity
+                meant a settled machine that had to stay flawless for a whole season.
               </li>
               <li>
-                Beat its expected points by <b>{model["2003/04"].points_over_expected}</b>{" "}
-                - the bigger over-performance of the two.
+                Out-finished its xG on top of elite chance volume - quality, not just
+                control.
               </li>
             </ul>
           </div>
           <div className="col s2526">
-            <h3 style={{ color: "#ef0107" }}>The case for 2025/26</h3>
+            <h3 style={{ color: "#d90007" }}>The case for 2025/26</h3>
             <ul>
               <li>
-                <b>A heavier, faster schedule:</b> 63 competitive games and 15 European
-                nights, in a deeper, more physical, more scrutinised league.
+                <b>A tighter race:</b> won by only {s["2025/26"].margin_to_second} points
+                over a Manchester City side ({s["2025/26"].runner_up_points} pts) every
+                bit as strong as the Invincibles' Chelsea.
               </li>
               <li>
-                <b>VAR-era margins:</b> every tight call reviewed, every offside toe
-                measured - pressure the 2003/04 side never faced.
+                <b>Won while rebuilding:</b> just {s["2025/26"].retention_pct}% of the
+                squad retained, {s["2025/26"].incoming} new PL players integrated on the
+                fly - not a settled machine.
               </li>
               <li>
-                <b>Ruthless where it mattered:</b> dropped just a handful of points to the
-                bottom half, and still cleared the field by seven.
+                <b>A brutal calendar:</b> {fc["2025/26"].total_games} games and{" "}
+                {fc["2025/26"].short_rest_count} short-rest turnarounds, against{" "}
+                {fc["2003/04"].total_games} and {fc["2003/04"].short_rest_count} in
+                2003/04.
               </li>
               <li>
-                Won without its best attacking xG translating into goals - a title built
-                on control and defence.
+                Beat the model by +{s["2025/26"].points_over_expected} despite
+                under-shooting its xG - a title built on defence and nerve.
               </li>
             </ul>
           </div>
@@ -62,23 +75,22 @@ export function Conclusion({ model }: { model: Record<Season, ModelResult> }) {
       <Reveal delay={80}>
         <div className="narrow" style={{ marginTop: 30 }}>
           <p>
-            <b>The honest takeaway.</b> If "hardest" means <i>sustained perfection</i>,
-            2003/04 wins - going unbeaten is a category of difficulty all its own. If
-            "hardest" means <i>the toughest environment to win 85 points in</i> - more
-            games, deeper opposition, unforgiving officiating - then 2025/26 has the
-            better claim than the bare table suggests.
+            <b>The honest takeaway.</b> If "harder" means <i>sustained perfection</i>,
+            2003/04 wins - going unbeaten is a category of difficulty all its own, and the
+            surface table rightly rates it the more dominant season. If "harder" means the{" "}
+            <i>more demanding conditions to win 85 points in</i> - an equally strong
+            rival, a smaller margin, a rebuilt squad, and a far heavier fixture load -
+            then 2025/26 met a task the 2003/04 side never faced.
           </p>
           <p className="dim">
-            What the model <em>can</em> say cleanly: both were genuine champions who beat
-            their expected points, by similar margins, via opposite methods - one by
-            finishing, one by defending and holding its nerve. The rest is a values
-            judgement, and it should stay one.
+            What the evidence says cleanly: both were genuine champions who beat their
+            expected points, by similar margins, via opposite methods and against
+            different obstacles. The rest is a values judgement, and it should stay one.
           </p>
           <p style={{ marginTop: 18, fontStyle: "italic" }}>
-            And the personal footnote the model isn't allowed to have: as an Arsenal fan,
-            both title-winning seasons are sweet. But 2003/04 is the one that made me a
-            fan in the first place, so I know which way my heart votes even if the numbers
-            won't.
+            The personal footnote the model isn't allowed to have: as an Arsenal fan, both
+            titles are sweet - but 2003/04 is the one that made me a fan in the first
+            place, so I know which way my heart votes even if the numbers won't.
           </p>
         </div>
       </Reveal>

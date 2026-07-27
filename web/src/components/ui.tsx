@@ -41,11 +41,11 @@ export function GitHubLink({ variant }: { variant: "header" | "footer" }) {
 
 const CATEGORY_LABEL: Record<Category, string> = {
   fact: "Historical fact",
-  measured: "Measured (model output)",
-  speculative: "Speculative",
+  measured: "Measured",
+  interpretation: "Interpretation",
 };
 
-/** The recurring fact / measured / speculative label. This visual language is
+/** The recurring fact / measured / interpretation label. This visual language is
  *  the whole point of the intellectual-honesty requirement. */
 export function CategoryBadge({ category }: { category: Category }) {
   return (

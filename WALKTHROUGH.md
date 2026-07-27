@@ -17,9 +17,10 @@ without tooling.
 ## 1. The big picture
 
 The project answers one question: **Arsenal's 2003/04 "Invincibles" vs the 2025/26
-title winners - which team had the harder job?** It's a guided, scroll-driven data
-story with a strict rule: never blend **fact**, **measured model output**, and
-**speculation**.
+title winners - which era faced the harder task?** (Not which squad was better: on the
+raw table the Invincibles were the more dominant campaign.) It's a guided, scroll-driven
+story with a strict rule: never blend **fact**, **measured** output, and
+**interpretation**.
 
 The data flows one direction:
 
@@ -46,7 +47,7 @@ at page load. That's why it can be hosted as a free static site.
 | `backend/` | A small FastAPI REST API that serves the processed data via SQLite. |
 | `web/` | The React + TypeScript scroll-telling website. |
 | `scripts/` | One-off tools (the Understat fetcher). |
-| `tests/` | pytest unit tests for the model and transforms. |
+| `tests/` | pytest unit tests for the model, transforms, and section builders. |
 | `data/raw/` | Cached source data (git-ignored except the small Understat file). |
 | `data/processed/` | The committed JSON that the app consumes. |
 
@@ -71,7 +72,7 @@ the two seasons can be compared fairly.
   - 2025/26 comes from **Understat** (already aggregated per match). The raw pull is
     done once by `scripts/fetch_understat.mjs` and cached as a small JSON.
 - **`transforms.py`** - the pandas work: `groupby` to get season summaries, a
-  **rolling** window for form, `merge`/filter logic for schedule difficulty. Pure
+  **rolling** window for form, and per-season aggregations. Pure
   functions, so they're easy to test.
 - **`facts.py`** - hard, looked-up historical facts (final league tables, how many
   cup/European games each season) with source URLs. Kept separate on purpose so
@@ -101,7 +102,7 @@ the two seasons can be compared fairly.
 
 ## 3. The expected-points model (`analysis/model.py`) - the interview crux
 
-This is the "measured" core (Act 2 of the story). It answers: *given the quality of
+This is the "measured" core (Sections A and D). It answers: *given the quality of
 chances each team created and conceded, how many points did they actually deserve?*
 
 ### The idea in one paragraph
@@ -184,52 +185,62 @@ the tight games:
 
 ---
 
-## 4. The era context and thought experiment (`analysis/era.py`)
+## 4. Circumstances, physical, synthesis (`circumstances.py`, `physical.py`, `synthesis.py`)
 
-This is Acts 3 and 4, and it's where the **honesty framing** is most important.
+This is the depth of the argument (Sections B-D), and where the **data-availability
+honesty** matters most.
 
-- **Act 3 - three "levers"** that are context, not part of the points model:
-  - *VAR* (didn't exist in 2003/04): explicitly **speculative** - a directional
-    estimate with stated assumptions, never fed into the model.
-  - *Fixture load* (total competitive games each season): **hard fact**, sourced.
-  - *Schedule difficulty* (points-per-game vs the bottom half of the table):
-    **derived from real results** - a genuine computation.
-- **Act 4 - the thought experiment:** transpose the Invincibles into 2025/26
-  conditions. This is **openly speculative** and deliberately produces a **range**,
-  never a single number. One assumption (VAR impact) is exposed as a slider so the
-  uncertainty is tangible. The exact same arithmetic lives in one Python function
-  (`thought_experiment`) and is mirrored in the frontend so the slider is instant -
-  the Python function is the single source of truth.
+- **`circumstances.py` (Section B)** - four measured angles on how hard the league was:
+  - *Chasing pack* - points of the teams that finished 2nd-4th. **Fact** (final tables).
+    Rival-team xG doesn't exist for 2003/04, so this is points-based for both eras and
+    says so.
+  - *Margin to 2nd* - the size of the title-winning cushion. **Fact**.
+  - *League shape* - the spread/dispersion of all 20 teams' points (top-heavy vs deep).
+    **Measured** (a computation on the fact).
+  - *Squad continuity* - how much of the PL squad was retained from the prior season.
+    **Measured** (a set operation on sourced squad lists).
+- **`physical.py` (Section C)** - two metrics that exist cleanly for BOTH eras:
+  - *Minutes-weighted squad age* - birthdates weighted by that season's league minutes.
+  - *Fixture congestion* - games-per-month and rest-gaps, computed from every
+    competitive match date. This is where the honesty note lives: modern tracking data
+    (distance, sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately
+    excluded rather than fabricated.
+- **`synthesis.py` (Section D)** - re-reads the measured expected-points model *through*
+  the circumstances: not "did they beat their xG?" but "against a stronger or weaker
+  field, and in what shape?". It only assembles measured numbers side by side; the
+  cumulative reading is presented in the frontend and tagged **interpretation**.
 
 ### Be ready to explain
-- *Why keep these separate from the model?* Because mixing a made-up VAR adjustment
-  into a measured expected-points number would be dishonest and is exactly the kind of
-  thing an analyst should never do. The whole app is built to keep the three
-  categories visually and structurally apart.
+- *Why is rival xG missing for 2003/04, and how is that handled?* Understat (the only
+  accessible free xG source that covers non-Arsenal teams) starts in 2014/15, and
+  StatsBomb's free data only has Arsenal's matches. So there's no rival xG for 2003/04 -
+  the chasing pack is compared on actual points for both eras, and the gap is stated.
+- *Why keep "interpretation" separate from the measurements?* Because a stated reading
+  ("this points to a harder task") is a judgement, not a number. Presenting it as a
+  measured fact would be exactly the dishonesty the whole app is built to avoid.
 
 ---
 
 ## 5. The API (`backend/`)
 
 ### What it does
-A small **FastAPI** service that serves the processed data and recomputes the Act-4
-range live. Endpoints are listed in the README.
+A small **FastAPI** service that serves the processed data. Endpoints are in the README.
 
 - **`db.py`** - loads the processed JSON into an **in-memory SQLite** database at
   startup and exposes it via real SQL queries. Tabular data goes into typed columns;
   the nested analytical documents go into a small key/value table.
 - **`models.py`** - **pydantic** models that type every response.
-- **`main.py`** - the routes. The thought-experiment endpoint imports the *same*
-  `analysis.era` function the pipeline uses, so there's no duplicated logic.
+- **`main.py`** - the routes: seasons, matches, players, model, and the section
+  documents (circumstances / physical / synthesis).
 
 ### Key decisions
 - **No database of record.** The data is tiny and read-only, so a stateful database
   would be pure overhead. SQLite-in-memory gives me genuine SQL (a skill I wanted to
   show) without any of that weight.
-- **The API doesn't need pandas/scikit-learn at runtime.** It only reuses one tiny
-  pure-Python function from `analysis.era`; that import is kept lazy so the API's
-  dependencies stay minimal (just FastAPI + pydantic). I verified the API boots from
-  a clean checkout with only `backend/requirements.txt` installed.
+- **The API needs no pandas/scikit-learn at runtime.** It's a pure read-only query
+  layer over the pre-built JSON, so its dependencies stay minimal (just FastAPI +
+  pydantic). I verified it boots from a clean checkout with only
+  `backend/requirements.txt` installed.
 
 ### Be ready to explain
 - *Is the SQL real or decorative?* Real - the list/filter/sort endpoints are
@@ -244,17 +255,16 @@ range live. Endpoints are listed in the README.
 
 ### What it does
 A single-page **React + TypeScript** app that tells the story as you scroll: a hook, a
-side-by-side "meet the teams", then Acts 1-4, then a balanced verdict.
+the data sources, then Sections A-D, then a balanced verdict.
 
-- **`data.ts`** - loads the baked JSON from `/public/data`. Also contains the
-  client-side **mirror** of the thought-experiment formula so the Act-4 slider updates
-  instantly and offline.
+- **`data.ts`** - loads the baked JSON from `/public/data`.
 - **`types.ts`** - TypeScript interfaces mirroring the JSON shape (type safety across
   the whole UI).
-- **`components/charts.tsx`** - the recharts charts (cumulative points, xG bars, the
-  per-match scatter, fixture load, schedule difficulty, the range bar).
+- **`components/charts.tsx`** - the recharts charts (title race, output bars, chasing
+  pack, margin, league-shape distributions, squad continuity, squad age, fixture
+  congestion, expected-points, per-match scatter).
 - **`components/ui.tsx`** - shared pieces: the **category badge** (fact / measured /
-  speculative - the honesty system made visual), a scroll-reveal wrapper, the GitHub
+  interpretation - the honesty system made visual), a scroll-reveal wrapper, the GitHub
   link.
 - **`sections/*`** - one file per narrative section.
 
@@ -279,11 +289,13 @@ side-by-side "meet the teams", then Acts 1-4, then a balanced verdict.
 
 ## 7. Tests, tooling, and CI
 
-- **`tests/`** - 14 pytest tests covering the model (probabilities sum to ~1, a
+- **`tests/`** - 17 pytest tests covering the model (probabilities sum to ~1, a
   symmetric match is 50/50, higher xG raises win probability, the calibration
-  identity, output shape) and the transforms (season tallies, rolling window, derived
-  per-90 columns, schedule-difficulty filtering, the thought-experiment range and
-  clamping). They test **logic and invariants**, not just that code runs.
+  identity, output shape), the transforms (season tallies, rolling window, derived
+  per-90 columns), and the section builders (title-race margin matches the final
+  table, league spread, squad-continuity counts reconcile, fixture totals match the
+  source, age is genuinely minutes-weighted). They test **logic and invariants**, not
+  just that code runs.
 - **Linters/formatters:** `ruff` for Python (config in `pyproject.toml`) and
   `prettier` + `eslint` (typescript-eslint + react-hooks) for the frontend. All pass
   with zero warnings; commands are in the README.
@@ -315,9 +327,16 @@ is of *expected points* (a calibrated output), plus clearly-labelled context.
 mildly correlated; the standard fixes are Dixon-Coles or a bivariate Poisson. For this
 scope the simpler model is defensible, and the limitation is documented.
 
-**"Isn't the Act-4 number made up?"** Yes, and it's labelled **speculative** in three
-places, presented as a range not a number, and built from assumptions you can see and
-change with the slider. That transparency is the entire point of the section.
+**"You're missing rival xG / physical tracking data for 2003/04 - isn't that a hole?"**
+It's a deliberate one. Rival-team xG doesn't exist that far back, and physical-tracking
+data has no 2003/04 equivalent, so instead of inventing a comparison I use actual points
+for the chasing pack and exclude tracking data entirely, with the gap stated in the UI.
+Cutting a metric you can't source for both eras is more credible than fabricating one -
+that discipline is the point of the whole piece.
+
+**"Aren't the 'suggested readings' just your opinion?"** Yes - and each is badged
+**interpretation** and visually walled off from the measurement it sits under. The
+numbers are shared; the reading is labelled as a judgement you can disagree with.
 
 **"Why SQLite/FastAPI if the site is static?"** To demonstrate the API/SQL skills the
 role asks for, and to offer a programmatic way to query the data. The static site is

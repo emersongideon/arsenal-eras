@@ -64,7 +64,7 @@ def build_connection() -> sqlite3.Connection:
     insert("seasons", _load("seasons.json"))
     insert("matches", _load("matches.json"))
     insert("players", _load("players.json"))
-    for key in ("model", "era", "thought_experiment", "meta"):
+    for key in ("model", "circumstances", "physical", "synthesis", "meta"):
         cur.execute(
             "INSERT INTO documents (key, json) VALUES (?, ?)",
             (key, json.dumps(_load(f"{key}.json"))),

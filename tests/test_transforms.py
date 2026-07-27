@@ -5,7 +5,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from analysis import era, transforms
+from analysis import transforms
 
 
 def _matches() -> pd.DataFrame:
@@ -106,27 +106,3 @@ def test_player_table_derived_columns():
     assert row["goals_minus_xg"] == pytest.approx(3.0)  # 12 - 9
     assert row["xg_per_90"] == pytest.approx(0.9)  # 9 / 900 * 90
     assert row["xg_per_shot"] == pytest.approx(0.3)  # 9 / 30
-
-
-def test_schedule_difficulty_filters_by_opponent():
-    sd = transforms.schedule_difficulty(_matches(), bottom_half={"Weak FC"}, top={"Big FC"})
-    # Two games vs Weak FC (3pts + 0pts) => 1.5 ppg over 2 games
-    assert sd["games_vs_bottom_half"] == 2
-    assert sd["ppg_vs_bottom_half"] == pytest.approx(1.5)
-    assert sd["points_dropped_vs_bottom_half"] == 3  # 6 available - 3 taken
-    assert sd["games_vs_top_rivals"] == 1
-
-
-def test_thought_experiment_is_a_range():
-    te = era.thought_experiment(base_points=90, var_points=0.0)
-    assert te["range"]["low"] < te["range"]["high"]
-    assert te["category"] == "speculative"
-
-
-def test_thought_experiment_var_is_monotonic_and_clamped():
-    low_var = era.thought_experiment(90, var_points=-6.0)["midpoint"]
-    high_var = era.thought_experiment(90, var_points=3.0)["midpoint"]
-    assert high_var > low_var
-    # Values beyond the slider bounds are clamped, not extrapolated.
-    clamped = era.thought_experiment(90, var_points=999.0)["var_points"]
-    assert clamped == era.VAR_SLIDER["max"]

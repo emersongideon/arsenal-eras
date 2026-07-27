@@ -154,7 +154,7 @@ a {
   color: var(--measured);
   background: var(--measured-soft);
 }
-.badge.speculative {
+.badge.interpretation {
   color: var(--spec);
   background: var(--spec-soft);
   border: 1px dashed currentColor;
@@ -285,6 +285,120 @@ a {
   border-color: var(--spec);
   background: var(--spec-soft);
   color: #5a3410;
+}
+
+/* ---------- Data-source lists ---------- */
+.src-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+.src-list li {
+  margin-bottom: 8px;
+  font-size: 14.5px;
+}
+
+/* ---------- Section B/C sub-layers ---------- */
+.sublayer {
+  margin-bottom: 20px;
+}
+.sublayer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.sublayer-head h3 {
+  margin: 0;
+}
+
+/* interpretation callout ("suggested reading") */
+.reading {
+  border-left: 3px solid var(--spec);
+  background: var(--spec-soft);
+  padding: 14px 16px;
+  border-radius: 0 12px 12px 0;
+  margin-top: 16px;
+  color: #5a3410;
+  font-size: 15px;
+}
+.reading p {
+  color: #5a3410;
+}
+.honesty p {
+  font-size: 15px;
+}
+
+/* fixture-congestion mini stats */
+.stat-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.mini-stat {
+  flex: 1 1 240px;
+  font-size: 13.5px;
+  color: var(--body);
+  background: #fafbfc;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.mini-tag {
+  display: inline-block;
+  font-weight: 800;
+  font-size: 12px;
+  margin-right: 8px;
+}
+.mini-stat.s0304 .mini-tag {
+  color: var(--gold-text);
+}
+.mini-stat.s2526 .mini-tag {
+  color: var(--red-text);
+}
+
+/* synthesis table */
+.tbl-wrap {
+  overflow-x: auto;
+}
+.synth-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+}
+.synth-table th,
+.synth-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.synth-table th {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.synth-table th.s0304 {
+  color: var(--gold-text);
+  text-align: center;
+}
+.synth-table th.s2526 {
+  color: var(--red-text);
+  text-align: center;
+}
+.synth-table td.ta-c {
+  text-align: center;
+  font-weight: 700;
+}
+
+/* connective-tissue handoff paragraph */
+.handoff {
+  margin-top: 26px;
+  font-style: italic;
+  font-size: 15px;
 }
 
 /* ---------- Two-column verdict ---------- */

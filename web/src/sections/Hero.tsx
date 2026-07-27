@@ -14,7 +14,7 @@ export function Hero({ meta }: { meta: Meta }) {
               />
               <figcaption className="cap">
                 <span className="y">2003/04</span>
-                <span className="l">The Invincibles · 90 pts</span>
+                <span className="l">The Invincibles · 90 pts, unbeaten</span>
               </figcaption>
             </figure>
             <span className="mid-vs">vs</span>
@@ -35,16 +35,17 @@ export function Hero({ meta }: { meta: Meta }) {
         </Reveal>
         <Reveal delay={160}>
           <p className="lead">
-            One went unbeaten - 38 games, 90 points, the "Invincibles". The other, 22
-            years later, took the title back with 85 points but five defeats. On the table
-            they look close. But the two teams played almost different sports. This is an
-            honest attempt to compare them: what the data can measure, what it can only
-            estimate, and what is pure speculation - kept strictly apart the whole way
-            down.
+            Be clear from the first whistle: on the raw table the{" "}
+            <b>2003/04 Invincibles were the more dominant league campaign</b> - 90 points,
+            not a single defeat. So this is not an argument about which squad was better.
+            It is about the <b>difficulty of the task</b> each side was handed - the field
+            they had to beat, and the state they were in to beat it - and how well each
+            one met it. Every figure below is tagged fact, measured, or interpretation,
+            and never blended.
           </p>
         </Reveal>
         <Reveal delay={240}>
-          <p className="scroll-hint">↓ Scroll to begin</p>
+          <p className="scroll-hint">↓ Start with where the data comes from</p>
         </Reveal>
       </div>
     </section>

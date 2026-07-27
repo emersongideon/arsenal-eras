@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import { loadDataset } from "./data";
 import type { Dataset } from "./types";
-import { Hero } from "./sections/Hero";
-import { MeetTeams } from "./sections/MeetTeams";
-import { Act1 } from "./sections/Act1";
-import { Act2 } from "./sections/Act2";
-import { Act3 } from "./sections/Act3";
-import { Act4 } from "./sections/Act4";
-import { Conclusion } from "./sections/Conclusion";
 import { GitHubLink } from "./components/ui";
+import { Hero } from "./sections/Hero";
+import { DataSources } from "./sections/DataSources";
+import { SectionA } from "./sections/SectionA";
+import { SectionB } from "./sections/SectionB";
+import { SectionC } from "./sections/SectionC";
+import { SectionD } from "./sections/SectionD";
+import { Conclusion } from "./sections/Conclusion";
 
 const SECTIONS = [
   ["hook", "Hook"],
-  ["meet", "Teams"],
-  ["act1", "Surface"],
-  ["act2", "Model"],
-  ["act3", "Era gap"],
-  ["act4", "What if"],
-  ["conclusion", "Verdict"],
+  ["sources", "Data"],
+  ["surface", "Surface"],
+  ["circumstances", "Circumstances"],
+  ["physical", "Physical"],
+  ["synthesis", "Synthesis"],
+  ["verdict", "Verdict"],
 ] as const;
 
 function NavDots() {
@@ -80,19 +80,19 @@ export default function App() {
       <GitHubLink variant="header" />
       <NavDots />
       <Hero meta={data.meta} />
-      <MeetTeams seasons={data.seasons} />
-      <Act1 matches={data.matches} seasons={data.seasons} />
-      <Act2 model={data.model} />
-      <Act3 era={data.era} />
-      <Act4 spec={data.te} />
-      <Conclusion model={data.model} />
+      <DataSources />
+      <SectionA seasons={data.seasons} matches={data.matches} />
+      <SectionB c={data.circumstances} />
+      <SectionC p={data.physical} />
+      <SectionD model={data.model} synth={data.synthesis} physical={data.physical} />
+      <Conclusion synth={data.synthesis} physical={data.physical} />
       <footer>
         <div className="wrap">
           <div style={{ fontWeight: 700, color: "#fff", marginBottom: 6 }}>
             {data.meta.title}
           </div>
           <div>
-            <b>Data.</b> 2003/04: {data.meta.sources["2003/04"]} · 2025/26:{" "}
+            <b>Data.</b> 2003/04: {data.meta.sources["2003/04"]} &nbsp;·&nbsp; 2025/26:{" "}
             {data.meta.sources["2025/26"]}
           </div>
           <div>
@@ -102,7 +102,7 @@ export default function App() {
           <div className="dim" style={{ marginTop: 8 }}>
             Every figure above is tagged <span style={{ color: "#7fd3c1" }}>fact</span> ·{" "}
             <span style={{ color: "#9ab4ff" }}>measured</span> ·{" "}
-            <span style={{ color: "#e6a256" }}>speculative</span> and never blended.
+            <span style={{ color: "#e6a256" }}>interpretation</span> and never blended.
           </div>
           <div style={{ marginTop: 14 }}>
             <GitHubLink variant="footer" />

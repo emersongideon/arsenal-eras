@@ -1,15 +1,14 @@
 """Arsenal Eras - REST API (FastAPI).
 
-Serves the processed season data and model output from an in-memory SQLite DB,
-and recomputes the Act-4 thought-experiment range live (reusing the analysis
-package, the single source of truth for that arithmetic).
+Serves the processed season data from an in-memory SQLite database. The data is
+built offline by the analysis pipeline (`python -m analysis.build`); this service
+is a thin, read-only query layer with no runtime dependency on pandas/scikit-learn.
 
 Run:  uvicorn main:app --app-dir backend --port 8000
 """
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
@@ -17,25 +16,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 import db
-from models import (
-    HealthResponse,
-    Match,
-    Player,
-    SeasonSummary,
-    ThoughtExperimentResult,
-)
+from models import HealthResponse, Match, Player, SeasonSummary
 
-# Make the repo-root `analysis` package importable so the API can reuse the
-# exact thought-experiment function the pipeline used.
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT))
-from analysis import era as era_mod  # noqa: E402
 
 app = FastAPI(
     title="Arsenal Eras API",
-    version="1.0.0",
-    description="2003/04 vs 2025/26 - expected-points model, era levers, and a "
-    "clearly-labelled speculative thought experiment.",
+    version="2.0.0",
+    description="2003/04 vs 2025/26 - expected-points model plus the circumstances "
+    "(chasing pack, league shape, squad continuity) and physical load each title "
+    "was won under.",
 )
 app.add_middleware(
     CORSMiddleware,
@@ -99,28 +89,22 @@ def model(season: str | None = Query(None)) -> dict:
     return doc
 
 
-@app.get("/api/era")
-def era() -> dict:
-    return db.one_document(CONN, "era")
+@app.get("/api/circumstances")
+def circumstances() -> dict:
+    """Section B: chasing pack, title-race margin, league shape, squad continuity."""
+    return db.one_document(CONN, "circumstances")
 
 
-@app.get("/api/thought-experiment", response_model=ThoughtExperimentResult)
-def thought_experiment(
-    var_points: float = Query(
-        era_mod.VAR_SLIDER["default"],
-        ge=era_mod.VAR_SLIDER["min"],
-        le=era_mod.VAR_SLIDER["max"],
-        description="VAR points assumption (the interactive lever).",
-    ),
-) -> dict:
-    spec = db.one_document(CONN, "thought_experiment")
-    return era_mod.thought_experiment(spec["base_points"], var_points)
+@app.get("/api/physical")
+def physical() -> dict:
+    """Section C: minutes-weighted squad age and fixture congestion."""
+    return db.one_document(CONN, "physical")
 
 
-@app.get("/api/thought-experiment/spec")
-def thought_experiment_spec() -> dict:
-    """The full Act-4 payload: components, assumptions, slider bounds."""
-    return db.one_document(CONN, "thought_experiment")
+@app.get("/api/synthesis")
+def synthesis() -> dict:
+    """Section D: the expected-points model re-read against the circumstances."""
+    return db.one_document(CONN, "synthesis")
 
 
 # --- serve the built SPA at "/" for a single-service deploy -----------------

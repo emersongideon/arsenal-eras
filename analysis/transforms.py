@@ -79,26 +79,3 @@ def player_table(players: pd.DataFrame) -> pd.DataFrame:
     df["goals_per_90"] = (df["goals"] / mins * C.PER90_BASE).round(3).fillna(0.0)
     df["xg_per_shot"] = (df["xg"] / df["shots"].replace(0, np.nan)).round(3).fillna(0.0)
     return df.sort_values(["season", "xg"], ascending=[True, False]).reset_index(drop=True)
-
-
-def schedule_difficulty(matches: pd.DataFrame, bottom_half: set[str], top: set[str]) -> dict:
-    """Points-per-game split by opponent strength (a competitive-depth proxy).
-
-    Uses a merge-free membership filter on the pre-computed final-table sets.
-    Returns PPG vs bottom-half (11th-20th) and vs the top rivals (2nd-6th).
-    """
-
-    def ppg(sub: pd.DataFrame) -> float:
-        return round(sub["points"].sum() / len(sub), 3) if len(sub) else 0.0
-
-    vs_bottom = matches[matches["opponent"].isin(bottom_half)]
-    vs_top = matches[matches["opponent"].isin(top)]
-    return {
-        "ppg_overall": ppg(matches),
-        "ppg_vs_bottom_half": ppg(vs_bottom),
-        "ppg_vs_top_rivals": ppg(vs_top),
-        "games_vs_bottom_half": int(len(vs_bottom)),
-        "games_vs_top_rivals": int(len(vs_top)),
-        "points_vs_bottom_half": int(vs_bottom["points"].sum()),
-        "points_dropped_vs_bottom_half": int(3 * len(vs_bottom) - vs_bottom["points"].sum()),
-    }

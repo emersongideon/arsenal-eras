@@ -1,12 +1,16 @@
-# Two Arsenals - Which Era Was Harder?
+# Two Arsenals - Which Era Faced the Harder Task?
 
 A full-stack, narrative **scrollytelling** data app comparing Arsenal's 2003/04
-"Invincibles" (38 unbeaten, 90 pts) with the 2025/26 title winners (85 pts, 26-7-5),
-asking: **which team actually had the harder job?**
+"Invincibles" (38 unbeaten, 90 pts) with the 2025/26 title winners (85 pts, 26-7-5).
+The 2003/04 campaign was the more dominant on the raw table - so the question isn't
+which squad was better, it's **which era faced the harder task, and how well each side
+met it**.
 
-It reads start-to-finish as a guided story - Hook → Meet the teams → four Acts →
-a balanced verdict - built on real shot data, an expected-points model, and an
-explicit separation of **fact**, **measured model output**, and **speculation**.
+It reads start-to-finish as a guided argument that builds: Hook → Data sources →
+**A. The surface** → **B. How hard was the task?** (chasing pack, margin, league shape,
+squad continuity) → **C. The physical toll** (age, fixture congestion) → **D. Synthesis**
+→ **E. Verdict** - built on real shot data, an expected-points model, and an explicit
+separation of **fact / measured / interpretation**.
 
 ![Hook](docs/hero.png)
 
@@ -19,25 +23,27 @@ explicit separation of **fact**, **measured model output**, and **speculation**.
 
 ## The question
 
-On the table the two title runs look close - five points apart. But the eras barely
-played the same sport: VAR, a bigger Champions League, a deeper division. This app
-tries to compare them **honestly**, and its guiding rule is that the three kinds of
-claim are never blended:
+On the table the Invincibles were clearly the more dominant campaign. But a points total
+is only as impressive as the field it was won in and the state the side was in to win it.
+So the app compares the **difficulty of the task** each era faced, with one guiding rule:
+the three kinds of claim are never blended.
 
 | Category | Meaning | Example in the app |
 |---|---|---|
-| 🟢 **Fact** | Looked-up historical record | Points, results, competitive match counts, final tables |
-| 🔵 **Measured** | Output of the xG model on real data | Expected points; points-per-game vs opponent tiers |
-| 🟠 **Speculative** | Explicit, assumption-driven estimate | VAR impact; the "transpose the Invincibles" thought experiment |
+| 🟢 **Fact** | Looked-up historical record | Final tables, chasing-pack points, margins, squads, fixture dates |
+| 🔵 **Measured** | Computed from data (incl. the model) | Expected points; league-points spread; minutes-weighted age; rest-gaps |
+| 🟠 **Interpretation** | A stated reading of the numbers | The "suggested reading" under each sub-layer, and the verdict |
 
-Every figure on the page carries its category as a badge, and the speculative Act is
-visually walled off (dashed borders, its own tint). That separation *is* the exercise.
+Every figure carries its category as a badge, and each interpretation is walled off
+(dashed border, amber tint) from the measurement it reads. That separation *is* the
+exercise. Where a metric only exists for one era - rival-team xG for 2003/04, modern
+physical-tracking data - it is **omitted or flagged, never fabricated**.
 
 ---
 
 ## The model - expected points, and why Poisson-from-xG is reasonable
 
-The measured core (Act 2) answers *"how many points did each team actually deserve?"*
+The measured core (Sections A and D) answers *"how many points did each team actually deserve?"*
 
 1. **Goals are a Poisson process.** Goals per team per match are low-count, roughly
    independent events - the textbook Poisson use-case. Expected goals (xG) already
@@ -78,17 +84,22 @@ Factual attribution, and the seasons each source covers:
   Understat is behind a Cloudflare JS challenge, so the data is pulled once with a real
   browser (`scripts/fetch_understat.mjs`, puppeteer-core driving local Chrome) and
   **cached to `data/raw/`**.
-- **Act-3 historical facts** (competitive match counts per competition; full final
-  league tables) are looked-up and cited in `analysis/facts.py` (primarily Wikipedia
-  season/competition pages).
+- **Final tables, squads, and fixture dates** (for the circumstances/physical sections)
+  are looked-up and cited in `analysis/facts.py` (final league tables) and
+  `analysis/sources.py` (all-competition fixture dates, prior/current squad lists, and
+  player birthdates) - primarily Wikipedia season/competition articles and player
+  infoboxes.
 
-**Derived fields, noted for honesty:**
+**Derived fields and honest gaps:**
 - 2003/04 **minutes** are derived from lineup stints on a 90-minute regulation baseline.
-- 2025/26 **shots**: Understat's `playersData` exposes raw shot totals directly, so -
-  contrary to what the team-page HTML table (which only shows `Sh90`) suggests - **no
-  Sh90×minutes derivation was needed**; I use the real totals.
-- The two seasons use **different xG models**, so cross-era xG is compared with that
-  caveat (the model is calibrated per-season for exactly this reason).
+- **Minutes-weighted age** uses public birthdates weighted by that season's league minutes.
+- The two seasons use **different xG models** (StatsBomb vs Understat), so xG is
+  calibrated per-season, never compared directly.
+- **Rival-team xG does not exist for 2003/04** (Understat starts 2014/15), so the chasing
+  pack is compared on **actual points** for both eras, with the gap stated in the UI.
+- **Physical-tracking data** (distance, sprints, GPS) has no 2003/04 equivalent, so it is
+  **deliberately excluded** rather than fabricated - the physical section only uses age
+  and fixture dates, which exist cleanly for both.
 
 **Everything runs offline.** The one network step is the Understat fetch; its output and
 all processed JSON are committed, so the app and notebook need no live request at load
@@ -104,17 +115,20 @@ analysis/            data + model layer (importable, tested)
   loaders.py         raw StatsBomb / Understat  ->  canonical pandas frames
   transforms.py      groupby / merge / rolling aggregations
   model.py           PoissonRegressor xG->goals  ->  expected points
-  era.py             Act-3 levers + Act-4 thought-experiment range
-  facts.py           cited historical facts (Act 3)
+  circumstances.py   Section B: chasing pack, margin, league shape, squad continuity
+  physical.py        Section C: minutes-weighted age + fixture congestion
+  synthesis.py       Section D: model output re-read against the circumstances
+  facts.py           cited final league tables
+  sources.py         cited fixture dates, squad lists, player birthdates
   build.py           orchestrates -> data/processed/*.json
 analysis.ipynb       narrated Colab notebook (pandas/numpy/sklearn/matplotlib)
 scripts/
   fetch_understat.mjs  one-off Understat pull via puppeteer-core + local Chrome
-tests/               pytest unit tests for model + transforms
+tests/               pytest unit tests for model, transforms + section builders
 backend/             FastAPI + pydantic; loads processed JSON into SQLite, queried by SQL
   main.py  db.py  models.py
 web/                 React + TypeScript + Vite scrollytelling SPA (recharts)
-  src/sections/      Hero, MeetTeams, Act1..Act4, Conclusion
+  src/sections/      Hero, DataSources, SectionA..SectionD, Conclusion
   src/components/    charts, shared UI (category badges, reveal-on-scroll)
 data/
   raw/               cached source data (Understat committed; StatsBomb git-ignored)
@@ -135,8 +149,9 @@ queries. SQLite earns its place as the query layer without the overhead of a sta
 | `GET /api/matches?season=` | per-match rows incl. rolling form (SQL) |
 | `GET /api/players?season=&min_shots=&sort_by=` | player aggregates (SQL) |
 | `GET /api/model?season=` | expected-points output + calibration |
-| `GET /api/era` | Act-3 levers |
-| `GET /api/thought-experiment?var_points=` | **live** Act-4 range recompute (reuses `analysis.era`) |
+| `GET /api/circumstances` | Section B: chasing pack, margin, league shape, squad continuity |
+| `GET /api/physical` | Section C: minutes-weighted age + fixture congestion |
+| `GET /api/synthesis` | Section D: model output re-read against the circumstances |
 
 ---
 
@@ -165,7 +180,7 @@ for - end-to-end, from data acquisition to a deployed full-stack product - and t
 | **JavaScript / TypeScript** | `web/`: React 18 in strict TypeScript - typed components, props, and a typed data layer mirroring the API schema |
 | **Full-stack, end-to-end internal products** | one repo takes raw shot data → pandas/sklearn pipeline → FastAPI + SQLite API → React SPA, with a one-command build and a single-URL deploy |
 | **Applied machine learning** | `analysis/model.py`: a Poisson GLM (`PoissonRegressor`) mapping xG→goals, propagated to expected points - fit, calibrated, validated, and unit-tested rather than treated as a black box |
-| **Data design & visualization** | a deliberate visual language: consistent team colours, per-match xG scatters, a fact/measured/speculative badge system, and matplotlib EDA in the notebook |
+| **Data design & visualization** | a deliberate visual language: consistent team colours, per-match xG scatters, a fact/measured/interpretation badge system, and matplotlib EDA in the notebook |
 | **Communicating to technical *and* non-technical audiences** | the story explains the model in plain English inline; the notebook narrates the reasoning; this README defends the methodology |
 | **Grounding work in real-world constraints** | the whole intellectual-honesty spine - never presenting a speculative number as a measured one - is exactly the discipline an analyst needs to trust a tool |
 | **Engineering mindset / scalable** | modular `data / model / api / web` split, type hints, pytest, pinned dependencies |
@@ -208,8 +223,7 @@ To refresh the 2025/26 data from Understat: `cd scripts && npm install && npm ru
 ## Deploy to a public URL
 
 **GitHub Pages (no third-party host).** The SPA is fully static (it reads the committed
-JSON in `web/public/data` and recomputes the Act-4 slider client-side), so it runs on
-Pages with nothing else. The committed workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+JSON in `web/public/data`), so it runs on Pages with nothing else. The committed workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
 builds `web/` and publishes it on every push to `main`. Just enable it once:
 **repo Settings → Pages → Build and deployment → Source: GitHub Actions.** The site lands
 at `https://<username>.github.io/<repo>/`. (Pages is static-only, so the FastAPI backend
@@ -221,8 +235,8 @@ builds the SPA and serves it from the FastAPI process (SPA at `/`, API at `/api`
 to GitHub → Render → **New → Blueprint** → select the repo.
 
 **Split (Vercel + Render).** Deploy `web/` to Vercel (framework: Vite); deploy `backend/`
-to Render. Since the SPA reads its own baked JSON, the API is only needed for the live
-thought-experiment endpoint.
+to Render. Since the SPA reads its own baked JSON, the API is optional - it's there to
+demonstrate the FastAPI/SQL layer and to serve the data programmatically.
 
 ---
 

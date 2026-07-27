@@ -15,7 +15,14 @@ import {
   YAxis,
   ZAxis,
 } from "recharts";
-import type { MatchRow, ModelResult, Season, SeasonSummary } from "../types";
+import type {
+  Circumstances,
+  MatchRow,
+  ModelResult,
+  Physical,
+  Season,
+  SeasonSummary,
+} from "../types";
 import { SEASON_COLOR } from "./ui";
 
 const GOLD = SEASON_COLOR["2003/04"];
@@ -23,9 +30,19 @@ const RED = SEASON_COLOR["2025/26"];
 const AXIS = "#5e6772"; // WCAG AA for axis tick/label text on white
 const GRID = "#eceef1";
 
-/** Act 1 - cumulative points across the 38-game league season (a "title race"). */
+const ttStyle: React.CSSProperties = {
+  borderRadius: 10,
+  border: "1px solid #e5e8ec",
+  fontSize: 13,
+  boxShadow: "0 8px 28px rgba(16,24,40,.10)",
+};
+
+// ===========================================================================
+// Section A - the surface
+// ===========================================================================
+
+/** Cumulative league points across the 38-game season (the "title race"). */
 export function CumulativePointsChart({ matches }: { matches: MatchRow[] }) {
-  // One row per matchweek with a cumulative-points column per season.
   type WeekRow = { match_no: number } & Partial<Record<Season, number>>;
   const byWeek: Record<number, WeekRow> = {};
   for (const m of matches) {
@@ -35,7 +52,7 @@ export function CumulativePointsChart({ matches }: { matches: MatchRow[] }) {
   }
   const data = Object.values(byWeek).sort((a, b) => a.match_no - b.match_no);
   return (
-    <ResponsiveContainer width="100%" height={340}>
+    <ResponsiveContainer width="100%" height={320}>
       <LineChart data={data} margin={{ top: 8, right: 16, bottom: 24, left: -8 }}>
         <CartesianGrid stroke={GRID} />
         <XAxis
@@ -72,7 +89,7 @@ export function CumulativePointsChart({ matches }: { matches: MatchRow[] }) {
   );
 }
 
-/** Act 1 - attacking & defensive output, goals vs xG, both seasons. */
+/** Attacking & defensive output: goals vs xG, both seasons. */
 export function OutputBars({ seasons }: { seasons: SeasonSummary[] }) {
   const s0 = seasons.find((s) => s.season === "2003/04")!;
   const s1 = seasons.find((s) => s.season === "2025/26")!;
@@ -83,7 +100,7 @@ export function OutputBars({ seasons }: { seasons: SeasonSummary[] }) {
     { metric: "xG against", "2003/04": s0.xg_against, "2025/26": s1.xg_against },
   ];
   return (
-    <ResponsiveContainer width="100%" height={320}>
+    <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
         <CartesianGrid stroke={GRID} vertical={false} />
         <XAxis dataKey="metric" stroke={AXIS} tick={{ fontSize: 12 }} />
@@ -97,7 +114,240 @@ export function OutputBars({ seasons }: { seasons: SeasonSummary[] }) {
   );
 }
 
-/** Act 2 - actual vs model-expected points, both seasons. The measured core. */
+// ===========================================================================
+// Section B - circumstances
+// ===========================================================================
+
+/** Points of the champion + chasing pack (2nd-4th), both seasons. */
+export function ChasingPackChart({
+  bySeason,
+}: {
+  bySeason: Circumstances["chasing_pack"]["by_season"];
+}) {
+  const labels = ["Champion", "2nd", "3rd", "4th"];
+  const data = labels.map((label, i) => ({
+    label,
+    "2003/04": bySeason["2003/04"].top4[i].points,
+    "2025/26": bySeason["2025/26"].top4[i].points,
+  }));
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="label" stroke={AXIS} tick={{ fontSize: 12 }} />
+        <YAxis stroke={AXIS} tick={{ fontSize: 12 }} domain={[0, 100]} />
+        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <Legend verticalAlign="top" height={30} />
+        <Bar dataKey="2003/04" fill={GOLD} radius={[4, 4, 0, 0]} />
+        <Bar dataKey="2025/26" fill={RED} radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+/** Champion vs runner-up points - the size of the title-winning cushion. */
+export function MarginChart({
+  bySeason,
+}: {
+  bySeason: Circumstances["margin_to_second"]["by_season"];
+}) {
+  const data = (Object.keys(bySeason) as Season[]).map((s) => ({
+    season: s,
+    Champion: bySeason[s].champion_points,
+    "Runner-up": bySeason[s].runner_up_points,
+  }));
+  return (
+    <ResponsiveContainer width="100%" height={280}>
+      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
+        <YAxis stroke={AXIS} tick={{ fontSize: 12 }} domain={[0, 100]} />
+        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <Legend verticalAlign="top" height={30} />
+        <Bar dataKey="Champion" radius={[4, 4, 0, 0]}>
+          {data.map((d) => (
+            <Cell key={d.season} fill={SEASON_COLOR[d.season]} />
+          ))}
+        </Bar>
+        <Bar dataKey="Runner-up" fill="#9aa4b2" radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+/** One season's full 20-team points distribution (top-heavy vs deep). */
+export function LeagueShapeChart({
+  season,
+  points,
+  relegationCutoff,
+}: {
+  season: Season;
+  points: number[];
+  relegationCutoff: number;
+}) {
+  const data = points.map((p, i) => ({ rank: i + 1, points: p }));
+  const color = SEASON_COLOR[season];
+  return (
+    <ResponsiveContainer width="100%" height={220}>
+      <BarChart data={data} margin={{ top: 6, right: 10, bottom: 4, left: -18 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="rank" stroke={AXIS} tick={{ fontSize: 10 }} interval={1} />
+        <YAxis stroke={AXIS} tick={{ fontSize: 11 }} domain={[0, 100]} />
+        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <ReferenceLine
+          y={relegationCutoff}
+          stroke="#c0392b"
+          strokeDasharray="4 4"
+          label={{ value: "safety", position: "right", fill: "#c0392b", fontSize: 10 }}
+        />
+        <Bar dataKey="points" radius={[3, 3, 0, 0]}>
+          {data.map((d) => (
+            <Cell key={d.rank} fill={d.rank === 1 ? color : "#c3c9d2"} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+/** Squad make-up vs the prior season: retained vs newly-arrived (stacked). */
+export function SquadContinuityChart({
+  bySeason,
+}: {
+  bySeason: Circumstances["squad_continuity"]["by_season"];
+}) {
+  const data = (Object.keys(bySeason) as Season[]).map((s) => ({
+    season: s,
+    Retained: bySeason[s].retained,
+    "New in": bySeason[s].incoming,
+  }));
+  return (
+    <ResponsiveContainer width="100%" height={280}>
+      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -18 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
+        <YAxis
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          label={{
+            value: "PL players",
+            angle: -90,
+            position: "insideLeft",
+            offset: 16,
+            fill: AXIS,
+            fontSize: 12,
+          }}
+        />
+        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <Legend verticalAlign="top" height={30} />
+        <Bar dataKey="Retained" stackId="a" fill="#2f6f4f" radius={[0, 0, 0, 0]} />
+        <Bar dataKey="New in" stackId="a" fill="#e0a458" radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ===========================================================================
+// Section C - physical
+// ===========================================================================
+
+/** Minutes-weighted mean squad age, both seasons. */
+export function SquadAgeChart({
+  bySeason,
+}: {
+  bySeason: Physical["squad_age"]["by_season"];
+}) {
+  const data = (Object.keys(bySeason) as Season[]).map((s) => ({
+    season: s,
+    age: bySeason[s].minutes_weighted_age,
+  }));
+  return (
+    <ResponsiveContainer width="100%" height={260}>
+      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
+        <YAxis stroke={AXIS} tick={{ fontSize: 12 }} domain={[20, 32]} />
+        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <Bar dataKey="age" radius={[4, 4, 0, 0]} name="min-weighted age">
+          {data.map((d) => (
+            <Cell key={d.season} fill={SEASON_COLOR[d.season]} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+const SEASON_MONTHS = [
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+];
+
+/** Games per calendar month across all competitions, both seasons. */
+export function FixtureCongestionChart({
+  bySeason,
+}: {
+  bySeason: Physical["fixture_congestion"]["by_season"];
+}) {
+  const pick = (s: Season, mon: string) =>
+    bySeason[s].games_per_month.find((m) => m.label.startsWith(mon))?.games ?? 0;
+  const data = SEASON_MONTHS.map((mon) => ({
+    month: mon,
+    "2003/04": pick("2003/04", mon),
+    "2025/26": pick("2025/26", mon),
+  }));
+  return (
+    <ResponsiveContainer width="100%" height={280}>
+      <LineChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -18 }}>
+        <CartesianGrid stroke={GRID} />
+        <XAxis dataKey="month" stroke={AXIS} tick={{ fontSize: 12 }} />
+        <YAxis
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          allowDecimals={false}
+          label={{
+            value: "games",
+            angle: -90,
+            position: "insideLeft",
+            offset: 12,
+            fill: AXIS,
+            fontSize: 12,
+          }}
+        />
+        <Tooltip contentStyle={ttStyle} />
+        <Legend verticalAlign="top" height={30} />
+        <Line
+          type="monotone"
+          dataKey="2003/04"
+          stroke={GOLD}
+          strokeWidth={3}
+          dot={{ r: 3 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="2025/26"
+          stroke={RED}
+          strokeWidth={3}
+          dot={{ r: 3 }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ===========================================================================
+// Sections A / D - the expected-points model
+// ===========================================================================
+
+/** Actual points vs model-expected points, both seasons. */
 export function ExpectedPointsChart({ model }: { model: Record<Season, ModelResult> }) {
   const data = (Object.keys(model) as Season[]).map((s) => ({
     season: s,
@@ -105,7 +355,7 @@ export function ExpectedPointsChart({ model }: { model: Record<Season, ModelResu
     Expected: model[s].expected_points,
   }));
   return (
-    <ResponsiveContainer width="100%" height={330}>
+    <ResponsiveContainer width="100%" height={320}>
       <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
         <CartesianGrid stroke={GRID} vertical={false} />
         <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
@@ -123,9 +373,8 @@ export function ExpectedPointsChart({ model }: { model: Record<Season, ModelResu
   );
 }
 
-/** Act 2 - per-match xG-for vs xG-against, one season, coloured by result. */
+/** Per-match xG-for vs xG-against, one season, coloured by result. */
 export function MatchXgScatter({ res }: { res: ModelResult }) {
-  // Accessible W/D/L colours (each >=5:1 on white, so they double as legend text).
   const color = (r: string) =>
     r === "W" ? "#15803d" : r === "D" ? "#b45309" : "#c0392b";
   const data = res.matches.map((m) => ({
@@ -191,199 +440,6 @@ export function MatchXgScatter({ res }: { res: ModelResult }) {
     </ResponsiveContainer>
   );
 }
-
-/** Act 3b - fixture load stacked by competition. */
-export function FixtureLoadChart({
-  byComp,
-}: {
-  byComp: Record<Season, Record<string, number>>;
-}) {
-  const comps = [
-    "Premier League",
-    "FA Cup",
-    "League Cup",
-    "Champions League",
-    "Community Shield",
-  ];
-  const colors: Record<string, string> = {
-    "Premier League": "#374151",
-    "FA Cup": "#6b7280",
-    "League Cup": "#9ca3af",
-    "Champions League": "#2354d6",
-    "Community Shield": "#c9ced6",
-  };
-  const data = (Object.keys(byComp) as Season[]).map((s) => {
-    const row: Record<string, string | number> = { season: s };
-    for (const c of comps) row[c] = byComp[s][c] ?? 0;
-    return row;
-  });
-  return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart
-        data={data}
-        layout="vertical"
-        margin={{ top: 8, right: 20, bottom: 8, left: 8 }}
-      >
-        <CartesianGrid stroke={GRID} horizontal={false} />
-        <XAxis type="number" stroke={AXIS} tick={{ fontSize: 12 }} />
-        <YAxis
-          type="category"
-          dataKey="season"
-          stroke={AXIS}
-          tick={{ fontSize: 13, fontWeight: 700 }}
-          width={72}
-        />
-        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
-        <Legend verticalAlign="top" height={30} />
-        {comps.map((c, i) => (
-          <Bar
-            key={c}
-            dataKey={c}
-            stackId="a"
-            fill={colors[c]}
-            radius={i === comps.length - 1 ? [0, 4, 4, 0] : undefined}
-          />
-        ))}
-      </BarChart>
-    </ResponsiveContainer>
-  );
-}
-
-/** Act 3c - points-per-game vs bottom-half and top rivals. */
-export function ScheduleDifficultyChart({
-  bySeason,
-}: {
-  bySeason: Record<Season, { ppg_vs_bottom_half: number; ppg_vs_top_rivals: number }>;
-}) {
-  const data = [
-    {
-      bucket: "vs bottom half (11-20)",
-      "2003/04": bySeason["2003/04"].ppg_vs_bottom_half,
-      "2025/26": bySeason["2025/26"].ppg_vs_bottom_half,
-    },
-    {
-      bucket: "vs top rivals (2-6)",
-      "2003/04": bySeason["2003/04"].ppg_vs_top_rivals,
-      "2025/26": bySeason["2025/26"].ppg_vs_top_rivals,
-    },
-  ];
-  return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
-        <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey="bucket" stroke={AXIS} tick={{ fontSize: 12 }} />
-        <YAxis
-          stroke={AXIS}
-          tick={{ fontSize: 12 }}
-          domain={[0, 3]}
-          label={{
-            value: "points / game",
-            angle: -90,
-            position: "insideLeft",
-            offset: 16,
-            fill: AXIS,
-            fontSize: 12,
-          }}
-        />
-        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
-        <Legend verticalAlign="top" height={30} />
-        <Bar dataKey="2003/04" fill={GOLD} radius={[4, 4, 0, 0]} />
-        <Bar dataKey="2025/26" fill={RED} radius={[4, 4, 0, 0]} />
-      </BarChart>
-    </ResponsiveContainer>
-  );
-}
-
-/** Act 4 - the speculative adjusted-points band, driven by the slider. */
-export function RangeBar({
-  low,
-  high,
-  base,
-  absMin = 70,
-  absMax = 95,
-}: {
-  low: number;
-  high: number;
-  base: number;
-  absMin?: number;
-  absMax?: number;
-}) {
-  const span = absMax - absMin;
-  const pct = (v: number) => ((v - absMin) / span) * 100;
-  return (
-    <div style={{ margin: "10px 0 4px" }}>
-      <div style={{ position: "relative", height: 54 }}>
-        <div
-          style={{
-            position: "absolute",
-            top: 22,
-            left: 0,
-            right: 0,
-            height: 10,
-            borderRadius: 6,
-            background: "#eef0f3",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: 22,
-            height: 10,
-            borderRadius: 6,
-            left: `${pct(low)}%`,
-            width: `${pct(high) - pct(low)}%`,
-            background: "linear-gradient(90deg,#e6a256,#b4550a)",
-          }}
-        />
-        {/* Invincibles' actual points marker */}
-        <div
-          title={`Actual 2003/04: ${base} pts`}
-          style={{
-            position: "absolute",
-            top: 12,
-            left: `${pct(base)}%`,
-            transform: "translateX(-50%)",
-            width: 2,
-            height: 30,
-            background: "#12151b",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: `${pct(base)}%`,
-            transform: "translateX(-50%)",
-            fontSize: 11,
-            color: "#12151b",
-            fontWeight: 700,
-            whiteSpace: "nowrap",
-          }}
-        >
-          actual 90
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          fontSize: 12,
-          color: "#5e6772",
-        }}
-      >
-        <span>{absMin}</span>
-        <span>{absMax} pts</span>
-      </div>
-    </div>
-  );
-}
-
-const ttStyle: React.CSSProperties = {
-  borderRadius: 10,
-  border: "1px solid #e5e8ec",
-  fontSize: 13,
-  boxShadow: "0 8px 28px rgba(16,24,40,.10)",
-};
 
 type ScatterPoint = {
   opponent: string;

@@ -2,13 +2,14 @@
 
 Run:  python -m analysis.build
 Outputs (all consumed by the API / frontend):
-  seasons.json           headline summaries + the three fact/measured/spec tags
-  matches.json           per-match rows (both seasons) incl. rolling form + xpts
-  players.json           per-player shooting aggregates (both seasons)
-  model.json             expected-points model output + calibration diagnostics
-  era.json               Act 3 levers (VAR / fixture load / schedule difficulty)
-  thought_experiment.json Act 4 speculative range + slider spec
-  meta.json              provenance for the whole build
+  seasons.json        headline summaries per season (Section A)
+  matches.json        per-match rows (both seasons) incl. rolling form
+  players.json        per-player shooting aggregates (both seasons)
+  model.json          expected-points model output + calibration (Act 2 / Section A)
+  circumstances.json  Section B: chasing pack, margin, league shape, squad continuity
+  physical.json       Section C: squad age + fixture congestion
+  synthesis.json      Section D: model output re-read against the circumstances
+  meta.json           thesis, provenance, and the honesty framing
 """
 
 from __future__ import annotations
@@ -17,8 +18,8 @@ import json
 
 import pandas as pd
 
+from . import circumstances, loaders, model, physical, synthesis, transforms
 from . import config as C
-from . import era, loaders, model, transforms
 
 
 def _round_records(df: pd.DataFrame) -> list[dict]:
@@ -35,52 +36,52 @@ def run() -> dict:
     p2526 = loaders.load_understat_players()
     players = pd.concat([p0304, p2526], ignore_index=True)
 
-    # --- transforms --------------------------------------------------------
+    # --- transforms (Section A) -------------------------------------------
     summaries = transforms.all_season_summaries(matches)
     matches_roll = transforms.add_rolling_form(matches)
     players_tbl = transforms.player_table(players)
 
-    # --- model (Act 2) -----------------------------------------------------
+    # --- expected-points model (Act 2, re-used in Section D) --------------
     model_by_season = {
         C.S0304: model.season_model_result(m0304),
         C.S2526: model.season_model_result(m2526),
     }
 
-    # --- era levers (Act 3) ------------------------------------------------
-    era_payload = {
-        "var": era.var_lever(),
-        "fixture_load": era.fixture_load_lever(),
-        "schedule_difficulty": era.schedule_difficulty_lever({C.S0304: m0304, C.S2526: m2526}),
-    }
+    # --- circumstances (B), physical (C), synthesis (D) -------------------
+    circ_payload = circumstances.build()
+    phys_payload = physical.build(players_tbl)
+    synth_payload = synthesis.build(model_by_season, circ_payload)
 
-    # --- thought experiment (Act 4) ---------------------------------------
-    invincibles_points = int(m0304["points"].sum())
-    te_payload = era.thought_experiment_spec(invincibles_points)
-
-    # --- write -------------------------------------------------------------
-    C.PROCESSED.mkdir(parents=True, exist_ok=True)
     outputs = {
         "seasons.json": _round_records(summaries),
         "matches.json": _round_records(matches_roll),
         "players.json": _round_records(players_tbl),
         "model.json": model_by_season,
-        "era.json": era_payload,
-        "thought_experiment.json": te_payload,
+        "circumstances.json": circ_payload,
+        "physical.json": phys_payload,
+        "synthesis.json": synth_payload,
         "meta.json": {
-            "title": "Arsenal Eras - 2003/04 vs 2025/26",
-            "question": "Two Arsenal title teams, 22 years apart. Which one had the harder job?",
+            "title": "Two Arsenals - which era faced the harder task?",
+            "question": "Two Arsenal title teams, 22 years apart. Which era faced the "
+            "harder task - and how well did each side meet it?",
+            "starting_fact": "On the raw table the 2003/04 Invincibles were the more "
+            "dominant league campaign: 90 points, unbeaten. This story is about the "
+            "difficulty of the task each side faced, not which squad was more talented.",
             "seasons": [C.S0304, C.S2526],
             "sources": {
-                "2003/04": "StatsBomb Open Data (github.com/statsbomb/open-data), "
-                "Premier League competition_id=2, season_id=44.",
-                "2025/26": "Understat (understat.com) per-match xG + player data.",
+                "2003/04": "StatsBomb Open Data (Arsenal shot/xG events); final tables, "
+                "squads and fixtures from Wikipedia.",
+                "2025/26": "Understat (per-match xG + player data); final tables, squads "
+                "and fixtures from Wikipedia.",
             },
             "model": "PoissonRegressor(goals ~ xG) -> independent-Poisson match "
             "outcomes -> expected points.",
-            "honesty_note": "Every figure is tagged fact / measured / speculative "
-            "and never blended.",
+            "honesty_note": "Every figure is tagged fact / measured / interpretation "
+            "and never blended. Metrics without data for both eras are omitted or "
+            "flagged, never fabricated.",
         },
     }
+
     # Canonical location, plus a baked copy in the web app's public dir so the
     # frontend runs fully offline (no request at load time).
     web_data = C.ROOT / "web" / "public" / "data"
