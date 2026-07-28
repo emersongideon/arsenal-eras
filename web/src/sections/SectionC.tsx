@@ -1,6 +1,17 @@
-import { FixtureCongestionChart, SquadAgeChart } from "../components/charts";
+import { FixtureCongestionChart, SquadAgeScatter } from "../components/charts";
 import { CategoryBadge, Reveal, Section } from "../components/ui";
 import type { Physical } from "../types";
+
+/** Interpretation block, marked with the interpretation pill and kept apart from
+ *  the measured statement it reads. */
+function Reading({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="reading">
+      <CategoryBadge category="interpretation" />
+      <p style={{ margin: "8px 0 0" }}>{children}</p>
+    </div>
+  );
+}
 
 export function SectionC({ p }: { p: Physical }) {
   const age = p.squad_age.by_season;
@@ -31,19 +42,32 @@ export function SectionC({ p }: { p: Physical }) {
       <Reveal delay={60}>
         <div className="card sublayer">
           <div className="sublayer-head">
-            <h3>1. Squad age, minutes-weighted</h3>
+            <h3>1. Squad age, weighted by minutes played</h3>
             <CategoryBadge category="measured" />
           </div>
           <p>
-            Weighting by minutes answers "how old was the team that played," not the flat
-            roster average. The Invincibles were a{" "}
-            <b>{age["2003/04"].minutes_weighted_age}</b>-year-old side, with{" "}
-            {over30("2003/04")}% of minutes given to players 30 or over. The 2025/26 side
-            was younger at <b>{age["2025/26"].minutes_weighted_age}</b>, with only{" "}
-            {over30("2025/26")}% of minutes over 30. A different profile, not a harder one
-            on its own.
+            Age matters physically, but a simple squad average is misleading, because a
+            34-year-old who barely featured would count the same as a 24-year-old who
+            played every week. So we weight each player's age by the minutes they actually
+            played. This answers the more useful question: how old was the team that was
+            really on the pitch, not how old is everyone on the books.
           </p>
-          <SquadAgeChart bySeason={age} />
+          <p>
+            By this measure, the Invincibles were a{" "}
+            <b>{age["2003/04"].minutes_weighted_age}</b>-year-old side, and{" "}
+            {over30("2003/04")}% of their playing minutes went to players aged 30 or over.
+            The 2025/26 side was younger, at{" "}
+            <b>{age["2025/26"].minutes_weighted_age}</b>, with only {over30("2025/26")}% of
+            minutes going to over-30s.
+          </p>
+          <SquadAgeScatter bySeason={age} />
+          <Reading>
+            The Invincibles were the older, more experienced team; the 2025/26 side was
+            younger and leaned less on players past 30. This is a difference in profile,
+            not evidence on its own that either season was physically harder. Age feeds
+            into the fixture load that follows, which is where the physical demand actually
+            shows up.
+          </Reading>
         </div>
       </Reveal>
 

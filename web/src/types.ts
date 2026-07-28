@@ -143,6 +143,7 @@ export interface Physical {
         oldest: number;
         u23_minutes_share: number;
         over30_minutes_share: number;
+        players: { name: string; age: number; minutes: number }[];
       }
     >;
   };

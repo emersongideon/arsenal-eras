@@ -420,6 +420,147 @@ export function SquadAgeChart({
   );
 }
 
+/** Per-player age vs minutes, one panel per season. Each dot is a player; the
+ *  dot's size AND height both encode minutes played, so the heavy-minutes players
+ *  are unmistakable. The vertical line is the minutes-weighted average age, which
+ *  the big dots visibly pull. Makes the weighting (and the age-distribution shape)
+ *  legible rather than collapsing it to a single bar. */
+type AgePlayer = { name: string; age: number; minutes: number };
+
+// Symbol area range (px^2) recharts maps minutes onto; shared with the legend so
+// the sample dots match the chart.
+const DOT_AREA = [70, 720] as const;
+
+export function SquadAgeScatter({
+  bySeason,
+}: {
+  bySeason: Physical["squad_age"]["by_season"];
+}) {
+  const seasons = Object.keys(bySeason) as Season[];
+  const all = seasons.flatMap((s) => bySeason[s].players);
+  const ageMin = Math.floor(Math.min(...all.map((p) => p.age)) - 1);
+  const ageMax = Math.ceil(Math.max(...all.map((p) => p.age)) + 1);
+  const minutesTop = Math.ceil(Math.max(...all.map((p) => p.minutes)) / 300) * 300;
+  const mMin = Math.min(...all.map((p) => p.minutes));
+  const mMax = Math.max(...all.map((p) => p.minutes));
+  // radius (px) for a legend sample at `mins`, matching recharts' area mapping
+  const legendR = (mins: number) => {
+    const t = (mins - mMin) / (mMax - mMin || 1);
+    return Math.sqrt((DOT_AREA[0] + t * (DOT_AREA[1] - DOT_AREA[0])) / Math.PI);
+  };
+
+  return (
+    <div className="age-scatter">
+      <div className="size-legend" aria-hidden="true">
+        <span className="dim">Dot size = minutes played:</span>
+        {[500, 1500, 3000].map((m) => (
+          <span className="size-legend-item" key={m}>
+            <span
+              className="size-dot"
+              style={{ width: legendR(m) * 2, height: legendR(m) * 2 }}
+            />
+            {m.toLocaleString()}
+          </span>
+        ))}
+      </div>
+
+      {seasons.map((s) => {
+        const wavg = bySeason[s].minutes_weighted_age;
+        const color = SEASON_COLOR[s];
+        return (
+          <div className="scatter-panel" key={s}>
+            <p className="scatter-panel-title">
+              <span className={`season-tag ${s === "2003/04" ? "s0304" : "s2526"}`}>
+                {s}
+              </span>
+              <span className="dim">
+                {" "}
+                minutes-weighted average age <b>{wavg}</b>
+              </span>
+            </p>
+            <ResponsiveContainer width="100%" height={240}>
+              <ScatterChart margin={{ top: 18, right: 18, bottom: 24, left: -6 }}>
+                <CartesianGrid stroke={GRID} />
+                <XAxis
+                  type="number"
+                  dataKey="age"
+                  domain={[ageMin, ageMax]}
+                  stroke={AXIS}
+                  tick={{ fontSize: 12 }}
+                  tickCount={7}
+                  label={{
+                    value: "player age in the title season",
+                    position: "bottom",
+                    offset: 8,
+                    fill: AXIS,
+                    fontSize: 12,
+                  }}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="minutes"
+                  domain={[0, minutesTop]}
+                  stroke={AXIS}
+                  tick={{ fontSize: 12 }}
+                  width={44}
+                  label={{
+                    value: "league minutes",
+                    angle: -90,
+                    position: "insideLeft",
+                    offset: 18,
+                    fill: AXIS,
+                    fontSize: 12,
+                  }}
+                />
+                <ZAxis type="number" dataKey="minutes" range={[...DOT_AREA]} />
+                <ReferenceLine
+                  x={wavg}
+                  stroke="#1d2530"
+                  strokeWidth={1.5}
+                  label={{
+                    value: `weighted avg ${wavg}`,
+                    position: "top",
+                    fill: "#1d2530",
+                    fontSize: 12,
+                    fontWeight: 700,
+                  }}
+                />
+                <Tooltip content={<AgeTip />} cursor={{ strokeDasharray: "3 3" }} />
+                <Scatter
+                  data={bySeason[s].players as AgePlayer[]}
+                  fill={color}
+                  fillOpacity={0.72}
+                  stroke={color}
+                  isAnimationActive={false}
+                />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function AgeTip({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: { payload: AgePlayer }[];
+}) {
+  if (!active || !payload?.length) return null;
+  const d = payload[0].payload;
+  return (
+    <div className="tt">
+      <strong>{d.name}</strong>
+      <div>
+        age {d.age} · {d.minutes.toLocaleString()} min
+      </div>
+    </div>
+  );
+}
+
 const SEASON_MONTHS = [
   "Aug",
   "Sep",

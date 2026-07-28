@@ -9,7 +9,114 @@
         "youngest": 18.4,
         "oldest": 37.4,
         "u23_minutes_share": 0.127,
-        "over30_minutes_share": 0.268
+        "over30_minutes_share": 0.268,
+        "players": [
+          {
+            "name": "Jens Lehmann",
+            "age": 34.1,
+            "minutes": 3420.0
+          },
+          {
+            "name": "Thierry Henry",
+            "age": 26.4,
+            "minutes": 3329.1
+          },
+          {
+            "name": "Kolo Tour\u00e9",
+            "age": 22.8,
+            "minutes": 3170.8
+          },
+          {
+            "name": "Sol Campbell",
+            "age": 29.3,
+            "minutes": 3150.0
+          },
+          {
+            "name": "Robert Pir\u00e8s",
+            "age": 30.2,
+            "minutes": 2977.0
+          },
+          {
+            "name": "Ashley Cole",
+            "age": 23.0,
+            "minutes": 2879.8
+          },
+          {
+            "name": "Lauren",
+            "age": 26.9,
+            "minutes": 2770.2
+          },
+          {
+            "name": "Gilberto Silva",
+            "age": 27.2,
+            "minutes": 2610.1
+          },
+          {
+            "name": "Patrick Vieira",
+            "age": 27.5,
+            "minutes": 2543.6
+          },
+          {
+            "name": "Freddie Ljungberg",
+            "age": 26.7,
+            "minutes": 2430.5
+          },
+          {
+            "name": "Dennis Bergkamp",
+            "age": 34.6,
+            "minutes": 1925.9
+          },
+          {
+            "name": "Ray Parlour",
+            "age": 30.8,
+            "minutes": 1454.3
+          },
+          {
+            "name": "Edu",
+            "age": 25.6,
+            "minutes": 1251.0
+          },
+          {
+            "name": "Pascal Cygan",
+            "age": 29.7,
+            "minutes": 901.3
+          },
+          {
+            "name": "Sylvain Wiltord",
+            "age": 29.6,
+            "minutes": 662.7
+          },
+          {
+            "name": "Ga\u00ebl Clichy",
+            "age": 18.4,
+            "minutes": 644.4
+          },
+          {
+            "name": "Jos\u00e9 Antonio Reyes",
+            "age": 20.3,
+            "minutes": 630.0
+          },
+          {
+            "name": "Martin Keown",
+            "age": 37.4,
+            "minutes": 332.1
+          },
+          {
+            "name": "Nwankwo Kanu",
+            "age": 27.4,
+            "minutes": 287.2
+          },
+          {
+            "name": "J\u00e9r\u00e9mie Aliadi\u00e8re",
+            "age": 20.8,
+            "minutes": 273.9
+          },
+          {
+            "name": "David Bentley",
+            "age": 19.3,
+            "minutes": 90.0
+          }
+        ]
       },
       "2025/26": {
         "reference_date": "2026-01-01",
@@ -18,7 +125,134 @@
         "youngest": 16.0,
         "oldest": 31.8,
         "u23_minutes_share": 0.051,
-        "over30_minutes_share": 0.147
+        "over30_minutes_share": 0.147,
+        "players": [
+          {
+            "name": "David Raya",
+            "age": 30.3,
+            "minutes": 3330.0
+          },
+          {
+            "name": "Declan Rice",
+            "age": 27.0,
+            "minutes": 3111.0
+          },
+          {
+            "name": "Mart\u00edn Zubimendi",
+            "age": 26.9,
+            "minutes": 3040.0
+          },
+          {
+            "name": "Gabriel Magalh\u00e3es",
+            "age": 28.0,
+            "minutes": 2748.0
+          },
+          {
+            "name": "William Saliba",
+            "age": 24.8,
+            "minutes": 2609.0
+          },
+          {
+            "name": "Jurri\u00ebn Timber",
+            "age": 24.5,
+            "minutes": 2475.0
+          },
+          {
+            "name": "Viktor Gy\u00f6keres",
+            "age": 27.6,
+            "minutes": 2255.0
+          },
+          {
+            "name": "Bukayo Saka",
+            "age": 24.3,
+            "minutes": 2239.0
+          },
+          {
+            "name": "Leandro Trossard",
+            "age": 31.1,
+            "minutes": 2026.0
+          },
+          {
+            "name": "Eberechi Eze",
+            "age": 27.5,
+            "minutes": 1841.0
+          },
+          {
+            "name": "Piero Hincapi\u00e9",
+            "age": 24.0,
+            "minutes": 1786.0
+          },
+          {
+            "name": "Riccardo Calafiori",
+            "age": 23.6,
+            "minutes": 1755.0
+          },
+          {
+            "name": "Martin \u00d8degaard",
+            "age": 27.0,
+            "minutes": 1347.0
+          },
+          {
+            "name": "Noni Madueke",
+            "age": 23.8,
+            "minutes": 1246.0
+          },
+          {
+            "name": "Gabriel Martinelli",
+            "age": 24.5,
+            "minutes": 1025.0
+          },
+          {
+            "name": "Mikel Merino",
+            "age": 29.5,
+            "minutes": 1002.0
+          },
+          {
+            "name": "Cristhian Mosquera",
+            "age": 21.5,
+            "minutes": 976.0
+          },
+          {
+            "name": "Ben White",
+            "age": 28.2,
+            "minutes": 703.0
+          },
+          {
+            "name": "Myles Lewis-Skelly",
+            "age": 19.3,
+            "minutes": 666.0
+          },
+          {
+            "name": "Kai Havertz",
+            "age": 26.6,
+            "minutes": 582.0
+          },
+          {
+            "name": "Gabriel Jesus",
+            "age": 28.7,
+            "minutes": 395.0
+          },
+          {
+            "name": "Ethan Nwaneri",
+            "age": 18.8,
+            "minutes": 154.0
+          },
+          {
+            "name": "Max Dowman",
+            "age": 16.0,
+            "minutes": 142.0
+          },
+          {
+            "name": "Christian N\u00f8rgaard",
+            "age": 31.8,
+            "minutes": 93.0
+          },
+          {
+            "name": "Kepa Arrizabalaga",
+            "age": 31.2,
+            "minutes": 90.0
+          }
+        ]
       }
     }
   },

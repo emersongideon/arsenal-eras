@@ -49,6 +49,16 @@ def squad_age(players: pd.DataFrame) -> dict:
         w = df["minutes"].to_numpy()
         ages = df["age"].to_numpy()
         weighted = float(np.average(ages, weights=w))
+        # per-player rows for the scatter (age vs minutes; dot size = minutes),
+        # heaviest-minutes first. Display label only; age/minutes are the data.
+        per_player = [
+            {
+                "name": sources.PLAYER_DISPLAY_NAME.get(r.player, r.player),
+                "age": round(float(r.age), 1),
+                "minutes": round(float(r.minutes), 1),
+            }
+            for r in df.sort_values("minutes", ascending=False).itertuples()
+        ]
         out["by_season"][s] = {
             "reference_date": ref,
             "minutes_weighted_age": round(weighted, 1),
@@ -58,6 +68,7 @@ def squad_age(players: pd.DataFrame) -> dict:
             # share of on-pitch minutes played by under-23s and by 30-and-over
             "u23_minutes_share": round(float(w[ages < 23].sum() / w.sum()), 3),
             "over30_minutes_share": round(float(w[ages >= 30].sum() / w.sum()), 3),
+            "players": per_player,
         }
     return out
 

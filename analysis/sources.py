@@ -346,3 +346,25 @@ BIRTHDATE: dict[str, str] = {
 
 # Age is measured as of 1 January of the season's second half (mid-season).
 AGE_REFERENCE = {S0304: "2004-01-01", S2526: "2026-01-01"}
+
+# Display labels for the per-player scatter: the raw StatsBomb (2003/04) and
+# Understat (2025/26) player strings are formal or ambiguous ("Laureano
+# Bisan-Etame Mayer", "Gabriel"), so map them to the familiar football name. This
+# is a LABEL ONLY - ages and minutes are untouched. Any name not listed is shown
+# as-is. Keyed by the exact name in data/processed/players.json.
+PLAYER_DISPLAY_NAME: dict[str, str] = {
+    # 2003/04 (StatsBomb full names -> familiar)
+    "Kolo Habib Touré": "Kolo Touré",
+    "Sulzeer Jeremiah ''Sol' Campbell": "Sol Campbell",
+    "Laureano Bisan-Etame Mayer": "Lauren",
+    "Gilberto Aparecido da Silva": "Gilberto Silva",
+    "Fredrik Ljungberg": "Freddie Ljungberg",
+    "Eduardo César Daude Gaspar": "Edu",
+    "José Antonio Reyes Calderón": "José Antonio Reyes",
+    "Nwankwo Christian Kanu": "Nwankwo Kanu",
+    # 2025/26 (Understat -> familiar / disambiguated)
+    "Gabriel": "Gabriel Magalhães",
+    "Viktor Gyokeres": "Viktor Gyökeres",
+    "Martin Odegaard": "Martin Ødegaard",
+    "Kepa": "Kepa Arrizabalaga",
+}

@@ -237,7 +237,16 @@ honesty** matters most.
     *incoming* side (signings + low carryover), not departures - and the report copy says
     exactly that rather than the tidier "more out" story the counts might suggest.
 - **`physical.py` (Section C)** - two metrics that exist cleanly for BOTH eras:
-  - *Minutes-weighted squad age* - birthdates weighted by that season's league minutes.
+  - *Minutes-weighted squad age* - birthdates weighted by that season's league minutes
+    (weighted age answers "how old was the team that actually played", not the flat
+    roster average). The pipeline also exports a per-player array (`squad_age.by_season[s]
+    .players` = name, age, minutes) so the report can draw a **scatter**: one panel per
+    season, each dot a player, X = age in the title season, and minutes encoded twice (dot
+    size and Y-position) so the heavy-minutes players are unmistakable. A vertical line
+    marks the minutes-weighted average, which you can see the big dots pull (2003/04 sits
+    older because Lehmann and Pirès are big dots past 30). Player names are cleaned to a
+    familiar label via `sources.PLAYER_DISPLAY_NAME` (label only; age/minutes untouched) -
+    StatsBomb's raw strings are formal ("Laureano Bisan-Etame Mayer" -> "Lauren").
   - *Fixture congestion* - games-per-month and rest-gaps, computed from every
     competitive match date. This is where the honesty note lives: modern tracking data
     (distance, sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately
