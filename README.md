@@ -1,4 +1,4 @@
-# Two title-winning seasons, one framework
+# A framework to measure how hard a title was to win
 
 A full-stack data project that turns shot-level and match data into a repeatable read on
 **title-campaign difficulty**, using Arsenal's 2003/04 "Invincibles" (38 unbeaten, 90 pts)

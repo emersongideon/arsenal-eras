@@ -198,8 +198,23 @@ honesty** matters most.
     highest when several teams finish near the top. This single metric replaces the old
     shallow "who came 2nd/3rd", "winning margin" and "points spread" views. **Measured**
     (a computation on the final tables; rival xG doesn't exist for 2003/04, so it's
-    points-based for both). The index is reported at several `tau` values to show the
-    2025/26 > 2003/04 ordering isn't an artefact of the decay scale.
+    points-based for both).
+
+    *The `tau` robustness check (the interactive chart).* `tau` is the one free knob: it
+    sets how fast a rival's weight fades with distance. Low `tau` means pressure fades
+    fast, so only very close rivals count; high `tau` means it fades slowly, so even
+    distant sides add a little. To avoid defending a single value, `_pressure_sweep()`
+    computes the index for both seasons across `tau = 5 -> 20` (step 0.5) and exports it
+    as `field_strength.sweep`; the frontend's `PressureRobustnessChart` plots the two
+    curves and gives the reader a draggable marker to read off both values at any `tau`.
+    How to read it: the 2025/26 (red) line sits above 2003/04 (gold) at every point in the
+    range, so the ordering is a property of the field, not of the parameter; only the
+    absolute numbers move. Range choice, verified against the printed sweep: below `tau=5`
+    both indices sit near zero (unreadable); above `tau=20` the "effective threats" reading
+    degrades (distant relegation sides start to count) and the two curves converge toward
+    the full 19 rivals - so the gap narrows as `tau` grows and widens as it shrinks, but
+    the lines never cross or touch anywhere tested (`tau = 3 -> 40`). The default marker
+    sits at `tau=10`, the value quoted in the report body.
   - *Squad continuity* - how much of the PL squad was retained from the prior season.
     **Measured** (a set operation on sourced squad lists).
 - **`physical.py` (Section C)** - two metrics that exist cleanly for BOTH eras:
@@ -269,8 +284,9 @@ toggle (choice saved to localStorage):
 - **`types.ts`** - TypeScript interfaces mirroring the JSON shape (type safety across
   the whole UI).
 - **`components/charts.tsx`** - the recharts charts (title race, output bars, the
-  title-race pressure-index bars, squad continuity, squad age, fixture congestion,
-  expected-points, per-match scatter).
+  interactive `tau`-sweep pressure-index robustness chart in the report plus the
+  per-rival pressure bars on the dashboard, squad continuity, squad age, fixture
+  congestion, expected-points, per-match scatter).
 - **`components/ui.tsx`** - shared pieces: the **category badge** (fact / measured /
   model output / interpretation - the honesty system made visual), a scroll-reveal
   wrapper, the GitHub link.

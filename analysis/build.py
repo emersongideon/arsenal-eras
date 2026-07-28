@@ -61,9 +61,8 @@ def run() -> dict:
         "physical.json": phys_payload,
         "synthesis.json": synth_payload,
         "meta.json": {
-            "title": "Two title-winning seasons, one framework",
-            "question": "Two title-winning seasons, one framework: characterising how "
-            "hard a league was to win",
+            "title": "A framework to measure how hard a title was to win",
+            "question": "A framework to measure how hard a title was to win",
             "subline": "This is a worked example of turning shot-level and match data "
             "into a repeatable read on title-campaign difficulty. Built from StatsBomb "
             "and Understat event data through a Poisson expected-points model, with every "

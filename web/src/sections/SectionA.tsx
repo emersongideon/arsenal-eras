@@ -56,15 +56,11 @@ export function SectionA({
         <p className="lead narrow">
           The Invincibles finished on <b>{s0.points} points unbeaten</b>, plus{" "}
           {s0.goal_difference} goal difference, {s0.ppg.toFixed(2)} points per game. The
-          2025/26 side won the title on <b>{s1.points} points</b>, {s1.wins} wins and{" "}
-          {s1.losses} losses, plus {s1.goal_difference}, {s1.ppg.toFixed(2)} per game.
+          2025/26 team won the title on <b>{s1.points} points</b>, {s1.wins} wins and{" "}
+          {s1.losses} losses, plus {s1.goal_difference}, {s1.ppg.toFixed(2)} per game. By
+          numbers alone, 2003/04 is the more dominant season.
         </p>
-        <p className="narrow">
-          On the raw table, 2003/04 is the more dominant season. This report does not
-          dispute that. It tests something the table cannot show: how hard each total was
-          to earn. Points are only comparable if the leagues behind them were, and they
-          were not. The rest follows from there.
-        </p>
+        <p className="narrow">What if we considered how hard each total was to earn?</p>
       </Reveal>
 
       <Reveal delay={100}>

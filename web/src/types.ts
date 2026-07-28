@@ -88,6 +88,13 @@ export interface Circumstances {
   field_strength: {
     tau: number;
     xg_note: string;
+    sweep: {
+      default_tau: number;
+      range: [number, number];
+      step: number;
+      n_rivals: number;
+      points: ({ tau: number } & Record<Season, number>)[];
+    };
     by_season: Record<
       Season,
       {

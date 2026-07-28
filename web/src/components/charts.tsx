@@ -1,3 +1,4 @@
+import { useId, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -168,6 +169,141 @@ export function FieldPressureChart({
         <Bar dataKey="2025/26" fill={RED} radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
+  );
+}
+
+/** Interactive robustness check for the pressure index: the index for both
+ *  seasons swept across the decay scale tau. A draggable marker lets the reader
+ *  read off both values at any tau and confirm the ranking never flips. */
+export function PressureRobustnessChart({
+  sweep,
+}: {
+  sweep: Circumstances["field_strength"]["sweep"];
+}) {
+  const [lo, hi] = sweep.range;
+  const [tau, setTau] = useState(sweep.default_tau);
+  const sliderId = useId();
+  const data = sweep.points;
+  // Slider steps land on data points, so an exact match exists; fall back to nearest.
+  const row =
+    data.find((d) => Math.abs(d.tau - tau) < sweep.step / 2) ??
+    data.reduce((a, b) => (Math.abs(b.tau - tau) < Math.abs(a.tau - tau) ? b : a));
+  const a = row["2003/04"];
+  const b = row["2025/26"];
+  const ratio = a > 0 ? (b / a).toFixed(2) : "-";
+  const isDefault = Math.abs(tau - sweep.default_tau) < 1e-9;
+  const yMax = Math.ceil(Math.max(...data.map((d) => d["2025/26"])) + 0.5);
+
+  return (
+    <div className="robust">
+      <ResponsiveContainer width="100%" height={320}>
+        <LineChart data={data} margin={{ top: 18, right: 18, bottom: 26, left: -6 }}>
+          <CartesianGrid stroke={GRID} />
+          <XAxis
+            dataKey="tau"
+            type="number"
+            domain={[lo, hi]}
+            stroke={AXIS}
+            tick={{ fontSize: 12 }}
+            allowDecimals={false}
+            label={{
+              value: "decay scale  τ  (how far back a rival still counts)",
+              position: "bottom",
+              offset: 10,
+              fill: AXIS,
+              fontSize: 12,
+            }}
+          />
+          <YAxis
+            stroke={AXIS}
+            tick={{ fontSize: 12 }}
+            domain={[0, yMax]}
+            label={{
+              value: "pressure index",
+              angle: -90,
+              position: "insideLeft",
+              offset: 16,
+              fill: AXIS,
+              fontSize: 12,
+            }}
+          />
+          <Tooltip
+            contentStyle={ttStyle}
+            formatter={(v: number) => v.toFixed(3)}
+            labelFormatter={(t) => `τ = ${t}`}
+          />
+          <Legend verticalAlign="top" height={30} />
+          {!isDefault && (
+            <ReferenceLine
+              x={sweep.default_tau}
+              stroke="#c4c8cc"
+              strokeDasharray="5 5"
+              label={{
+                value: "report",
+                position: "insideTopRight",
+                fill: "#9aa4b2",
+                fontSize: 11,
+              }}
+            />
+          )}
+          <ReferenceLine
+            x={tau}
+            stroke="#1d2530"
+            strokeWidth={1.5}
+            label={{
+              value: `τ = ${tau}`,
+              position: "insideTop",
+              dy: 6,
+              fill: "#1d2530",
+              fontSize: 12,
+              fontWeight: 700,
+            }}
+          />
+          <Line
+            type="monotone"
+            dataKey="2003/04"
+            stroke={GOLD}
+            strokeWidth={3}
+            dot={false}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="2025/26"
+            stroke={RED}
+            strokeWidth={3}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+
+      <label className="robust-slider" htmlFor={sliderId}>
+        <span className="dim">Drag to move the marker</span>
+        <input
+          id={sliderId}
+          type="range"
+          min={lo}
+          max={hi}
+          step={sweep.step}
+          value={tau}
+          onChange={(e) => setTau(Number(e.target.value))}
+          aria-label="decay scale tau"
+        />
+      </label>
+
+      <div className="robust-readout" role="status" aria-live="polite">
+        <span>
+          At <b>τ = {tau}</b>
+          {isDefault && <span className="dim"> (used in the report)</span>}:
+        </span>
+        <span className="robust-vals">
+          <span className="s0304">2003/04 = {a.toFixed(3)}</span>
+          <span className="s2526">2025/26 = {b.toFixed(3)}</span>
+          <span className="dim">2025/26 is {ratio}× higher</span>
+        </span>
+      </div>
+    </div>
   );
 }
 

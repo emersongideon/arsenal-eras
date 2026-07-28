@@ -39,11 +39,43 @@ from .config import S0304, S2526
 SEASONS = (S0304, S2526)
 PRESSURE_TAU = 10.0  # points: decay scale for title-race pressure
 TAU_GRID = (7.0, 10.0, 13.0)  # robustness check
+# Interactive robustness sweep: below 5 both indices sit near zero (unreadable);
+# above 20 the "effective threats" reading degrades (distant relegation sides start
+# to count) and the two curves converge toward n_rivals=19. 5-20 is the region where
+# the comparison is both readable and defensible. See WALKTHROUGH.md.
+TAU_SWEEP_RANGE = (5.0, 20.0)
+TAU_SWEEP_STEP = 0.5
 
 
 def _pressure_index(champ_points: int, rival_points: list[int], tau: float) -> float:
     gaps = champ_points - np.asarray(rival_points, dtype=float)
     return float(np.exp(-gaps / tau).sum())
+
+
+def _pressure_sweep() -> dict:
+    """Pressure index for both seasons across a swept decay scale tau, so the
+    reader can verify the ranking (2025/26 > 2003/04) is stable, not an artefact
+    of tau=10. Computed here in the pipeline; the frontend only reads the JSON."""
+    lo, hi = TAU_SWEEP_RANGE
+    taus = np.round(np.arange(lo, hi + TAU_SWEEP_STEP / 2, TAU_SWEEP_STEP), 1)
+    rival_pts = {
+        s: [p for _, p in facts.FINAL_TABLE[s][1:]] for s in SEASONS
+    }
+    champ_pts = {s: facts.FINAL_TABLE[s][0][1] for s in SEASONS}
+    points = [
+        {
+            "tau": float(t),
+            **{s: round(_pressure_index(champ_pts[s], rival_pts[s], float(t)), 3) for s in SEASONS},
+        }
+        for t in taus
+    ]
+    return {
+        "default_tau": PRESSURE_TAU,
+        "range": [float(lo), float(hi)],
+        "step": TAU_SWEEP_STEP,
+        "n_rivals": len(rival_pts[SEASONS[0]]),
+        "points": points,
+    }
 
 
 def field_strength() -> dict:
@@ -55,6 +87,7 @@ def field_strength() -> dict:
             "Rival-team xG exists for 2025/26 (Understat) but not for 2003/04, so the "
             "field is measured on actual points - the fair like-for-like measure."
         ),
+        "sweep": _pressure_sweep(),
         "by_season": {},
     }
     for s in SEASONS:

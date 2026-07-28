@@ -264,6 +264,49 @@ a {
   font-size: 13.5px;
   margin: 0 6px 14px;
 }
+/* interactive robustness chart (Section B pressure index) */
+.robust {
+  margin-top: 6px;
+}
+.robust-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 6px 14px;
+  font-size: 13px;
+}
+.robust-slider input[type="range"] {
+  width: 100%;
+  height: 26px;
+  accent-color: #1d2530;
+  cursor: pointer;
+  touch-action: none; /* let the thumb be dragged by touch without scrolling */
+}
+.robust-readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  padding: 12px 14px;
+  margin: 0 6px;
+  background: #f6f8fa;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+}
+.robust-vals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+.robust-vals .s0304 {
+  color: var(--gold-text);
+  font-weight: 700;
+}
+.robust-vals .s2526 {
+  color: var(--red-text);
+  font-weight: 700;
+}
 .tt {
   background: #fff;
   border: 1px solid var(--line);
