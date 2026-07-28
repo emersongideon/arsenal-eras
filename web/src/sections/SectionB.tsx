@@ -112,6 +112,11 @@ export function SectionB({ c }: { c: Circumstances }) {
             losing a key player counts for more than losing a squad filler.
           </p>
           <p>
+            Weighting departures this way means the figure reflects not just how many
+            players left, but how much of the team that actually played walked out the
+            door.
+          </p>
+          <p>
             Of the squad that won the title in 2003/04,{" "}
             <b>{ct["2003/04"].retention_pct.toFixed(1)}%</b> had been at the club the
             previous season and only {ct["2003/04"].incoming} players were new. The 2025/26
@@ -121,6 +126,15 @@ export function SectionB({ c }: { c: Circumstances }) {
             though: the players who left before 2003/04 had accounted for{" "}
             <b>{ct["2003/04"].departed_minutes_pct}%</b> of the prior season&rsquo;s league
             minutes, against <b>{ct["2025/26"].departed_minutes_pct}%</b> before 2025/26.
+          </p>
+          <p>
+            Put plainly: imagine last season&rsquo;s team as 100 minutes of playing time.
+            The players who left before 2003/04 accounted for about{" "}
+            {Math.round(ct["2003/04"].departed_minutes_pct)} of those minutes, and before
+            2025/26 about {Math.round(ct["2025/26"].departed_minutes_pct)}. So while 2025/26
+            brought in far more new faces, the two sides lost a similar <b>share</b> of their
+            proven playing time. The difference between the eras is how much was <b>new</b>,
+            not how much departed.
           </p>
           <SquadStabilityChart bySeason={ct} />
           <LimitationNote>

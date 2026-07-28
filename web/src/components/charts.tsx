@@ -403,84 +403,118 @@ export function PressureRobustnessChart({
   );
 }
 
-/** Squad stability vs the prior season: retained + newly-arrived (stacked bar),
- *  with a companion strip for the minutes-weighted departure figure (the share of
- *  the prior season's team minutes that left the club). */
+const KEPT = "#2f6f4f"; // retained (green)
+const NEWIN = "#e0a458"; // joined / new in (amber)
+const OUT = "#c0392b"; // departed (outgoing red, distinct from the 2025/26 season red)
+
+/** Squad movement vs the prior season - retained, joined and departed - with a
+ *  toggle between a headcount view ("by player count") and a minutes-weighted view
+ *  ("by minutes"). The weighted view splits last season's playing time into the
+ *  share kept vs the share that left, which is where the 16.7% / 15.6% departure
+ *  figures live and where "similar share of proven minutes lost despite more bodies
+ *  in" becomes visible. */
 export function SquadStabilityChart({
   bySeason,
 }: {
   bySeason: Circumstances["squad_stability"]["by_season"];
 }) {
+  const [view, setView] = useState<"count" | "minutes">("count");
   const seasons = Object.keys(bySeason) as Season[];
-  const data = seasons.map((s) => ({
+
+  const countData = seasons.map((s) => ({
     season: s,
     Retained: bySeason[s].retained,
     "New in": bySeason[s].incoming,
+    Departed: bySeason[s].outgoing,
   }));
+  const minutesData = seasons.map((s) => {
+    const b = bySeason[s];
+    const retainedPct =
+      Math.round(((b.prior_total_minutes - b.departed_minutes) / b.prior_total_minutes) * 1000) /
+      10;
+    return { season: s, Retained: retainedPct, Departed: b.departed_minutes_pct };
+  });
+
+  const isMinutes = view === "minutes";
+  const lbl = (v: number | string) => (isMinutes ? `${v}%` : `${v}`);
+
   return (
-    <>
-      <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -18 }}>
+    <div className="stability-chart">
+      <div className="chart-toggle" role="group" aria-label="Squad movement view">
+        <button
+          type="button"
+          className={!isMinutes ? "active" : ""}
+          aria-pressed={!isMinutes}
+          onClick={() => setView("count")}
+        >
+          By player count
+        </button>
+        <button
+          type="button"
+          className={isMinutes ? "active" : ""}
+          aria-pressed={isMinutes}
+          onClick={() => setView("minutes")}
+        >
+          By minutes
+        </button>
+      </div>
+
+      <ResponsiveContainer width="100%" height={290}>
+        <BarChart
+          data={isMinutes ? minutesData : countData}
+          margin={{ top: 20, right: 16, bottom: 8, left: -14 }}
+        >
           <CartesianGrid stroke={GRID} vertical={false} />
-          <XAxis
-            dataKey="season"
-            stroke={AXIS}
-            tick={{ fontSize: 13, fontWeight: 700 }}
-          />
+          <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
           <YAxis
             stroke={AXIS}
             tick={{ fontSize: 12 }}
+            domain={isMinutes ? [0, 100] : [0, "auto"]}
             label={{
-              value: "PL players",
+              value: isMinutes ? "% of last season's minutes" : "PL players",
               angle: -90,
               position: "insideLeft",
-              offset: 16,
+              offset: 12,
               fill: AXIS,
               fontSize: 12,
             }}
           />
-          <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+          <Tooltip
+            contentStyle={ttStyle}
+            cursor={{ fill: "rgba(0,0,0,.03)" }}
+            formatter={(v: number | string) => lbl(v)}
+          />
           <Legend verticalAlign="top" height={30} />
-          <Bar dataKey="Retained" stackId="a" fill="#2f6f4f" radius={[0, 0, 0, 0]} />
-          <Bar dataKey="New in" stackId="a" fill="#e0a458" radius={[4, 4, 0, 0]} />
+          {isMinutes ? (
+            <>
+              <Bar dataKey="Retained" stackId="a" fill={KEPT}>
+                <LabelList dataKey="Retained" position="insideTop" fill="#fff" fontSize={12} formatter={lbl} />
+              </Bar>
+              <Bar dataKey="Departed" stackId="a" fill={OUT} radius={[3, 3, 0, 0]}>
+                <LabelList dataKey="Departed" position="insideTop" fill="#fff" fontSize={12} formatter={lbl} />
+              </Bar>
+            </>
+          ) : (
+            <>
+              <Bar dataKey="Retained" fill={KEPT} radius={[3, 3, 0, 0]}>
+                <LabelList dataKey="Retained" position="top" fontSize={11} formatter={lbl} />
+              </Bar>
+              <Bar dataKey="New in" fill={NEWIN} radius={[3, 3, 0, 0]}>
+                <LabelList dataKey="New in" position="top" fontSize={11} formatter={lbl} />
+              </Bar>
+              <Bar dataKey="Departed" fill={OUT} radius={[3, 3, 0, 0]}>
+                <LabelList dataKey="Departed" position="top" fontSize={11} formatter={lbl} />
+              </Bar>
+            </>
+          )}
         </BarChart>
       </ResponsiveContainer>
-      <DepartedMinutesStrip bySeason={bySeason} />
-    </>
-  );
-}
 
-/** Companion visual: the minutes-weighted departure figure for each season, drawn
- *  as two proportional bars so the "how much of last year's playing time left"
- *  comparison is legible at a glance. */
-function DepartedMinutesStrip({
-  bySeason,
-}: {
-  bySeason: Circumstances["squad_stability"]["by_season"];
-}) {
-  const seasons = Object.keys(bySeason) as Season[];
-  const max = Math.max(...seasons.map((s) => bySeason[s].departed_minutes_pct), 1);
-  return (
-    <div className="dep-strip">
-      <p className="dep-strip-title">
-        Departures, weighted by last season&rsquo;s minutes
-        <span className="dim">: share of the prior season&rsquo;s team minutes that left</span>
+      <p className="chart-note">
+        {isMinutes
+          ? "Each season's bar is last season's playing time split into the share kept (retained) and the share that left (departed). New arrivals had no prior-season minutes, so they are not shown in this view."
+          : "Headcount of players retained, joined and departed versus the prior season."}
       </p>
-      {seasons.map((s) => {
-        const b = bySeason[s];
-        return (
-          <div className={`dep-row ${s === "2003/04" ? "s0304" : "s2526"}`} key={s}>
-            <span className="dep-season">{s}</span>
-            <span className="dep-track">
-              <span
-                className="dep-fill"
-                style={{ width: `${(b.departed_minutes_pct / max) * 100}%` }}
-              />
-            </span>
-            <span className="dep-val">{b.departed_minutes_pct}%</span>
-          </div>
-        );
-      })}
     </div>
   );
 }

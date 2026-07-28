@@ -527,6 +527,35 @@ a {
   color: var(--red-text);
 }
 
+/* raw/weighted toggle (Section B squad stability chart) */
+.stability-chart {
+  margin-top: 4px;
+}
+.chart-toggle {
+  display: inline-flex;
+  gap: 2px;
+  margin: 0 6px 12px;
+  padding: 3px;
+  background: #eef1f5;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.chart-toggle button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 6px 13px;
+  border-radius: 999px;
+  transition: color 0.18s, background 0.18s;
+}
+.chart-toggle button.active {
+  background: var(--ink);
+  color: #fff;
+}
+
 /* minutes-weighted departure companion (Section B squad stability) */
 .dep-strip {
   margin: 10px 6px 2px;

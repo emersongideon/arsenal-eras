@@ -247,7 +247,16 @@ honesty** matters most.
     2003/04 vs 15.6% in 2025/26 - if anything 2003/04 lost marginally more, losing Seaman,
     Luzhnyi and van Bronckhorst). The upheaval gap between the eras is therefore on the
     *incoming* side (signings + low carryover), not departures - and the report copy says
-    exactly that rather than the tidier "more out" story the counts might suggest.
+    exactly that rather than the tidier "more out" story the counts might suggest. The
+    frontend `SquadStabilityChart` shows all three movements (retained / joined / departed,
+    departures in an outgoing red) with a **raw/weighted toggle**: "By player count" is the
+    headcount view (grouped bars: joined differs a lot, 4 vs 9), and "By minutes" splits
+    last season's playing time into the share kept vs the share that left (a 100% stacked
+    bar), which is where the 16.7% / 15.6% departure figures live and where "similar share
+    of proven minutes lost despite far more bodies in" becomes visible. New arrivals have no
+    prior-season minutes, so they are intentionally absent from the weighted view (noted in
+    a caption). Retained-minutes share is derived in the frontend as `100 - departed_pct`
+    from the exported fields; no new data.
 - **`physical.py` (Section C)** - two metrics that exist cleanly for BOTH eras:
   - *Minutes-weighted squad age* - birthdates weighted by that season's league minutes
     (weighted age answers "how old was the team that actually played", not the flat
