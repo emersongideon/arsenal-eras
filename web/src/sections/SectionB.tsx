@@ -40,12 +40,18 @@ export function SectionB({ c }: { c: Circumstances }) {
             <CategoryBadge category="model" />
           </div>
           <p>
-            Quoting the runner-up's points is shallow: a team 30 points back was never a
-            threat. Instead, every rival is weighted by how close it finished. Each
-            contributes <code>exp(-gap / τ)</code>, where <code>gap</code> is its points
-            behind Arsenal and <code>τ</code> sets how fast a rival's weight fades as it
-            finishes further back. Summed across the table, the index reads as the
-            effective number of genuine title threats.
+            The title is won by taking more points than your rivals, but how close those
+            rivals finish changes how hard that is. A team breathing down your neck all
+            season is a different task from one that fell away early. Hence we use a
+            title-race pressure index, which measures the total pressure the chasing pack
+            applied: the closer a rival finishes on points, the more it contributes, and
+            the further back it finishes, the less. We define each rival's weight using the
+            formula <code>exp(-gap / τ)</code>, where <code>gap</code> is the number of
+            points it finished behind Arsenal and <code>τ</code> sets how fast that weight
+            fades. We use exponential decay because it lets a rival's weight fade smoothly
+            as the gap grows, rather than cutting off sharply at some arbitrary point.
+            Summed across the table, the index reads as the effective number of genuine
+            title threats Arsenal faced.
           </p>
           <p>
             <code>τ</code> is a choice, not a fixed rule: a low <code>τ</code> means
@@ -64,16 +70,13 @@ export function SectionB({ c }: { c: Circumstances }) {
             informative here.
           </p>
           <PressureRobustnessChart sweep={c.field_strength.sweep} />
-          <p style={{ marginTop: 12 }}>
-            At the reported <code>τ = {c.field_strength.tau}</code> the index is{" "}
-            <b>{f["2003/04"].pressure_index}</b> for 2003/04 and{" "}
-            <b>{f["2025/26"].pressure_index}</b> for 2025/26, roughly {morePressure}% more
-            title-race pressure on the later side.
-          </p>
           <Reading>
-            2003/04 was more dominant, but it pulled clear of a field that never came
-            within 10 points. 2025/26 won with a rival that stayed within{" "}
-            {f["2025/26"].margin}.
+            At <code>τ = {c.field_strength.tau}</code>, the value used in the report,
+            2025/26 shows about {morePressure}% more title-race pressure than 2003/04. Read
+            plainly: 2003/04 was the more dominant season, but its nearest rival still
+            finished {f["2003/04"].margin} points back. In 2025/26 the closest rival
+            finished only {f["2025/26"].margin} points back and stayed in the race far
+            longer, so the title was contested for more of the season.
           </Reading>
         </div>
       </Reveal>
