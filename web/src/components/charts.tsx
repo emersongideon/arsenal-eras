@@ -826,6 +826,33 @@ function axisFrac(dateStr: string): number {
   return (idx + (d - 1) / daysInMonth) / TL_MONTHS.length;
 }
 
+/** Congested stretches: maximal runs of consecutive short-rest games. A run of
+ *  N short-rest games means N+1 matches bunched together (each within 3 days of
+ *  the previous), so a run of >=2 is 3+ games in quick succession. Returns the
+ *  fractional x-span (start of the bunch to its last game) for shading. */
+function congestedBands(matches: TLMatch[]): { start: number; end: number }[] {
+  const bands: { start: number; end: number }[] = [];
+  let runStart = -1;
+  const close = (endIdx: number) => {
+    if (runStart >= 1 && endIdx - runStart >= 1) {
+      bands.push({
+        start: axisFrac(matches[runStart - 1].date),
+        end: axisFrac(matches[endIdx].date),
+      });
+    }
+    runStart = -1;
+  };
+  matches.forEach((m, i) => {
+    if (m.short) {
+      if (runStart === -1) runStart = i;
+    } else if (runStart !== -1) {
+      close(i - 1);
+    }
+  });
+  if (runStart !== -1) close(matches.length - 1);
+  return bands;
+}
+
 /** Visual B: season congestion timeline. One strip per season, Aug->May, every
  *  competitive match a tick placed by date; short-rest games (<=3 days) in a hot
  *  colour so clusters (December, modern European weeks) jump out. */
@@ -851,6 +878,9 @@ export function CongestionTimeline({
         <span className="tl-key">
           <i className="tl-swatch" style={{ background: NORMAL_TICK }} /> normal rest
         </span>
+        <span className="tl-key">
+          <i className="tl-swatch band" /> congested stretch (3+ games in quick succession)
+        </span>
       </div>
       <div className="tl-scroll">
         <div className="tl-inner">
@@ -865,6 +895,17 @@ export function CongestionTimeline({
                     className="tl-monthline"
                     key={mo}
                     style={{ left: `${(i / TL_MONTHS.length) * 100}%` }}
+                  />
+                ))}
+                {congestedBands(bySeason[s].matches as TLMatch[]).map((bd, i) => (
+                  <span
+                    className="tl-band"
+                    key={`band-${i}`}
+                    aria-hidden="true"
+                    style={{
+                      left: `${bd.start * 100}%`,
+                      width: `${(bd.end - bd.start) * 100}%`,
+                    }}
                   />
                 ))}
                 {(bySeason[s].matches as TLMatch[]).map((m, i) => {

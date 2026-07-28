@@ -284,9 +284,10 @@ honesty** matters most.
     list. This is also where the honesty note lives: modern tracking data (distance,
     sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately excluded rather
     than fabricated.
-- **`congestion.py` (Section D - "Performance under congestion")** - synthesises
-  Section C (rest-gaps) with Section A (results) to ask whether the more compressed
-  2025/26 schedule actually cost points. **Bucket definition:** each of the 38 LEAGUE
+- **`congestion.py` (Section C, part 3 - "Did it cost points?")** - the physical
+  force's payoff, absorbed into Section C (it used to be its own Section D). Synthesises
+  the rest-gaps (Section C part 2) with match results (Section A) to ask whether the more
+  compressed 2025/26 schedule actually cost points. **Bucket definition:** each of the 38 LEAGUE
   games per season is split into "short rest" (`<= 3` days) or "normal rest" (`4+` days),
   where the rest is measured from the FULL fixture list across ALL competitions (a
   midweek cup or European game tires the side too), i.e. the same rest-gap as Section C.
@@ -352,8 +353,9 @@ A small **FastAPI** service that serves the processed data. Endpoints are in the
 A single-page **React + TypeScript** app with two views, switched by a persistent
 toggle (choice saved to localStorage):
 - **Report** (`ReportView`): the scroll-driven analytical read. Hook, "Before we start:
-  the data," then Section A (the surface), B (the field), C (the physical picture),
-  D (performance under congestion), E (what this surfaces).
+  the data," then Section A (the surface), B (the field), C (the physical picture -
+  now age + fixture congestion + the points-under-congestion payoff), D (synthesis,
+  reserved - combines the two forces; being built), E (what this surfaces).
 - **Dashboard** (`DashboardView`): every metric side by side, a head-to-head comparison
   table plus all charts in a grid, for scanning and modelling.
 

@@ -1,6 +1,11 @@
-import { CongestionTimeline, RestGapChart, SquadAgeScatter } from "../components/charts";
+import {
+  CongestionPpgChart,
+  CongestionTimeline,
+  RestGapChart,
+  SquadAgeScatter,
+} from "../components/charts";
 import { CategoryBadge, LimitationNote, Reveal, Section } from "../components/ui";
-import type { Physical } from "../types";
+import type { Congestion, Physical } from "../types";
 
 /** Interpretation block, marked with the interpretation pill and kept apart from
  *  the measured statement it reads. */
@@ -13,9 +18,10 @@ function Reading({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function SectionC({ p }: { p: Physical }) {
+export function SectionC({ p, congestion }: { p: Physical; congestion: Congestion }) {
   const age = p.squad_age.by_season;
   const fc = p.fixture_congestion.by_season;
+  const cg = congestion.by_season;
   const over30 = (s: "2003/04" | "2025/26") =>
     Math.round(age[s].over30_minutes_share * 100);
   return (
@@ -29,12 +35,14 @@ export function SectionC({ p }: { p: Physical }) {
       }}
     >
       <Reveal>
-        <h2>Only what is measurable for both eras</h2>
+        <h2>When the body breaks, a title race slips away</h2>
         <p className="lead narrow">
-          Two physical measures exist cleanly for 2003/04 and 2025/26: the age of the side
-          that actually played, and the fixture load it carried. Everything else modern
-          tracking would give us has no 2003/04 equivalent, so it is left out. See the
-          note at the end of this section.
+          The second force is internal: the physical demand the season placed on the squad,
+          and whether the squad could carry it. A title is a nine-month test of endurance as
+          much as quality, and when legs go, leads slip. We measure this two ways that exist
+          cleanly for both eras: how old the side that actually played was, and how heavy and
+          compressed its fixture schedule was. Then we test the thing that actually matters:
+          did the physical load show up in dropped points?
         </p>
       </Reveal>
 
@@ -62,11 +70,11 @@ export function SectionC({ p }: { p: Physical }) {
           </p>
           <SquadAgeScatter bySeason={age} />
           <Reading>
-            The Invincibles were the older, more experienced team; the 2025/26 side was
-            younger and leaned less on players past 30. This is a difference in profile,
-            not evidence on its own that either season was physically harder. Age feeds
-            into the fixture load that follows, which is where the physical demand actually
-            shows up.
+            An older side carries more experience but usually less physical margin over a
+            long, congested season. The Invincibles were the older team; 2025/26 was
+            younger. On its own this settles nothing, but it sets up the real test: how
+            heavy was the schedule each side had to survive, and did it cost them? That is
+            what the fixture load, and then the points, will show.
           </Reading>
         </div>
       </Reveal>
@@ -104,22 +112,79 @@ export function SectionC({ p }: { p: Physical }) {
           </p>
           <RestGapChart bySeason={fc} />
 
+          <div className="callout">
+            <p className="callout-eyebrow">The significant difference</p>
+            <p className="callout-body">
+              The shift is in how often games came thick and fast. 2025/26 played{" "}
+              <b>{fc["2025/26"].short_rest_count} of its {fc["2025/26"].total_games} games</b>{" "}
+              on three days&rsquo; rest or fewer, close to half; the Invincibles played{" "}
+              <b>{fc["2003/04"].short_rest_count} of {fc["2003/04"].total_games}</b>, closer
+              to a third. The single busiest month was heavier too:{" "}
+              <b>{fc["2025/26"].busiest_month_games} games in {fc["2025/26"].busiest_month}</b>{" "}
+              against {fc["2003/04"].busiest_month_games} in {fc["2003/04"].busiest_month}.
+              The timeline below shows where those short-rest games bunched into congested
+              stretches.
+            </p>
+          </div>
+
           <p className="chart-title" style={{ marginTop: 20 }}>
             The season, match by match
           </p>
           <p className="chart-sub">
-            Each tick is one competitive game, placed by date from August to May.
-            Short-rest games are highlighted, so the clusters (December, and the modern
-            European weeks) stand out.
+            Each tick is one competitive game, placed by date from August to May. Short-rest
+            games are highlighted, and shaded bands mark congested stretches where three or
+            more games came in quick succession, so it is visible where the calendar bunched
+            up (December, and the modern January and February European weeks).
           </p>
           <CongestionTimeline bySeason={fc} />
 
           <Reading>
-            The 2025/26 side carried a heavier and more compressed schedule, with more
-            games and far more of them crammed into short-rest windows. This is the
-            clearest physical difference between the two seasons, and unlike tracking data,
-            it can be measured the same way for both.
+            The 2025/26 side carried a heavier and more compressed schedule, with more games
+            and far more of them crammed into short-rest windows. This is the clearest
+            physical difference between the two seasons, and unlike tracking data, it can be
+            measured the same way for both.
           </Reading>
+        </div>
+      </Reveal>
+
+      {/* C3 - the payoff: did the load cost points? (absorbed from old Section D) */}
+      <Reveal delay={60}>
+        <div className="card sublayer">
+          <div className="sublayer-head">
+            <h3>3. Did it cost points?</h3>
+            <CategoryBadge category="measured" />
+          </div>
+          <p>
+            So did it cost them? This is the test the whole section builds to: did either
+            side actually drop more points when it played on short rest? We take the same
+            rest-gaps from the fixture data and line them up against the points won in each
+            league game.
+          </p>
+          <div className="chart-card" style={{ margin: "16px 0 6px" }}>
+            <p className="chart-title" style={{ margin: "0 6px 2px" }}>
+              League points per game, by rest before the match
+            </p>
+            <p className="chart-sub">
+              Points per game over the 38 league matches each season, split by the rest
+              before each game (measured across all competitions). Dashed lines mark each
+              season&rsquo;s overall PPG. Sample sizes are shown on the bars.
+            </p>
+            <CongestionPpgChart bySeason={cg} />
+            <p className="dim" style={{ fontSize: 13, marginTop: 8 }}>
+              Short-rest games: 2003/04 n={cg["2003/04"].buckets.short.games}, 2025/26 n=
+              {cg["2025/26"].buckets.short.games}. Normal-rest: n=
+              {cg["2003/04"].buckets.normal.games} and n=
+              {cg["2025/26"].buckets.normal.games}. The short-rest buckets are small, so
+              treat the per-bucket figures as indicative rather than decisive.
+            </p>
+          </div>
+          <p>
+            The honest answer: it did not. Neither side&rsquo;s points per game dropped on
+            short rest relative to its own baseline; if anything both edged slightly higher.
+            So the heavier, more compressed 2025/26 calendar reads as a load the side
+            absorbed rather than a visible cost in dropped points. That is a genuine finding,
+            not a disappointment: the physical demand was real, but this side carried it.
+          </p>
         </div>
       </Reveal>
 
@@ -135,7 +200,8 @@ export function SectionC({ p }: { p: Physical }) {
 
       <Reveal delay={60}>
         <p className="narrow dim handoff">
-          The schedule was heavier and more compressed. Did it cost points? ↓
+          Both forces are now measured, the field outside and the strain inside. Section D
+          combines them. ↓
         </p>
       </Reveal>
     </Section>

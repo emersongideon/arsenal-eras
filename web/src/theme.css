@@ -340,6 +340,19 @@ a {
   width: 1px;
   background: #e6e9ee;
 }
+.tl-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(255, 90, 31, 0.13);
+  border-left: 1px solid rgba(255, 90, 31, 0.35);
+  border-right: 1px solid rgba(255, 90, 31, 0.35);
+  border-radius: 4px;
+}
+.tl-swatch.band {
+  background: rgba(255, 90, 31, 0.18);
+  border: 1px solid rgba(255, 90, 31, 0.5);
+}
 .tl-tick {
   position: absolute;
   top: 6px;
@@ -608,6 +621,30 @@ a {
   flex: 0 0 46px;
   text-align: right;
   font-weight: 700;
+  color: var(--ink);
+}
+
+/* "what's significant" analytic callout (Section C fixture congestion) */
+.callout {
+  background: var(--measured-soft);
+  border: 1px solid #cfd9f6;
+  border-left: 4px solid var(--measured);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 16px;
+  margin: 16px 6px;
+}
+.callout-eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--measured);
+}
+.callout p.callout-body {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
   color: var(--ink);
 }
 

@@ -10,7 +10,7 @@ const NAV = [
   { id: "section-a", short: "A · Surface", long: "A · The surface" },
   { id: "section-b", short: "B · Field", long: "B · The field" },
   { id: "section-c", short: "C · Physical", long: "C · The physical picture" },
-  { id: "section-d", short: "D · Congestion", long: "D · Performance under congestion" },
+  { id: "section-d", short: "D · Synthesis", long: "D · Combining the forces" },
   { id: "section-e", short: "E · Verdict", long: "E · What this surfaces" },
 ] as const;
 
