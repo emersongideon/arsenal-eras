@@ -626,6 +626,164 @@ export function FixtureCongestionChart({
   );
 }
 
+/** Visual A: rest-gap distribution. How many games followed a <=2 / 3 / 4-5 /
+ *  6-7 / 8+ day rest, both seasons side by side. The direct evidence that 2025/26
+ *  is weighted toward the short-rest buckets. */
+export function RestGapChart({
+  bySeason,
+}: {
+  bySeason: Physical["fixture_congestion"]["by_season"];
+}) {
+  const labels = bySeason["2003/04"].rest_buckets.map((b) => b.label);
+  const data = labels.map((label) => ({
+    label,
+    "2003/04": bySeason["2003/04"].rest_buckets.find((b) => b.label === label)!.count,
+    "2025/26": bySeason["2025/26"].rest_buckets.find((b) => b.label === label)!.count,
+  }));
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 20, left: -12 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis
+          dataKey="label"
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          label={{
+            value: "rest before the game (days since previous match)",
+            position: "bottom",
+            offset: 6,
+            fill: AXIS,
+            fontSize: 12,
+          }}
+        />
+        <YAxis
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          allowDecimals={false}
+          label={{
+            value: "games",
+            angle: -90,
+            position: "insideLeft",
+            offset: 16,
+            fill: AXIS,
+            fontSize: 12,
+          }}
+        />
+        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <Legend verticalAlign="top" height={30} />
+        <Bar dataKey="2003/04" fill={GOLD} radius={[4, 4, 0, 0]} />
+        <Bar dataKey="2025/26" fill={RED} radius={[4, 4, 0, 0]} />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+}
+
+const TL_MONTHS = ["Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May"];
+// map calendar month (1-12) to an Aug..May axis index (Aug=0 .. May=9)
+const MONTH_AXIS: Record<number, number> = {
+  8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 1: 5, 2: 6, 3: 7, 4: 8, 5: 9,
+};
+const SHORT_TICK = "#ff5a1f"; // hot accent for short-rest games
+const NORMAL_TICK = "#b8c0cb"; // muted for normal-rest games
+
+type TLMatch = Physical["fixture_congestion"]["by_season"][keyof Physical["fixture_congestion"]["by_season"]]["matches"][number];
+
+/** fraction 0..1 along an Aug->May axis for a match date. */
+function axisFrac(dateStr: string): number {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const idx = MONTH_AXIS[m] ?? 0;
+  const daysInMonth = new Date(y, m, 0).getDate();
+  return (idx + (d - 1) / daysInMonth) / TL_MONTHS.length;
+}
+
+/** Visual B: season congestion timeline. One strip per season, Aug->May, every
+ *  competitive match a tick placed by date; short-rest games (<=3 days) in a hot
+ *  colour so clusters (December, modern European weeks) jump out. */
+export function CongestionTimeline({
+  bySeason,
+}: {
+  bySeason: Physical["fixture_congestion"]["by_season"];
+}) {
+  const seasons = Object.keys(bySeason) as Season[];
+  const [hover, setHover] = useState<{
+    x: number;
+    text: string;
+    short: boolean;
+  } | null>(null);
+
+  return (
+    <div className="timeline">
+      <div className="tl-legend" aria-hidden="true">
+        <span className="tl-key">
+          <i className="tl-swatch" style={{ background: SHORT_TICK }} /> short rest
+          (3 days or fewer)
+        </span>
+        <span className="tl-key">
+          <i className="tl-swatch" style={{ background: NORMAL_TICK }} /> normal rest
+        </span>
+      </div>
+      <div className="tl-scroll">
+        <div className="tl-inner">
+          {seasons.map((s) => (
+            <div className="tl-block" key={s}>
+              <span className={`season-tag ${s === "2003/04" ? "s0304" : "s2526"}`}>
+                {s}
+              </span>
+              <div className="tl-track">
+                {TL_MONTHS.map((mo, i) => (
+                  <span
+                    className="tl-monthline"
+                    key={mo}
+                    style={{ left: `${(i / TL_MONTHS.length) * 100}%` }}
+                  />
+                ))}
+                {(bySeason[s].matches as TLMatch[]).map((m, i) => {
+                  const left = axisFrac(m.date) * 100;
+                  const rest =
+                    m.rest_days === null ? "season opener" : `${m.rest_days} days rest`;
+                  const text = `${m.competition} · ${m.date} · ${rest}`;
+                  return (
+                    <button
+                      type="button"
+                      key={`${m.date}-${i}`}
+                      className={`tl-tick ${m.short ? "short" : ""}`}
+                      style={{ left: `${left}%` }}
+                      aria-label={text}
+                      onMouseEnter={() => setHover({ x: left, text, short: m.short })}
+                      onMouseLeave={() => setHover(null)}
+                      onFocus={() => setHover({ x: left, text, short: m.short })}
+                      onBlur={() => setHover(null)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          <div className="tl-axis">
+            {TL_MONTHS.map((mo, i) => (
+              <span
+                className="tl-month"
+                key={mo}
+                style={{ left: `${(i / TL_MONTHS.length) * 100}%` }}
+              >
+                {mo}
+              </span>
+            ))}
+          </div>
+          {hover && (
+            <div
+              className={`tl-tip ${hover.short ? "short" : ""}`}
+              style={{ left: `${hover.x}%` }}
+            >
+              {hover.text}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ===========================================================================
 // Sections A / D - the expected-points model
 // ===========================================================================

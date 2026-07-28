@@ -309,7 +309,385 @@
         "busiest_month_games": 8,
         "min_rest_days": 2,
         "median_rest_days": 4.0,
-        "short_rest_count": 19
+        "short_rest_count": 19,
+        "rest_buckets": [
+          {
+            "label": "<=2 days",
+            "count": 6
+          },
+          {
+            "label": "3 days",
+            "count": 13
+          },
+          {
+            "label": "4-5 days",
+            "count": 23
+          },
+          {
+            "label": "6-7 days",
+            "count": 9
+          },
+          {
+            "label": "8+ days",
+            "count": 7
+          }
+        ],
+        "matches": [
+          {
+            "date": "2003-08-10",
+            "competition": "Community Shield",
+            "rest_days": null,
+            "short": false
+          },
+          {
+            "date": "2003-08-16",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2003-08-24",
+            "competition": "Premier League",
+            "rest_days": 8,
+            "short": false
+          },
+          {
+            "date": "2003-08-27",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2003-08-31",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-09-13",
+            "competition": "Premier League",
+            "rest_days": 13,
+            "short": false
+          },
+          {
+            "date": "2003-09-17",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-09-21",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-09-26",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2003-09-30",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-10-04",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-10-18",
+            "competition": "Premier League",
+            "rest_days": 14,
+            "short": false
+          },
+          {
+            "date": "2003-10-21",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2003-10-26",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2003-10-28",
+            "competition": "League Cup",
+            "rest_days": 2,
+            "short": true
+          },
+          {
+            "date": "2003-11-01",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-11-05",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-11-08",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2003-11-22",
+            "competition": "Premier League",
+            "rest_days": 14,
+            "short": false
+          },
+          {
+            "date": "2003-11-25",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2003-11-30",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2003-12-02",
+            "competition": "League Cup",
+            "rest_days": 2,
+            "short": true
+          },
+          {
+            "date": "2003-12-06",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-12-10",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-12-14",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-12-16",
+            "competition": "League Cup",
+            "rest_days": 2,
+            "short": true
+          },
+          {
+            "date": "2003-12-20",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2003-12-26",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2003-12-29",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-01-04",
+            "competition": "FA Cup",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2004-01-07",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-01-10",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-01-18",
+            "competition": "Premier League",
+            "rest_days": 8,
+            "short": false
+          },
+          {
+            "date": "2004-01-20",
+            "competition": "League Cup",
+            "rest_days": 2,
+            "short": true
+          },
+          {
+            "date": "2004-01-24",
+            "competition": "FA Cup",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2004-02-01",
+            "competition": "Premier League",
+            "rest_days": 8,
+            "short": false
+          },
+          {
+            "date": "2004-02-03",
+            "competition": "League Cup",
+            "rest_days": 2,
+            "short": true
+          },
+          {
+            "date": "2004-02-07",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2004-02-10",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-02-15",
+            "competition": "FA Cup",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2004-02-21",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2004-02-24",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-02-28",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2004-03-06",
+            "competition": "FA Cup",
+            "rest_days": 7,
+            "short": false
+          },
+          {
+            "date": "2004-03-10",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2004-03-13",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-03-20",
+            "competition": "Premier League",
+            "rest_days": 7,
+            "short": false
+          },
+          {
+            "date": "2004-03-24",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2004-03-28",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2004-04-03",
+            "competition": "FA Cup",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2004-04-06",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-04-09",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-04-11",
+            "competition": "Premier League",
+            "rest_days": 2,
+            "short": true
+          },
+          {
+            "date": "2004-04-16",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2004-04-25",
+            "competition": "Premier League",
+            "rest_days": 9,
+            "short": false
+          },
+          {
+            "date": "2004-05-01",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2004-05-04",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2004-05-09",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2004-05-15",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          }
+        ]
       },
       "2025/26": {
         "total_games": 63,
@@ -360,7 +738,409 @@
         "busiest_month_games": 9,
         "min_rest_days": 3,
         "median_rest_days": 4.0,
-        "short_rest_count": 30
+        "short_rest_count": 30,
+        "rest_buckets": [
+          {
+            "label": "<=2 days",
+            "count": 0
+          },
+          {
+            "label": "3 days",
+            "count": 30
+          },
+          {
+            "label": "4-5 days",
+            "count": 20
+          },
+          {
+            "label": "6-7 days",
+            "count": 6
+          },
+          {
+            "label": "8+ days",
+            "count": 6
+          }
+        ],
+        "matches": [
+          {
+            "date": "2025-08-17",
+            "competition": "Premier League",
+            "rest_days": null,
+            "short": false
+          },
+          {
+            "date": "2025-08-23",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2025-08-31",
+            "competition": "Premier League",
+            "rest_days": 8,
+            "short": false
+          },
+          {
+            "date": "2025-09-13",
+            "competition": "Premier League",
+            "rest_days": 13,
+            "short": false
+          },
+          {
+            "date": "2025-09-16",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-09-21",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2025-09-24",
+            "competition": "League Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-09-28",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2025-10-01",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-10-04",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-10-18",
+            "competition": "Premier League",
+            "rest_days": 14,
+            "short": false
+          },
+          {
+            "date": "2025-10-21",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-10-26",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2025-10-29",
+            "competition": "League Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-11-01",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-11-04",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-11-08",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2025-11-23",
+            "competition": "Premier League",
+            "rest_days": 15,
+            "short": false
+          },
+          {
+            "date": "2025-11-26",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-11-30",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2025-12-03",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-12-06",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-12-10",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2025-12-13",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-12-20",
+            "competition": "Premier League",
+            "rest_days": 7,
+            "short": false
+          },
+          {
+            "date": "2025-12-23",
+            "competition": "League Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2025-12-27",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2025-12-30",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-01-03",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-01-08",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2026-01-11",
+            "competition": "FA Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-01-14",
+            "competition": "League Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-01-17",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-01-20",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-01-25",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2026-01-28",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-01-31",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-02-03",
+            "competition": "League Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-02-07",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-02-12",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2026-02-15",
+            "competition": "FA Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-02-18",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-02-22",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-03-01",
+            "competition": "Premier League",
+            "rest_days": 7,
+            "short": false
+          },
+          {
+            "date": "2026-03-04",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-03-07",
+            "competition": "FA Cup",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-03-11",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-03-14",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-03-17",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-03-22",
+            "competition": "League Cup",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2026-04-04",
+            "competition": "FA Cup",
+            "rest_days": 13,
+            "short": false
+          },
+          {
+            "date": "2026-04-07",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-04-11",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-04-15",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-04-19",
+            "competition": "Premier League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-04-25",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2026-04-29",
+            "competition": "Champions League",
+            "rest_days": 4,
+            "short": false
+          },
+          {
+            "date": "2026-05-02",
+            "competition": "Premier League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-05-05",
+            "competition": "Champions League",
+            "rest_days": 3,
+            "short": true
+          },
+          {
+            "date": "2026-05-10",
+            "competition": "Premier League",
+            "rest_days": 5,
+            "short": false
+          },
+          {
+            "date": "2026-05-18",
+            "competition": "Premier League",
+            "rest_days": 8,
+            "short": false
+          },
+          {
+            "date": "2026-05-24",
+            "competition": "Premier League",
+            "rest_days": 6,
+            "short": false
+          },
+          {
+            "date": "2026-05-30",
+            "competition": "Champions League",
+            "rest_days": 6,
+            "short": false
+          }
+        ]
       }
     }
   },

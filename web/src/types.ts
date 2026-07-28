@@ -160,6 +160,13 @@ export interface Physical {
         min_rest_days: number;
         median_rest_days: number;
         short_rest_count: number;
+        rest_buckets: { label: string; count: number }[];
+        matches: {
+          date: string;
+          competition: string;
+          rest_days: number | null;
+          short: boolean;
+        }[];
       }
     >;
   };

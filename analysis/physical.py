@@ -73,12 +73,49 @@ def squad_age(players: pd.DataFrame) -> dict:
     return out
 
 
+REST_BUCKET_ORDER = ["<=2 days", "3 days", "4-5 days", "6-7 days", "8+ days"]
+
+
+def _rest_bucket(gap: int) -> str:
+    if gap <= 2:
+        return "<=2 days"
+    if gap == 3:
+        return "3 days"
+    if gap <= 5:
+        return "4-5 days"
+    if gap <= 7:
+        return "6-7 days"
+    return "8+ days"
+
+
 def fixture_congestion() -> dict:
-    """Games-per-month and rest-gaps across ALL competitions, from real dates."""
+    """Games-per-month and rest-gaps across ALL competitions, from real dates.
+
+    The section is about COMPRESSION, so alongside the raw totals we export the
+    rest-gap distribution (how many games followed a short vs long rest) and the
+    full per-match list, both driven by the gap in days between consecutive
+    competitive matches. The season opener has no preceding match, so it carries
+    no rest gap and is excluded from the buckets."""
     out = {"metric": "fixture_congestion", "note": TRACKING_NOTE, "by_season": {}}
     for s in SEASONS:
-        dates = pd.to_datetime(sorted(d for d, _ in sources.FIXTURES[s]))
-        gaps = dates.to_series().diff().dt.days.dropna().to_numpy()
+        fixtures = sorted(sources.FIXTURES[s])  # (ISO date, competition), chronological
+        dates = pd.to_datetime([d for d, _ in fixtures])
+        gaps = dates.to_series().diff().dt.days.dropna().astype(int).to_numpy()
+
+        # Per-match rows for the timeline; rest_days = gap to the previous match.
+        matches = []
+        buckets = dict.fromkeys(REST_BUCKET_ORDER, 0)
+        prev = None
+        for d, comp in fixtures:
+            cur = date.fromisoformat(d)
+            rest = None if prev is None else (cur - prev).days
+            short = rest is not None and rest <= 3
+            if rest is not None:
+                buckets[_rest_bucket(rest)] += 1
+            matches.append(
+                {"date": d, "competition": comp, "rest_days": rest, "short": short}
+            )
+            prev = cur
 
         # Games per calendar month, in chronological order.
         per_month = (
@@ -91,7 +128,7 @@ def fixture_congestion() -> dict:
         per_month["label"] = per_month["month"].dt.strftime("%b %Y")
 
         out["by_season"][s] = {
-            "total_games": int(len(dates)),
+            "total_games": int(len(fixtures)),
             "span_days": int((dates[-1] - dates[0]).days),
             "games_per_month": per_month[["label", "games"]].to_dict("records"),
             "busiest_month": per_month.loc[per_month["games"].idxmax(), "label"],
@@ -100,6 +137,8 @@ def fixture_congestion() -> dict:
             "median_rest_days": round(float(np.median(gaps)), 1),
             # quick-turnaround games: <=3 clear days between matches
             "short_rest_count": int((gaps <= 3).sum()),
+            "rest_buckets": [{"label": b, "count": buckets[b]} for b in REST_BUCKET_ORDER],
+            "matches": matches,
         }
     return out
 

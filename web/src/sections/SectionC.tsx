@@ -1,4 +1,4 @@
-import { FixtureCongestionChart, SquadAgeScatter } from "../components/charts";
+import { CongestionTimeline, RestGapChart, SquadAgeScatter } from "../components/charts";
 import { CategoryBadge, Reveal, Section } from "../components/ui";
 import type { Physical } from "../types";
 
@@ -79,14 +79,47 @@ export function SectionC({ p }: { p: Physical }) {
             <CategoryBadge category="measured" />
           </div>
           <p>
-            Computed from every competitive match date:{" "}
-            <b>{fc["2025/26"].total_games} games</b> in 2025/26 against{" "}
-            <b>{fc["2003/04"].total_games}</b> in 2003/04, and{" "}
-            <b>{fc["2025/26"].short_rest_count} short-rest turnarounds</b> (three days'
-            rest or fewer) against <b>{fc["2003/04"].short_rest_count}</b>. A materially
-            more compressed calendar, driven mainly by the expanded Champions League.
+            Games are only half the load; how tightly they are packed is the other half.
+            Playing 60 matches with a clear week between each is very different from
+            playing them in bunches with two or three days' rest, when players cannot fully
+            recover before the next one. So we measure two things from the actual match
+            dates across every competition: how many games each side played, and how often
+            those games came after only a short rest.
           </p>
-          <FixtureCongestionChart bySeason={fc} />
+          <p>
+            The 2025/26 side played <b>{fc["2025/26"].total_games} games</b> to the
+            Invincibles' <b>{fc["2003/04"].total_games}</b>, and{" "}
+            <b>{fc["2025/26"].short_rest_count}</b> of those came after three days' rest or
+            fewer, against <b>{fc["2003/04"].short_rest_count}</b> for the Invincibles. The
+            gap is driven mainly by the modern Champions League, which is larger and runs
+            deeper into the calendar than the 2003/04 version.
+          </p>
+
+          <p className="chart-title" style={{ marginTop: 6 }}>
+            How much rest before each game
+          </p>
+          <p className="chart-sub">
+            Every game bucketed by the days since the previous match. The 2025/26 side sits
+            far more heavily in the short-rest buckets.
+          </p>
+          <RestGapChart bySeason={fc} />
+
+          <p className="chart-title" style={{ marginTop: 20 }}>
+            The season, match by match
+          </p>
+          <p className="chart-sub">
+            Each tick is one competitive game, placed by date from August to May.
+            Short-rest games are highlighted, so the clusters (December, and the modern
+            European weeks) stand out.
+          </p>
+          <CongestionTimeline bySeason={fc} />
+
+          <Reading>
+            The 2025/26 side carried a heavier and more compressed schedule, with more
+            games and far more of them crammed into short-rest windows. This is the
+            clearest physical difference between the two seasons, and unlike tracking data,
+            it can be measured the same way for both.
+          </Reading>
         </div>
       </Reveal>
 

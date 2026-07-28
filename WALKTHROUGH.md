@@ -247,10 +247,22 @@ honesty** matters most.
     older because Lehmann and Pirès are big dots past 30). Player names are cleaned to a
     familiar label via `sources.PLAYER_DISPLAY_NAME` (label only; age/minutes untouched) -
     StatsBomb's raw strings are formal ("Laureano Bisan-Etame Mayer" -> "Lauren").
-  - *Fixture congestion* - games-per-month and rest-gaps, computed from every
-    competitive match date. This is where the honesty note lives: modern tracking data
-    (distance, sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately
-    excluded rather than fabricated.
+  - *Fixture congestion* - the section is about COMPRESSION, not raw volume, so it is
+    built from the **rest gap** between consecutive competitive matches (the difference
+    in days between each match date and the one before it, across all competitions; the
+    season opener has no preceding match and carries no gap). From those gaps the pipeline
+    exports (a) `rest_buckets` - how many games followed a `<=2 / 3 / 4-5 / 6-7 / 8+` day
+    rest, and (b) `matches` - the full per-match list with each game's date, competition,
+    rest days, and a `short` flag (`<=3` days). The frontend draws two views: **Visual A**,
+    a grouped bar of the rest-gap buckets (the direct evidence that 2025/26 is weighted
+    toward short rest: 30 games on 3 days' rest vs 13), and **Visual B**, a per-season
+    Aug->May timeline where every match is a tick placed by date, short-rest games in a
+    hot colour, so the clusters (December, the modern European weeks) are visible; hover
+    gives competition, date and rest days. Totals reconstruct to 59 (2003/04) and 63
+    (2025/26) and short-rest counts to 19 and 30, verified against the assembled fixture
+    list. This is also where the honesty note lives: modern tracking data (distance,
+    sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately excluded rather
+    than fabricated.
 - **`synthesis.py` (Section D)** - re-reads the measured expected-points model *through*
   the circumstances: not "did they beat their xG?" but "against a stronger or weaker
   field, and in what shape?". It only assembles measured numbers side by side; the
