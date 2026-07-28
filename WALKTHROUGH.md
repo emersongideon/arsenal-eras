@@ -332,7 +332,7 @@ A single-page **React + TypeScript** app with two views, switched by a persisten
 toggle (choice saved to localStorage):
 - **Report** (`ReportView`): the scroll-driven analytical read. Hook, "Before we start:
   the data," then Section A (the surface), B (the field), C (the physical picture),
-  D (performance against task), E (what this surfaces).
+  D (performance under congestion), E (what this surfaces).
 - **Dashboard** (`DashboardView`): every metric side by side, a head-to-head comparison
   table plus all charts in a grid, for scanning and modelling.
 

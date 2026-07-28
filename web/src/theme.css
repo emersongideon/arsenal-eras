@@ -881,6 +881,12 @@ footer {
 footer a {
   color: #d7dde5;
 }
+/* the honesty note uses .dim (var(--muted), tuned for white bg); on the dark
+   footer that fails contrast, so lift it to an AA-compliant grey (>= 7:1 on
+   #12151b) while staying visibly quieter than the body text. */
+footer .dim {
+  color: #9aa4b2;
+}
 footer .wrap {
   display: grid;
   gap: 8px;
