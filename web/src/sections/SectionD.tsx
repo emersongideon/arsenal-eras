@@ -108,13 +108,11 @@ export function SectionD({
         <div className="reading narrow" style={{ marginTop: 22 }}>
           <CategoryBadge category="interpretation" />
           <p style={{ margin: "8px 0 0" }}>
-            Read together: the Invincibles over-performed the model by more, and did it
-            from a settled, experienced squad that had dominated the league for years - an
-            all-time peak, converted into a bigger cushion. The 2025/26 side
-            over-performed by a little less, but did it against an equally strong rival,
-            with a smaller margin for error, a heavily rebuilt squad, and a materially
-            more congested calendar. Same headline - "champions who beat their xG" - two
-            very different tasks underneath it.
+            Both beat the model, by similar margins. The Invincibles over-performed by
+            more, from a settled, experienced squad, against a field that never closed in.
+            The 2025/26 side over-performed by less, but against a closer rival, with a
+            smaller margin, a heavily rebuilt squad, and more games. Same headline -
+            champions who beat their xG - different tasks underneath.
           </p>
         </div>
       </Reveal>

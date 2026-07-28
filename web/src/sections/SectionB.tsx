@@ -63,11 +63,10 @@ export function SectionB({ c }: { c: Circumstances }) {
             ), so it isn't an artefact of that one parameter.
           </p>
           <Reading>
-            By this measure the 2025/26 champions faced roughly{" "}
-            <b>{morePressure}% more title-race pressure</b> than the Invincibles. The
-            Invincibles were more dominant on the raw table, but they pulled clear of a
-            field that never truly closed in; the 2025/26 side had to win the title with a
-            genuine rival breathing down its neck to the final weeks.
+            The 2025/26 champions faced roughly{" "}
+            <b>{morePressure}% more title-race pressure</b> than the Invincibles. 2003/04
+            was more dominant, but it pulled clear of a field that never got within 10
+            points. 2025/26 won with a rival that stayed within 7.
           </Reading>
         </div>
       </Reveal>
@@ -89,18 +88,18 @@ export function SectionB({ c }: { c: Circumstances }) {
           </p>
           <SquadContinuityChart bySeason={ct} />
           <Reading>
-            The 2025/26 title was won with a materially less settled squad - a rebuild
-            bedding in on the fly, versus a machine in its third season together. That
-            makes producing results harder, not easier.
+            2025/26 won with a less settled squad: {ct["2025/26"].retention_pct}% retained
+            against the Invincibles' {ct["2003/04"].retention_pct}%, and{" "}
+            {ct["2025/26"].incoming} new players to integrate against{" "}
+            {ct["2003/04"].incoming}.
           </Reading>
         </div>
       </Reveal>
 
       <Reveal delay={60}>
         <p className="narrow dim handoff">
-          So the field: a comparably strong rival that pressed far harder, integrated by a
-          far more rebuilt squad. But there's one more strain a table can't show - the
-          toll of the calendar itself. ↓
+          A closer field and a more rebuilt squad. One factor left, and a table can't show
+          it: the calendar. ↓
         </p>
       </Reveal>
     </Section>

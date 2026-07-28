@@ -57,14 +57,14 @@ export function SectionA({
           <CategoryBadge category="fact" />
         </div>
         <p className="lead narrow">
-          On the raw record the Invincibles were the more dominant campaign:{" "}
-          <b>{s0.points} points and no defeats</b>, a +{s0.goal_difference} goal
-          difference, {s0.ppg.toFixed(2)} points a game. The 2025/26 side won with{" "}
+          The Invincibles finished on <b>{s0.points} points with no defeats</b>, a +
+          {s0.goal_difference} goal difference and {s0.ppg.toFixed(2)} points per game.
+          The 2025/26 side won the title on{" "}
           <b>
-            {s1.points} points and {s1.losses} losses
+            {s1.points} points with {s1.losses} losses
           </b>
-          . That gap is the starting point, not the conclusion - the rest of the story
-          asks how hard each total was to earn.
+          . On the table, 2003/04 is the more dominant season. The report tests how hard
+          each total was to earn.
         </p>
       </Reveal>
 
@@ -79,8 +79,8 @@ export function SectionA({
         <div className="chart-card" style={{ marginBottom: 22 }}>
           <p className="chart-title">The title race, week by week</p>
           <p className="chart-sub">
-            Cumulative league points across all 38 matches. The Invincibles' line never
-            dips - that flat, unbroken climb is the legend in one chart.
+            Cumulative league points across all 38 matches. The 2003/04 line never turns
+            down - the Invincibles dropped points but never lost.
           </p>
           <CumulativePointsChart matches={matches} />
         </div>
@@ -90,9 +90,8 @@ export function SectionA({
         <div className="chart-card">
           <p className="chart-title">Attack and defence: goals vs expected goals</p>
           <p className="chart-sub">
-            Season totals. A tell for later: 2003/04 <em>out-scored</em> its xG (clinical
-            finishing), while 2025/26 actually <em>under-scored</em> its xG yet conceded
-            fewer than expected - a defence-and-margins title.
+            Season totals. 2003/04 out-scored its xG (73 goals from {s0.xg_for}); 2025/26
+            under-scored its xG (71 from {s1.xg_for}) but conceded fewer than expected.
           </p>
           <OutputBars seasons={seasons} />
         </div>
@@ -100,9 +99,8 @@ export function SectionA({
 
       <Reveal delay={60}>
         <p className="narrow dim handoff">
-          So the surface says: more dominant in 2003/04. But a table doesn't tell you how
-          hard the league was to win. That is the real question - and it starts with who
-          else was in the race. ↓
+          The table says 2003/04 was more dominant. It does not say how hard the league
+          was to win. That starts with the rest of the field. ↓
         </p>
       </Reveal>
     </Section>

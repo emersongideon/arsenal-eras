@@ -25,11 +25,11 @@ export function SectionC({ p }: { p: Physical }) {
       }}
     >
       <Reveal>
-        <h2>The body behind the points</h2>
+        <h2>Squad age and the calendar</h2>
         <p className="lead narrow">
-          Two physical measures exist cleanly for both eras: how old the team that took
-          the field was, and how relentless the calendar was. That's all this section
-          claims - see the note at the end for what it deliberately won't.
+          Two physical measures exist cleanly for both eras: the age of the team that
+          played, and the fixture load it carried. That's all this section uses - see the
+          note at the end for what it leaves out, and why.
         </p>
       </Reveal>
 
@@ -51,9 +51,9 @@ export function SectionC({ p }: { p: Physical }) {
           </p>
           <SquadAgeChart bySeason={age} />
           <Reading>
-            The Invincibles leaned on peak-and-past-peak experience; 2025/26 leaned on
-            younger legs. Neither is "harder" on its own - but a younger, rebuilt side
-            carrying a title race is a different kind of ask from a settled veteran core.
+            The Invincibles were the older, more experienced side; 2025/26 was younger and
+            gave far fewer minutes to over-30s. A different profile, not a harder one on
+            its own.
           </Reading>
         </div>
       </Reveal>

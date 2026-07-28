@@ -630,6 +630,108 @@ footer .wrap {
   gap: 8px;
 }
 
+/* ---------- View toggle (Report / Dashboard) ---------- */
+.view-toggle {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 70;
+  display: inline-flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.93);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px;
+  box-shadow: var(--shadow);
+}
+.view-toggle button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+  padding: 6px 15px;
+  border-radius: 999px;
+  transition: all 0.2s;
+}
+.view-toggle button.active {
+  background: var(--red);
+  color: #fff;
+}
+
+/* ---------- Dashboard view ---------- */
+.dash {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 70px 20px 64px;
+}
+.dash-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.dash-head h1 {
+  font-family: var(--serif);
+  font-size: clamp(24px, 4vw, 34px);
+  margin: 0 0 4px;
+}
+.dash-panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 16px 12px;
+  box-shadow: var(--shadow);
+}
+.dash > .dash-panel {
+  margin-top: 18px;
+}
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+}
+.cmp-table th,
+.cmp-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.cmp-table th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.cmp-table th.s0304 {
+  color: var(--gold-text);
+  text-align: center;
+}
+.cmp-table th.s2526 {
+  color: var(--red-text);
+  text-align: center;
+}
+.cmp-table td.ta-c {
+  text-align: center;
+  font-weight: 600;
+}
+.cmp-table tr.hi td {
+  background: #fafbfc;
+  font-weight: 700;
+}
+
 /* ---------- Responsive ---------- */
 /* Belt-and-suspenders: never allow horizontal scroll on a phone. */
 html,
@@ -643,7 +745,8 @@ body {
     font-size: 16px;
   }
   .grid2,
-  .verdict {
+  .verdict,
+  .dash-grid {
     grid-template-columns: 1fr;
   }
   .nav-dots {
