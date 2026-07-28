@@ -582,6 +582,37 @@ a {
   color: var(--ink);
 }
 
+/* "the maths, if you want it" aside (Section B pressure index) */
+.maths-aside {
+  background: #f6f8fa;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 15px;
+  margin: 14px 0 2px;
+}
+.maths-label {
+  margin: 0 0 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.maths-body {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--body);
+}
+
+/* live interpretation under the tau-sweep readout */
+.robust-interp {
+  margin: 8px 6px 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--body);
+}
+
 /* interactive robustness chart (Section B pressure index) */
 .robust {
   margin-top: 6px;

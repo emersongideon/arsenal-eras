@@ -215,6 +215,18 @@ honesty** matters most.
     the full 19 rivals - so the gap narrows as `tau` grows and widens as it shrinks, but
     the lines never cross or touch anywhere tested (`tau = 3 -> 40`). The default marker
     sits at `tau=10`, the value quoted in the report body.
+
+    *Presenting it (Section B copy).* The lead-in is reasoning-first (why closer rivals
+    mean a harder title) and the formula is demoted into a small "the maths, if you want
+    it" aside so it does not interrupt the plain-language flow. Before the sweep chart a
+    lightweight **`TauExplainer`** visual draws two example decay curves (low `tau=5` vs
+    high `tau=20`) purely to build the intuition that "`tau` = how far back a rival still
+    matters" - it is illustrative, computed client-side, not season data. On the sweep
+    chart itself, dragging the marker updates a live readout (both indices + the ratio) and
+    a live interpretation line. That interpretation keeps the FRAMING constant and only
+    swaps the multiplier ("2025/26 shows Nx more ... at every setting 2025/26 stays higher,
+    so the ranking holds; only the size of the gap moves"), so dragging can never make the
+    finding look weaker - the ranking is invariant, only the gap size moves.
   - *Squad stability* - how much upheaval each squad absorbed going into its title
     season, measured three ways off the sourced squad lists: **players retained**
     (share of *this* season's title-winning squad that was at the club the year before -

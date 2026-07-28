@@ -190,6 +190,78 @@ export function FieldPressureChart({
   );
 }
 
+/** Intuition-builder for tau: how a single rival's weight falls off as its
+ *  points-gap grows, for a low tau vs a high tau. Not season data - two example
+ *  decay curves so the reader grasps "tau = how far back a rival still matters"
+ *  before meeting the sweep chart. */
+export function TauExplainer() {
+  const data = Array.from({ length: 25 }, (_, gap) => ({
+    gap,
+    low: Number(Math.exp(-gap / 5).toFixed(3)),
+    high: Number(Math.exp(-gap / 20).toFixed(3)),
+  }));
+  return (
+    <ResponsiveContainer width="100%" height={210}>
+      <LineChart data={data} margin={{ top: 10, right: 18, bottom: 24, left: -8 }}>
+        <CartesianGrid stroke={GRID} />
+        <XAxis
+          dataKey="gap"
+          type="number"
+          domain={[0, 24]}
+          ticks={[0, 5, 10, 15, 20]}
+          stroke={AXIS}
+          tick={{ fontSize: 11 }}
+          label={{
+            value: "points a rival finished behind Arsenal",
+            position: "bottom",
+            offset: 10,
+            fill: AXIS,
+            fontSize: 11,
+          }}
+        />
+        <YAxis
+          domain={[0, 1]}
+          ticks={[0, 0.5, 1]}
+          stroke={AXIS}
+          tick={{ fontSize: 11 }}
+          label={{
+            value: "weight",
+            angle: -90,
+            position: "insideLeft",
+            offset: 16,
+            fill: AXIS,
+            fontSize: 11,
+          }}
+        />
+        <Tooltip
+          contentStyle={ttStyle}
+          formatter={(v: number | string) => Number(v).toFixed(2)}
+          labelFormatter={(g) => `${g} points behind`}
+        />
+        <Legend verticalAlign="top" height={28} />
+        <Line
+          type="monotone"
+          dataKey="low"
+          name="Low τ (5) · fades fast"
+          stroke="#1d4ed8"
+          strokeWidth={2.5}
+          dot={false}
+          isAnimationActive={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="high"
+          name="High τ (20) · fades slowly"
+          stroke="#0d9488"
+          strokeWidth={2.5}
+          dot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
 /** Interactive robustness check for the pressure index: the index for both
  *  seasons swept across the decay scale tau. A draggable marker lets the reader
  *  read off both values at any tau and confirm the ranking never flips. */
@@ -321,6 +393,12 @@ export function PressureRobustnessChart({
           <span className="dim">2025/26 is {ratio}× higher</span>
         </span>
       </div>
+
+      <p className="robust-interp" aria-live="polite">
+        At this setting, 2025/26 shows <b>{ratio}×</b> more title-race pressure than
+        2003/04. At every setting across the range, 2025/26 stays higher, so the ranking
+        holds; only the size of the gap moves.
+      </p>
     </div>
   );
 }

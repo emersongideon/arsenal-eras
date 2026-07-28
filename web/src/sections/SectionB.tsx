@@ -1,4 +1,8 @@
-import { PressureRobustnessChart, SquadStabilityChart } from "../components/charts";
+import {
+  PressureRobustnessChart,
+  SquadStabilityChart,
+  TauExplainer,
+} from "../components/charts";
 import { CategoryBadge, LimitationNote, Reveal, Section } from "../components/ui";
 import type { Circumstances } from "../types";
 
@@ -16,19 +20,18 @@ function Reading({ children }: { children: React.ReactNode }) {
 export function SectionB({ c }: { c: Circumstances }) {
   const f = c.field_strength.by_season;
   const ct = c.squad_stability.by_season;
-  const morePressure = Math.round(
-    (f["2025/26"].pressure_index / f["2003/04"].pressure_index - 1) * 100
-  );
 
   return (
     <Section id="section-b" eyebrow="Section B · The field">
       <Reveal>
         <h2>How much resistance each title was won against</h2>
         <p className="lead narrow">
-          A points total is only as strong as the league it was won in. This section
-          measures the league behind each title two ways: the resistance the rest of the
-          table applied, and how settled the squad was that delivered it. Both are
-          available for each era.
+          This is the first of the two forces from the framework: the resistance from
+          outside, meaning how strong the rest of the league was. The same points total is
+          harder to reach in a strong league than a weak one, so a title is only as
+          impressive as the field it was won against. We measure that field two ways: how
+          much title-race pressure the chasing pack applied, and how settled the squad was
+          that delivered the title. Both can be measured for each era.
         </p>
       </Reveal>
 
@@ -40,43 +43,53 @@ export function SectionB({ c }: { c: Circumstances }) {
             <CategoryBadge category="model" />
           </div>
           <p>
-            The title is won by taking more points than your rivals, but how close those
-            rivals finish changes how hard that is. A team breathing down your neck all
-            season is a different task from one that fell away early. Hence we use a
-            title-race pressure index, which measures the total pressure the chasing pack
-            applied: the closer a rival finishes on points, the more it contributes, and
-            the further back it finishes, the less. We define each rival's weight using the
-            formula <code>exp(-gap / τ)</code>, where <code>gap</code> is the number of
-            points it finished behind Arsenal and <code>τ</code> sets how fast that weight
-            fades. We use exponential decay because it lets a rival's weight fade smoothly
-            as the gap grows, rather than cutting off sharply at some arbitrary point.
-            Summed across the table, the index reads as the effective number of genuine
-            title threats Arsenal faced.
+            The resistance the rest of the table applied can be captured in a single
+            measure. The idea: a rival breathing down your neck all season is a far harder
+            test than one that fell away early, so the closer a rival finishes, the more
+            pressure it represents. We add up that pressure across every rival to get a
+            title-race pressure index. The higher the index, the more genuine title threats
+            the team had to hold off, and so the harder the title was to win.
           </p>
-          <p>
-            <code>τ</code> is a choice, not a fixed rule: a low <code>τ</code> means
-            pressure fades fast, so only very close rivals count; a high <code>τ</code>{" "}
-            means it fades slowly, so even distant sides add a little. Rather than defend
-            one value, the chart sweeps <code>τ</code> across its usable range. At every
-            setting, 2025/26 sits above 2003/04, so the ranking does not depend on the
-            choice of <code>τ</code>. The size of the gap does depend on it: 2025/26 runs
-            from about 2.1× higher at low <code>τ</code> down to 1.3× at high{" "}
-            <code>τ</code>. The ranking is the robust finding; the exact multiplier is not.
+
+          <aside className="maths-aside">
+            <p className="maths-label">The maths, if you want it</p>
+            <p className="maths-body">
+              Each rival's weight is <code>exp(-gap / τ)</code>, where <code>gap</code> is
+              the points it finished behind Arsenal and <code>τ</code> sets how fast that
+              weight fades as a rival finishes further back. We use exponential decay so the
+              weight fades smoothly rather than cutting off sharply at an arbitrary points
+              gap. The index is the sum of these weights across all rivals.
+            </p>
+          </aside>
+
+          <p className="chart-title" style={{ marginTop: 20 }}>
+            What τ does
           </p>
-          <p>
-            The chart stops at <code>τ = 20</code> on purpose: beyond it the two indices
-            keep converging, but the measure stops meaning "genuine title threats" because
-            it starts counting mid-table and relegation sides, so that range is not
-            informative here.
+          <p className="chart-sub">
+            τ is just how far back a rival still matters. At a low τ the weight falls away
+            fast, so only very close rivals count; at a high τ it fades slowly, so even
+            distant sides still add a little.
+          </p>
+          <TauExplainer />
+
+          <p className="chart-title" style={{ marginTop: 22 }}>
+            The index across every τ
+          </p>
+          <p className="chart-sub">
+            Rather than defend a single value of τ, the chart sweeps it across its usable
+            range. Drag the marker to read the index for each season at any τ.
           </p>
           <PressureRobustnessChart sweep={c.field_strength.sweep} />
+          <p className="chart-sub" style={{ marginTop: 12 }}>
+            The chart stops at τ = 20 on purpose: beyond it the two indices keep converging,
+            but the measure stops meaning "genuine title threats" because it starts counting
+            mid-table and relegation sides, so that range is not informative here.
+          </p>
           <Reading>
-            At <code>τ = {c.field_strength.tau}</code>, the value used in the report,
-            2025/26 shows about {morePressure}% more title-race pressure than 2003/04. Read
-            plainly: 2003/04 was the more dominant season, but its nearest rival still
-            finished {f["2003/04"].margin} points back. In 2025/26 the closest rival
-            finished only {f["2025/26"].margin} points back and stayed in the race far
-            longer, so the title was contested for more of the season.
+            2003/04 was the more dominant season, but its nearest rival still finished{" "}
+            {f["2003/04"].margin} points back. In 2025/26 the closest rival finished only{" "}
+            {f["2025/26"].margin} points back and stayed in the race far longer, so the
+            title was contested for more of the season.
           </Reading>
         </div>
       </Reveal>
