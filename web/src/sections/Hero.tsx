@@ -35,13 +35,10 @@ export function Hero({ meta }: { meta: Meta }) {
         </Reveal>
         <Reveal delay={160}>
           <p className="lead">
-            Be clear from the first whistle: on the raw table the{" "}
-            <b>2003/04 Invincibles were the more dominant league campaign</b> - 90 points,
-            not a single defeat. So this is not an argument about which squad was better.
-            It is about the <b>difficulty of the task</b> each side was handed - the field
-            they had to beat, and the state they were in to beat it - and how well each
-            one met it. Every figure below is tagged fact, measured, or interpretation,
-            and never blended.
+            On paper it's no contest: the <b>2003/04 Invincibles were more dominant</b> -
+            90 points, unbeaten. So the real question isn't which squad was better, but{" "}
+            <b>which side faced the harder task</b> to win its title. That's what we
+            measure here.
           </p>
         </Reveal>
         <Reveal delay={240}>
