@@ -96,10 +96,11 @@ export function SectionB({ c }: { c: Circumstances }) {
             losing a key player counts for more than losing a squad filler.
           </p>
           <p>
-            Of the squad that won the title in 2003/04, <b>{ct["2003/04"].retention_pct}%</b>{" "}
-            had been at the club the previous season and only {ct["2003/04"].incoming} players
-            were new. The 2025/26 title squad was far less settled:{" "}
-            <b>{ct["2025/26"].retention_pct}%</b> carried over and{" "}
+            Of the squad that won the title in 2003/04,{" "}
+            <b>{ct["2003/04"].retention_pct.toFixed(1)}%</b> had been at the club the
+            previous season and only {ct["2003/04"].incoming} players were new. The 2025/26
+            title squad was far less settled:{" "}
+            <b>{ct["2025/26"].retention_pct.toFixed(1)}%</b> carried over and{" "}
             {ct["2025/26"].incoming} were new. The departures were comparable in weight,
             though: the players who left before 2003/04 had accounted for{" "}
             <b>{ct["2003/04"].departed_minutes_pct}%</b> of the prior season&rsquo;s league

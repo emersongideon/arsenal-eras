@@ -368,7 +368,7 @@ function DepartedMinutesStrip({
     <div className="dep-strip">
       <p className="dep-strip-title">
         Departures, weighted by last season&rsquo;s minutes
-        <span className="dim"> — share of the prior season&rsquo;s team minutes that left</span>
+        <span className="dim">: share of the prior season&rsquo;s team minutes that left</span>
       </p>
       {seasons.map((s) => {
         const b = bySeason[s];
