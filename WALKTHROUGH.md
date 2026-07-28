@@ -345,7 +345,13 @@ toggle (choice saved to localStorage):
   congestion, expected-points, per-match scatter).
 - **`components/ui.tsx`** - shared pieces: the **category badge** (fact / measured /
   model output / interpretation - the honesty system made visual), a scroll-reveal
-  wrapper, the GitHub link.
+  wrapper, the GitHub link, and the reusable **`LimitationNote`** - a neutral
+  dashed-aside "honest footnote" component with a fixed eyebrow ("What this
+  deliberately leaves out") for stating something deliberately not measured (usually
+  because the data does not exist for both eras). It is styled as its own category,
+  distinct from the interpretation blocks and the metric cards. Currently used in
+  Section B part 2 (positional/depth data) and Section C (physical tracking data);
+  future sections should reuse it rather than hand-rolling a bespoke note.
 - **`sections/*`** - one file per narrative section.
 
 ### Key decisions

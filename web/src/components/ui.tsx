@@ -57,6 +57,27 @@ export function CategoryBadge({ category }: { category: Category }) {
   );
 }
 
+/** A recurring, understated "honest footnote": something the author considered
+ *  measuring but deliberately left out (usually because the data does not exist
+ *  for both eras). Its neutral dashed-aside styling is deliberately distinct from
+ *  the orange INTERPRETATION blocks and the solid MEASURED/MODEL cards, so the
+ *  reader recognises it as its own repeated category. `title` is optional. */
+export function LimitationNote({
+  title,
+  children,
+}: {
+  title?: string;
+  children: ReactNode;
+}) {
+  return (
+    <aside className="limitation">
+      <p className="limitation-eyebrow">What this deliberately leaves out</p>
+      {title ? <p className="limitation-title">{title}</p> : null}
+      <p className="limitation-body">{children}</p>
+    </aside>
+  );
+}
+
 /** Wraps children in a scroll-reveal container. */
 export function Reveal({
   children,

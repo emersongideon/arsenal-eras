@@ -1,5 +1,5 @@
 import { PressureRobustnessChart, SquadStabilityChart } from "../components/charts";
-import { CategoryBadge, Reveal, Section } from "../components/ui";
+import { CategoryBadge, LimitationNote, Reveal, Section } from "../components/ui";
 import type { Circumstances } from "../types";
 
 /** Interpretation block, marked with the interpretation pill and kept apart from
@@ -110,12 +110,12 @@ export function SectionB({ c }: { c: Circumstances }) {
             minutes, against <b>{ct["2025/26"].departed_minutes_pct}%</b> before 2025/26.
           </p>
           <SquadStabilityChart bySeason={ct} />
-          <p style={{ marginTop: 14 }}>
+          <LimitationNote>
             Squad depth and positional cover matter too, and a fuller version of this
             would include them. We leave them out because reliable position-by-position
             data does not exist for the 2003/04 squad, and a measure available for only
             one era would not make a fair comparison.
-          </p>
+          </LimitationNote>
           <Reading>
             The 2025/26 title was won amid real turnover on the incoming side: more than
             twice as many new signings, and only two-thirds of the title squad carried

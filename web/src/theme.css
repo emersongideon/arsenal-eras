@@ -579,6 +579,37 @@ a {
   color: #5a3410;
   font-size: 15px;
 }
+
+/* Reusable "limitation" note: a neutral, dashed aside for something deliberately
+   left out. Understated (a footnote, not a warning) and visually its own category,
+   distinct from the orange .reading interpretation blocks and the white cards. */
+.limitation {
+  border: 1px dashed #b9c1cc;
+  background: #eef1f5;
+  border-radius: 12px;
+  padding: 15px 18px;
+  margin-top: 16px;
+}
+.limitation-eyebrow {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted); /* #5e6772 on #eef1f5 -> ~5:1, AA */
+}
+.limitation-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.limitation-body {
+  margin: 0;
+  color: var(--body); /* #384049 on #eef1f5 -> AAA */
+  font-size: 14.5px;
+  line-height: 1.55;
+}
 .reading p {
   color: #5a3410;
 }

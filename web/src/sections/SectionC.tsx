@@ -1,5 +1,5 @@
 import { CongestionTimeline, RestGapChart, SquadAgeScatter } from "../components/charts";
-import { CategoryBadge, Reveal, Section } from "../components/ui";
+import { CategoryBadge, LimitationNote, Reveal, Section } from "../components/ui";
 import type { Physical } from "../types";
 
 /** Interpretation block, marked with the interpretation pill and kept apart from
@@ -125,15 +125,12 @@ export function SectionC({ p }: { p: Physical }) {
 
       {/* Methodological note - the gap stated, not filled */}
       <Reveal delay={60}>
-        <div className="card spec honesty">
-          <p style={{ marginBottom: 0 }}>
-            <b>What this section deliberately does not compare.</b> Distance covered,
-            high-intensity sprints, GPS load and recovery data have no 2003/04 equivalent,
-            so none of it is compared here. Any cross-era comparison of those would be
-            invented. Flagging the gap is the more useful call than filling it with a
-            number that cannot be sourced.
-          </p>
-        </div>
+        <LimitationNote>
+          Distance covered, high-intensity sprints, GPS load and recovery data have no
+          2003/04 equivalent, so none of it is compared here. Any cross-era comparison of
+          those would be invented. Flagging the gap is the more useful call than filling it
+          with a number that cannot be sourced.
+        </LimitationNote>
       </Reveal>
 
       <Reveal delay={60}>
