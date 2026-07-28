@@ -1,70 +1,83 @@
 import { Reveal, Section } from "../components/ui";
-import type { Physical, Synthesis } from "../types";
+import type { Physical, SeasonSummary, Synthesis } from "../types";
 
 export function Conclusion({
   synth,
   physical,
+  seasons,
 }: {
   synth: Synthesis;
   physical: Physical;
+  seasons: SeasonSummary[];
 }) {
   const s = synth.by_season;
   const fc = physical.fixture_congestion.by_season;
+  const s0 = seasons.find((x) => x.season === "2003/04")!;
+
   return (
-    <Section id="verdict" eyebrow="Section E · So, which task was harder?">
+    <Section id="verdict" eyebrow="Section E · What this surfaces">
       <Reveal>
-        <h2>It depends on what you weigh - and now the evidence is on the table</h2>
+        <h2>The finding, and where it goes next</h2>
         <p className="lead narrow">
-          The data doesn't crown a winner, and it would be dishonest to pretend it does.
-          Here's the fair version of each case, built from the sections above.
+          The two titles were won by opposite methods against different obstacles. That is
+          the finding, and it is a statement the data supports directly, not a matter of
+          opinion.
+        </p>
+        <p className="narrow">
+          2003/04 is the more dominant campaign on every raw and model measure: the larger
+          margin, the bigger over-performance, unbeaten across 38 games. 2025/26 was won
+          against a closer field, with a less settled squad, across a heavier calendar.
+          The data does not rank one task above the other, and no single number should
+          claim to. What it does is break "difficulty" into measurable parts, each sourced
+          and checkable, so the judgement is made on evidence rather than memory.
         </p>
       </Reveal>
 
       <Reveal delay={80}>
         <div className="verdict" style={{ marginTop: 26 }}>
           <div className="col s0304">
-            <h3 style={{ color: "#8a6610" }}>The case for 2003/04</h3>
+            <h3 style={{ color: "#8a6610" }}>
+              The case that 2003/04 faced the harder task
+            </h3>
             <ul>
+              <li>Unbeaten across 38 games, something no side has done since.</li>
               <li>
-                <b>Unbeaten.</b> The hardest thing in football is to never lose across 38
-                games - nobody has done it since.
+                The larger cushion: {s["2003/04"].margin_to_second} points clear, and the
+                bigger over-performance at +{s["2003/04"].points_over_expected}.
               </li>
               <li>
-                <b>The bigger cushion:</b> {s["2003/04"].margin_to_second} points clear,
-                and it beat the model by <b>+{s["2003/04"].points_over_expected}</b> - the
-                larger over-performance of the two.
+                Won with a settled squad, {s["2003/04"].retention_pct}% retained, and
+                stayed unbeaten the whole way.
               </li>
               <li>
-                <b>Settled squad:</b> {s["2003/04"].retention_pct}% retained from the year
-                before, and it stayed unbeaten across all 38 games.
-              </li>
-              <li>
-                Out-scored its xG (73 goals from 60.9) - finishing, not just volume.
+                Out-scored its xG ({s0.goals_for} goals from {s0.xg_for.toFixed(1)}), a
+                finishing edge on top of volume.
               </li>
             </ul>
           </div>
           <div className="col s2526">
-            <h3 style={{ color: "#d90007" }}>The case for 2025/26</h3>
+            <h3 style={{ color: "#d90007" }}>
+              The case that 2025/26 faced the harder task
+            </h3>
             <ul>
               <li>
-                <b>A closer field:</b> won by {s["2025/26"].margin_to_second} points over
-                a Manchester City side on {s["2025/26"].runner_up_points} pts - a pressure
-                index of {s["2025/26"].pressure_index} against the Invincibles'{" "}
+                A closer field: won by {s["2025/26"].margin_to_second} points over a
+                Manchester City side on {s["2025/26"].runner_up_points}, a pressure index
+                of {s["2025/26"].pressure_index} against the Invincibles'{" "}
                 {s["2003/04"].pressure_index}.
               </li>
               <li>
-                <b>Won while rebuilding:</b> {s["2025/26"].retention_pct}% of the squad
-                retained, {s["2025/26"].incoming} new PL players to integrate.
+                Won while rebuilding: {s["2025/26"].retention_pct}% of the squad retained,{" "}
+                {s["2025/26"].incoming} new league players to integrate.
               </li>
               <li>
-                <b>A heavier calendar:</b> {fc["2025/26"].total_games} games and{" "}
+                A heavier calendar: {fc["2025/26"].total_games} games and{" "}
                 {fc["2025/26"].short_rest_count} short-rest turnarounds, against{" "}
-                {fc["2003/04"].total_games} and {fc["2003/04"].short_rest_count} in
-                2003/04.
+                {fc["2003/04"].total_games} and {fc["2003/04"].short_rest_count}.
               </li>
               <li>
                 Beat the model by +{s["2025/26"].points_over_expected} while
-                under-shooting its xG - a title built on defence.
+                under-shooting its xG, a title built more on defence.
               </li>
             </ul>
           </div>
@@ -72,19 +85,14 @@ export function Conclusion({
       </Reveal>
 
       <Reveal delay={80}>
-        <div className="narrow" style={{ marginTop: 30 }}>
-          <p>
-            <b>The bottom line.</b> If "harder" means sustained perfection, 2003/04 wins:
-            no side has gone unbeaten since, and it was the more dominant season on the
-            table. If "harder" means the conditions the 85 points were won in - a closer
-            rival, a smaller margin, a rebuilt squad, a heavier calendar - then 2025/26
-            met a task the 2003/04 side did not face.
-          </p>
-          <p className="dim">
-            What the data settles: both beat their expected points, by similar margins, by
-            opposite methods and against different obstacles. Which task was harder is a
-            judgement call, and the numbers don't make it for you.
-          </p>
+        <div className="method narrow" style={{ marginTop: 30 }}>
+          <strong>Where this goes next, if it were live work.</strong> The pressure index
+          and continuity measures are not Arsenal-specific. Run across every title race,
+          they would give a season-difficulty baseline to judge any campaign against, ours
+          or a rival's. The same squad-continuity read applied forward is an input into
+          projecting how much a summer rebuild is likely to cost in points. That is the
+          direction I would take it: from a retrospective on two seasons to a repeatable
+          tool for characterising the season ahead.
         </div>
       </Reveal>
     </Section>

@@ -1,7 +1,7 @@
 // Types mirroring the processed JSON (data/processed/*.json).
 
 export type Season = "2003/04" | "2025/26";
-export type Category = "fact" | "measured" | "interpretation";
+export type Category = "fact" | "measured" | "model" | "interpretation";
 
 export interface SeasonSummary {
   season: Season;
@@ -176,7 +176,7 @@ export interface Synthesis {
 export interface Meta {
   title: string;
   question: string;
-  starting_fact: string;
+  subline: string;
   seasons: Season[];
   sources: Record<string, string>;
   model: string;

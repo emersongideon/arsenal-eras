@@ -42,6 +42,7 @@ export function GitHubLink({ variant }: { variant: "header" | "footer" }) {
 const CATEGORY_LABEL: Record<Category, string> = {
   fact: "Historical fact",
   measured: "Measured",
+  model: "Model output",
   interpretation: "Interpretation",
 };
 

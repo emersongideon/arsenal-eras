@@ -154,6 +154,10 @@ a {
   color: var(--measured);
   background: var(--measured-soft);
 }
+.badge.model {
+  color: #6d28d9;
+  background: #ede9fe;
+}
 .badge.interpretation {
   color: var(--spec);
   background: var(--spec-soft);

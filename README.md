@@ -1,16 +1,15 @@
-# Two Arsenals - Which Era Faced the Harder Task?
+# Two title-winning seasons, one framework
 
-A full-stack, narrative **scrollytelling** data app comparing Arsenal's 2003/04
-"Invincibles" (38 unbeaten, 90 pts) with the 2025/26 title winners (85 pts, 26-7-5).
-The 2003/04 campaign was the more dominant on the raw table - so the question isn't
-which squad was better, it's **which era faced the harder task, and how well each side
-met it**.
+A full-stack data project that turns shot-level and match data into a repeatable read on
+**title-campaign difficulty**, using Arsenal's 2003/04 "Invincibles" (38 unbeaten, 90 pts)
+and 2025/26 title winners (85 pts, 26-7-5) as a worked example.
 
-It reads start-to-finish as a guided argument that builds: Hook → Data sources →
-**A. The surface** → **B. How hard was the task?** (a title-race pressure index +
-squad continuity) → **C. The physical toll** (age, fixture congestion) → **D. Synthesis**
-→ **E. Verdict** - built on real shot data, an expected-points model, and an explicit
-separation of **fact / measured / interpretation**.
+It reads start-to-finish as a personal analytical piece: Hook → Before we start: the data
+→ **A. The surface** → **B. The field** → **C. The physical picture** → **D. Performance
+against task** → **E. What this surfaces**. Built on StatsBomb and Understat data through a
+Poisson expected-points model, with every figure tagged **fact / model output /
+interpretation**. A second **Dashboard** view exposes every metric side by side, and a
+persistent toggle switches between the two.
 
 ![Hook](docs/hero.png)
 
@@ -30,9 +29,9 @@ the three kinds of claim are never blended.
 
 | Category | Meaning | Example in the app |
 |---|---|---|
-| 🟢 **Fact** | Looked-up historical record | Final tables, chasing-pack points, margins, squads, fixture dates |
-| 🔵 **Measured** | Computed from data (incl. the model) | Expected points; league-points spread; minutes-weighted age; rest-gaps |
-| 🟠 **Interpretation** | A stated reading of the numbers | The "suggested reading" under each sub-layer, and the verdict |
+| 🟢 **Fact** | Looked-up historical record | Final tables, margins, squads, fixture dates |
+| 🔵 **Model output / measured** | Computed from the model, or directly from the data | Pressure index and expected points (model); squad continuity, minutes-weighted age, congestion (measured) |
+| 🟠 **Interpretation** | A stated reading of the numbers | The "Read" note under a measured block, and the verdict |
 
 Every figure carries its category as a badge, and each interpretation is walled off
 (dashed border, amber tint) from the measurement it reads. That separation *is* the

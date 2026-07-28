@@ -1,5 +1,5 @@
 import { CumulativePointsChart, OutputBars } from "../components/charts";
-import { CategoryBadge, Reveal, Section, seasonClass } from "../components/ui";
+import { Reveal, Section, seasonClass } from "../components/ui";
 import type { MatchRow, SeasonSummary } from "../types";
 
 function TeamCard({ s }: { s: SeasonSummary }) {
@@ -52,19 +52,18 @@ export function SectionA({
   return (
     <Section id="surface" eyebrow="Section A · The surface">
       <Reveal>
-        <h2>What each side did on paper</h2>
-        <div style={{ margin: "8px 0 16px" }}>
-          <CategoryBadge category="fact" />
-        </div>
+        <h2>What the table already tells us</h2>
         <p className="lead narrow">
-          The Invincibles finished on <b>{s0.points} points with no defeats</b>, a +
-          {s0.goal_difference} goal difference and {s0.ppg.toFixed(2)} points per game.
-          The 2025/26 side won the title on{" "}
-          <b>
-            {s1.points} points with {s1.losses} losses
-          </b>
-          . On the table, 2003/04 is the more dominant season. The report tests how hard
-          each total was to earn.
+          The Invincibles finished on <b>{s0.points} points unbeaten</b>, plus{" "}
+          {s0.goal_difference} goal difference, {s0.ppg.toFixed(2)} points per game. The
+          2025/26 side won the title on <b>{s1.points} points</b>, {s1.wins} wins and{" "}
+          {s1.losses} losses, plus {s1.goal_difference}, {s1.ppg.toFixed(2)} per game.
+        </p>
+        <p className="narrow">
+          On the raw table, 2003/04 is the more dominant season. This report does not
+          dispute that. It tests something the table cannot show: how hard each total was
+          to earn. Points are only comparable if the leagues behind them were, and they
+          were not. The rest follows from there.
         </p>
       </Reveal>
 
@@ -80,7 +79,7 @@ export function SectionA({
           <p className="chart-title">The title race, week by week</p>
           <p className="chart-sub">
             Cumulative league points across all 38 matches. The 2003/04 line never turns
-            down - the Invincibles dropped points but never lost.
+            down: the Invincibles dropped points but never lost.
           </p>
           <CumulativePointsChart matches={matches} />
         </div>
@@ -98,10 +97,7 @@ export function SectionA({
       </Reveal>
 
       <Reveal delay={60}>
-        <p className="narrow dim handoff">
-          The table says 2003/04 was more dominant. It does not say how hard the league
-          was to win. That starts with the rest of the field. ↓
-        </p>
+        <p className="narrow dim handoff">The field, first. ↓</p>
       </Reveal>
     </Section>
   );

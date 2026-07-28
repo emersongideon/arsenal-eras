@@ -34,12 +34,7 @@ export function Hero({ meta }: { meta: Meta }) {
           <h1>{meta.question}</h1>
         </Reveal>
         <Reveal delay={160}>
-          <p className="lead">
-            On paper it's no contest: the <b>2003/04 Invincibles were more dominant</b> -
-            90 points, unbeaten. So the real question isn't which squad was better, but{" "}
-            <b>which side faced the harder task</b> to win its title. That's what we
-            measure here.
-          </p>
+          <p className="lead">{meta.subline}</p>
         </Reveal>
         <Reveal delay={240}>
           <p className="scroll-hint">↓ Start with where the data comes from</p>

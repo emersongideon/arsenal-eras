@@ -61,22 +61,23 @@ def run() -> dict:
         "physical.json": phys_payload,
         "synthesis.json": synth_payload,
         "meta.json": {
-            "title": "Two Arsenals - which era faced the harder task?",
-            "question": "Two Arsenal title teams, 22 years apart. Which era faced the "
-            "harder task - and how well did each side meet it?",
-            "starting_fact": "On the raw table the 2003/04 Invincibles were the more "
-            "dominant league campaign: 90 points, unbeaten. This story is about the "
-            "difficulty of the task each side faced, not which squad was more talented.",
+            "title": "Two title-winning seasons, one framework",
+            "question": "Two title-winning seasons, one framework: characterising how "
+            "hard a league was to win",
+            "subline": "This is a worked example of turning shot-level and match data "
+            "into a repeatable read on title-campaign difficulty. Built from StatsBomb "
+            "and Understat event data through a Poisson expected-points model, with every "
+            "figure tagged as fact, model output, or interpretation.",
             "seasons": [C.S0304, C.S2526],
             "sources": {
-                "2003/04": "StatsBomb Open Data (Arsenal shot/xG events); final tables, "
-                "squads and fixtures from Wikipedia.",
-                "2025/26": "Understat (per-match xG + player data); final tables, squads "
-                "and fixtures from Wikipedia.",
+                "2003/04": "StatsBomb Open Data (Arsenal shot/xG events); tables, squads "
+                "and fixtures from public records.",
+                "2025/26": "Understat (per-match xG + player data); tables, squads and "
+                "fixtures from public records.",
             },
-            "model": "PoissonRegressor(goals ~ xG) -> independent-Poisson match "
-            "outcomes -> expected points.",
-            "honesty_note": "Every figure is tagged fact / measured / interpretation "
+            "model": "PoissonRegressor(goals ~ xG) → independent-Poisson match "
+            "outcomes → expected points.",
+            "honesty_note": "Every figure is tagged fact / model output / interpretation, "
             "and never blended. Metrics without data for both eras are omitted or "
             "flagged, never fabricated.",
         },

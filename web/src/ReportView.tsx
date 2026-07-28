@@ -62,25 +62,21 @@ export function ReportView({ data }: { data: Dataset }) {
       <SectionB c={data.circumstances} />
       <SectionC p={data.physical} />
       <SectionD model={data.model} synth={data.synthesis} physical={data.physical} />
-      <Conclusion synth={data.synthesis} physical={data.physical} />
+      <Conclusion
+        synth={data.synthesis}
+        physical={data.physical}
+        seasons={data.seasons}
+      />
       <footer>
         <div className="wrap">
-          <div style={{ fontWeight: 700, color: "#fff", marginBottom: 6 }}>
-            {data.meta.title}
-          </div>
           <div>
-            <b>Data.</b> 2003/04: {data.meta.sources["2003/04"]} &nbsp;·&nbsp; 2025/26:{" "}
+            <b>Data.</b> 2003/04: {data.meta.sources["2003/04"]} 2025/26:{" "}
             {data.meta.sources["2025/26"]}
           </div>
           <div>
             <b>Model.</b> {data.meta.model}
           </div>
           <div className="dim">{data.meta.honesty_note}</div>
-          <div className="dim" style={{ marginTop: 8 }}>
-            Every figure above is tagged <span style={{ color: "#7fd3c1" }}>fact</span> ·{" "}
-            <span style={{ color: "#9ab4ff" }}>measured</span> ·{" "}
-            <span style={{ color: "#e6a256" }}>interpretation</span> and never blended.
-          </div>
           <div style={{ marginTop: 14 }}>
             <GitHubLink variant="footer" />
           </div>

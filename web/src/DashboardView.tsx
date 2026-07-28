@@ -172,7 +172,7 @@ export function DashboardView({ data }: { data: Dataset }) {
     <div className="dash">
       <header className="dash-head">
         <div>
-          <h1>Arsenal 2003/04 vs 2025/26 - metrics dashboard</h1>
+          <h1>Arsenal 2003/04 vs 2025/26: metrics dashboard</h1>
           <p className="dim">
             Every measured metric, side by side. 2003/04 from StatsBomb, 2025/26 from
             Understat; tables and squads from public records.
@@ -220,13 +220,13 @@ export function DashboardView({ data }: { data: Dataset }) {
           <FixtureCongestionChart bySeason={fc} />
         </Panel>
         <Panel
-          title="Per-match xG - 2003/04"
+          title="Per-match xG, 2003/04"
           sub="xG created vs conceded, coloured by result."
         >
           <MatchXgScatter res={m0} />
         </Panel>
         <Panel
-          title="Per-match xG - 2025/26"
+          title="Per-match xG, 2025/26"
           sub="xG created vs conceded, coloured by result."
         >
           <MatchXgScatter res={m1} />

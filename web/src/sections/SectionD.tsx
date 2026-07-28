@@ -1,7 +1,6 @@
 import { ExpectedPointsChart } from "../components/charts";
 import { CategoryBadge, Reveal, Section } from "../components/ui";
-import type { Physical, Season, Synthesis } from "../types";
-import type { ModelResult } from "../types";
+import type { ModelResult, Physical, Season, Synthesis } from "../types";
 
 export function SectionD({
   model,
@@ -15,74 +14,78 @@ export function SectionD({
   const s = synth.by_season;
   const fc = physical.fixture_congestion.by_season;
 
-  const rows: { label: string; a: string; b: string; note: string }[] = [
+  const rows: { label: string; a: string; b: string }[] = [
     {
       label: "Points over the model's expectation",
       a: `+${s["2003/04"].points_over_expected}`,
       b: `+${s["2025/26"].points_over_expected}`,
-      note: "measured",
     },
     {
       label: "Winning margin over 2nd",
       a: `${s["2003/04"].margin_to_second} pts`,
       b: `${s["2025/26"].margin_to_second} pts`,
-      note: "fact",
     },
     {
       label: "Title-race pressure index",
       a: `${s["2003/04"].pressure_index}`,
       b: `${s["2025/26"].pressure_index}`,
-      note: "measured",
     },
     {
       label: "Squad retained from prior year",
       a: `${s["2003/04"].retention_pct}%`,
       b: `${s["2025/26"].retention_pct}%`,
-      note: "fact",
     },
     {
-      label: "Games played (all comps)",
+      label: "Games played (all competitions)",
       a: `${fc["2003/04"].total_games}`,
       b: `${fc["2025/26"].total_games}`,
-      note: "fact",
     },
     {
-      label: "Short-rest games (≤3 days)",
+      label: "Short-rest games (three days or fewer)",
       a: `${fc["2003/04"].short_rest_count}`,
       b: `${fc["2025/26"].short_rest_count}`,
-      note: "fact",
     },
   ];
 
   return (
-    <Section id="synthesis" eyebrow="Section D · So who met the harder task?">
+    <Section id="synthesis" eyebrow="Section D · Performance against task">
       <Reveal>
-        <h2>Beating the model, against different fields</h2>
-        <div style={{ margin: "8px 0 16px" }}>
-          <CategoryBadge category="measured" />
-        </div>
+        <h2>Reading the model output against the field</h2>
         <p className="lead narrow">
-          The expected-points model (a Poisson model fit on each season's shots) says how
-          many points the underlying performances deserved. Both sides beat it - the mark
-          of a champion who wins tight games. But "beating your xG" means more against a
-          harder field, so we read the over-performance next to the circumstances.
+          The Poisson expected-points model, fit on each season's shots, says how many
+          points the underlying performances deserved. Both sides beat it, the signature
+          of a champion who wins tight games. But over-performance means more against a
+          harder field, so the two are read together, not in isolation.
         </p>
       </Reveal>
 
       <Reveal delay={80}>
         <div className="chart-card" style={{ margin: "22px 0" }}>
-          <p className="chart-title">Actual points vs model-expected points</p>
-          <p className="chart-sub">
-            Grey = what the chances deserved; colour = what they actually won. 2003/04
-            beat its expectation by {s["2003/04"].points_over_expected}; 2025/26 by{" "}
-            {s["2025/26"].points_over_expected}.
-          </p>
+          <div className="sublayer-head">
+            <p className="chart-title" style={{ margin: 0 }}>
+              Actual points vs model-expected points
+            </p>
+            <CategoryBadge category="model" />
+          </div>
+          <p className="chart-sub">Grey = points deserved; colour = points won.</p>
           <ExpectedPointsChart model={model} />
         </div>
       </Reveal>
 
+      <Reveal delay={60}>
+        <p className="narrow">
+          2003/04 beat its expected points by <b>+{s["2003/04"].points_over_expected}</b>;
+          2025/26 by <b>+{s["2025/26"].points_over_expected}</b>. Set against the two
+          sections above: the Invincibles over-performed by more, from a settled, older
+          squad, against a field that never closed in, across a lighter calendar. The
+          2025/26 side over-performed by less, but against a closer rival, with a smaller
+          margin, a heavily rebuilt squad, and a more congested season. Same headline,
+          champions who beat their xG, different tasks underneath.
+        </p>
+      </Reveal>
+
       <Reveal delay={80}>
-        <div className="tbl-wrap">
+        <div className="tbl-wrap" style={{ marginTop: 10 }}>
           <table className="synth-table">
             <thead>
               <tr>
@@ -101,27 +104,14 @@ export function SectionD({
               ))}
             </tbody>
           </table>
-        </div>
-      </Reveal>
-
-      <Reveal delay={60}>
-        <div className="reading narrow" style={{ marginTop: 22 }}>
-          <CategoryBadge category="interpretation" />
-          <p style={{ margin: "8px 0 0" }}>
-            Both beat the model, by similar margins. The Invincibles over-performed by
-            more, from a settled, experienced squad, against a field that never closed in.
-            The 2025/26 side over-performed by less, but against a closer rival, with a
-            smaller margin, a heavily rebuilt squad, and more games. Same headline -
-            champions who beat their xG - different tasks underneath.
+          <p className="dim" style={{ fontSize: 13, marginTop: 8 }}>
+            All figures from the sections above.
           </p>
         </div>
       </Reveal>
 
       <Reveal delay={60}>
-        <p className="narrow dim handoff">
-          Which of those is the "harder" task? That depends on what you weigh most - so
-          here's the honest verdict, both ways. ↓
-        </p>
+        <p className="narrow dim handoff">What the whole picture surfaces. ↓</p>
       </Reveal>
     </Section>
   );
