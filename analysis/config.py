@@ -19,6 +19,13 @@ SB_SEASON_ID = 44  # 2003/2004
 # Understat cache produced by scripts/fetch_understat.mjs
 UNDERSTAT_FILE = RAW / "understat_arsenal_2025.json"
 
+# Prior-season player minutes, for the squad-stability minutes-weighted departure
+# figure. 2024/25 from Understat (same source family as 2025/26); 2002/03 from
+# FBref's Standard Stats read via an Internet Archive Wayback snapshot (live FBref
+# is Cloudflare-gated). Both cached under data/raw for reproducibility.
+UNDERSTAT_2024_25_FILE = RAW / "understat_arsenal_2024.json"
+FBREF_2002_03_FILE = RAW / "fbref_arsenal_2002_03.json"
+
 TEAM = "Arsenal"
 ROLLING_N = 6  # rolling-form window (matches)
 PER90_BASE = 90.0

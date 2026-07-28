@@ -22,6 +22,12 @@ SOURCES = {
     "arsenal_2002_03": "https://en.wikipedia.org/wiki/2002%E2%80%9303_Arsenal_F.C._season",
     "arsenal_2025_26": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Arsenal_F.C._season",
     "arsenal_2024_25": "https://en.wikipedia.org/wiki/2024%E2%80%9325_Arsenal_F.C._season",
+    # Prior-season player minutes, for the minutes-weighted departure figure.
+    "arsenal_2002_03_minutes": (
+        "https://fbref.com/en/squads/18bb7c10/2002-2003/Arsenal-Stats"
+        " (FBref Standard Stats; read via Internet Archive Wayback snapshot)"
+    ),
+    "arsenal_2024_25_minutes": "https://understat.com/team/Arsenal/2024",
 }
 
 # ---------------------------------------------------------------------------

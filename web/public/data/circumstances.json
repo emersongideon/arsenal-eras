@@ -472,8 +472,8 @@
       }
     }
   },
-  "squad_continuity": {
-    "metric": "squad_continuity",
+  "squad_stability": {
+    "metric": "squad_stability",
     "by_season": {
       "2003/04": {
         "prior_season": "2002/03",
@@ -481,7 +481,10 @@
         "retained": 18,
         "incoming": 4,
         "outgoing": 10,
-        "retention_pct": 81.8
+        "retention_pct": 81.8,
+        "prior_total_minutes": 37542,
+        "departed_minutes": 6258,
+        "departed_minutes_pct": 16.7
       },
       "2025/26": {
         "prior_season": "2024/25",
@@ -489,7 +492,10 @@
         "retained": 16,
         "incoming": 9,
         "outgoing": 8,
-        "retention_pct": 64.0
+        "retention_pct": 64.0,
+        "prior_total_minutes": 37434,
+        "departed_minutes": 5846,
+        "departed_minutes_pct": 15.6
       }
     }
   },
@@ -501,6 +507,10 @@
     "squads": [
       "https://en.wikipedia.org/wiki/2002%E2%80%9303_Arsenal_F.C._season",
       "https://en.wikipedia.org/wiki/2024%E2%80%9325_Arsenal_F.C._season"
+    ],
+    "squad_minutes": [
+      "https://fbref.com/en/squads/18bb7c10/2002-2003/Arsenal-Stats (FBref Standard Stats; read via Internet Archive Wayback snapshot)",
+      "https://understat.com/team/Arsenal/2024"
     ]
   }
 }

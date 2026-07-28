@@ -111,7 +111,7 @@ export interface Circumstances {
       }
     >;
   };
-  squad_continuity: {
+  squad_stability: {
     by_season: Record<
       Season,
       {
@@ -121,10 +121,13 @@ export interface Circumstances {
         incoming: number;
         outgoing: number;
         retention_pct: number;
+        prior_total_minutes: number;
+        departed_minutes: number;
+        departed_minutes_pct: number;
       }
     >;
   };
-  sources: { final_tables: string[]; squads: string[] };
+  sources: { final_tables: string[]; squads: string[]; squad_minutes: string[] };
 }
 
 // --- Section C: physical ---------------------------------------------------

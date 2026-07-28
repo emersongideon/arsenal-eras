@@ -264,6 +264,61 @@ a {
   font-size: 13.5px;
   margin: 0 6px 14px;
 }
+/* minutes-weighted departure companion (Section B squad stability) */
+.dep-strip {
+  margin: 10px 6px 2px;
+}
+.dep-strip-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.dep-strip-title .dim {
+  font-weight: 400;
+}
+.dep-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+  font-size: 13px;
+}
+.dep-season {
+  flex: 0 0 62px;
+  font-weight: 700;
+}
+.dep-row.s0304 .dep-season {
+  color: var(--gold-text);
+}
+.dep-row.s2526 .dep-season {
+  color: var(--red-text);
+}
+.dep-track {
+  flex: 1 1 auto;
+  height: 14px;
+  background: #eceef1;
+  border-radius: 7px;
+  overflow: hidden;
+}
+.dep-fill {
+  display: block;
+  height: 100%;
+  border-radius: 7px;
+}
+.dep-row.s0304 .dep-fill {
+  background: var(--gold);
+}
+.dep-row.s2526 .dep-fill {
+  background: var(--red);
+}
+.dep-val {
+  flex: 0 0 46px;
+  text-align: right;
+  font-weight: 700;
+  color: var(--ink);
+}
+
 /* interactive robustness chart (Section B pressure index) */
 .robust {
   margin-top: 6px;

@@ -1,0 +1,124 @@
+{
+  "source": "fbref.com (Sports Reference), via Wayback Machine snapshot",
+  "team": "Arsenal",
+  "season": "2002/2003",
+  "competition": "Premier League",
+  "original_url": "https://fbref.com/en/squads/18bb7c10/2002-2003/Arsenal-Stats",
+  "snapshot_url": "https://web.archive.org/web/20251225103537id_/https://fbref.com/en/squads/18bb7c10/2002-2003/Arsenal-Stats",
+  "table_id": "stats_standard_9",
+  "fetched_note": "FBref Standard Stats (Playing Time minutes) read from an Internet Archive Wayback snapshot; FBref live is Cloudflare-gated. Cached for reproducibility.",
+  "players": [
+    {
+      "player": "Thierry Henry",
+      "minutes": 3298
+    },
+    {
+      "player": "Sol Campbell",
+      "minutes": 2927
+    },
+    {
+      "player": "Gilberto Silva",
+      "minutes": 3017
+    },
+    {
+      "player": "Ashley Cole",
+      "minutes": 2703
+    },
+    {
+      "player": "David Seaman",
+      "minutes": 2520
+    },
+    {
+      "player": "Sylvain Wiltord",
+      "minutes": 2362
+    },
+    {
+      "player": "Lauren",
+      "minutes": 2300
+    },
+    {
+      "player": "Patrick Vieira",
+      "minutes": 2038
+    },
+    {
+      "player": "Dennis Bergkamp",
+      "minutes": 1795
+    },
+    {
+      "player": "Martin Keown",
+      "minutes": 1954
+    },
+    {
+      "player": "Robert Pirès",
+      "minutes": 1797
+    },
+    {
+      "player": "Freddie Ljungberg",
+      "minutes": 1605
+    },
+    {
+      "player": "Pascal Cygan",
+      "minutes": 1429
+    },
+    {
+      "player": "Ray Parlour",
+      "minutes": 1277
+    },
+    {
+      "player": "Edu Gaspar",
+      "minutes": 1002
+    },
+    {
+      "player": "Oleh Luzhny",
+      "minutes": 1064
+    },
+    {
+      "player": "Giovanni van Bronckhorst",
+      "minutes": 956
+    },
+    {
+      "player": "Kolo Touré",
+      "minutes": 898
+    },
+    {
+      "player": "Nwankwo Kanu",
+      "minutes": 856
+    },
+    {
+      "player": "Stuart Taylor",
+      "minutes": 677
+    },
+    {
+      "player": "Rami Shaaban",
+      "minutes": 223
+    },
+    {
+      "player": "Francis Jeffers",
+      "minutes": 365
+    },
+    {
+      "player": "Igors Stepanovs",
+      "minutes": 180
+    },
+    {
+      "player": "Jermaine Pennant",
+      "minutes": 169
+    },
+    {
+      "player": "Ryan Garry",
+      "minutes": 90
+    },
+    {
+      "player": "Jérémie Aliadière",
+      "minutes": 25
+    },
+    {
+      "player": "Stathis Tavlaridis",
+      "minutes": 14
+    },
+    {
+      "player": "Justin Hoyte",
+      "minutes": 1
+    }
+  ]
+}

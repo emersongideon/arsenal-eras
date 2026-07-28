@@ -6,7 +6,7 @@ Outputs (all consumed by the API / frontend):
   matches.json        per-match rows (both seasons) incl. rolling form
   players.json        per-player shooting aggregates (both seasons)
   model.json          expected-points model output + calibration (Act 2 / Section A)
-  circumstances.json  Section B: chasing pack, margin, league shape, squad continuity
+  circumstances.json  Section B: chasing pack, margin, league shape, squad stability
   physical.json       Section C: squad age + fixture congestion
   synthesis.json      Section D: model output re-read against the circumstances
   meta.json           thesis, provenance, and the honesty framing

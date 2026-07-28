@@ -7,7 +7,7 @@ import {
   MatchXgScatter,
   OutputBars,
   SquadAgeChart,
-  SquadContinuityChart,
+  SquadStabilityChart,
 } from "./components/charts";
 type Row = { label: string; a: string | number; b: string | number; hi?: boolean };
 
@@ -63,7 +63,7 @@ export function DashboardView({ data }: { data: Dataset }) {
   const m0 = model["2003/04"];
   const m1 = model["2025/26"];
   const f = circumstances.field_strength.by_season;
-  const ct = circumstances.squad_continuity.by_season;
+  const ct = circumstances.squad_stability.by_season;
   const age = physical.squad_age.by_season;
   const fc = physical.fixture_congestion.by_season;
   const pct = (x: number) => `${Math.round(x * 100)}%`;
@@ -134,11 +134,17 @@ export function DashboardView({ data }: { data: Dataset }) {
       b: ct["2025/26"].retained,
     },
     { label: "New in", a: ct["2003/04"].incoming, b: ct["2025/26"].incoming },
+    { label: "Departed", a: ct["2003/04"].outgoing, b: ct["2025/26"].outgoing },
     {
       label: "Squad retention",
       a: `${ct["2003/04"].retention_pct}%`,
       b: `${ct["2025/26"].retention_pct}%`,
       hi: true,
+    },
+    {
+      label: "Departures (minutes-weighted)",
+      a: `${ct["2003/04"].departed_minutes_pct}%`,
+      b: `${ct["2025/26"].departed_minutes_pct}%`,
     },
     {
       label: "Minutes-weighted age",
@@ -207,8 +213,11 @@ export function DashboardView({ data }: { data: Dataset }) {
         >
           <FieldPressureChart bySeason={f} />
         </Panel>
-        <Panel title="Squad continuity" sub="Retained vs newly-arrived PL players.">
-          <SquadContinuityChart bySeason={ct} />
+        <Panel
+          title="Squad stability"
+          sub="Retained vs newly-arrived PL players, plus minutes-weighted departures."
+        >
+          <SquadStabilityChart bySeason={ct} />
         </Panel>
         <Panel
           title="Minutes-weighted squad age"

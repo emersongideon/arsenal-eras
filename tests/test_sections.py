@@ -34,15 +34,21 @@ def test_pressure_contribution_decays_with_gap():
     assert by_gap[0]["pressure"] > by_gap[-1]["pressure"]
 
 
-def test_squad_continuity_counts_reconcile():
-    c = circumstances.squad_continuity()["by_season"]
+def test_squad_stability_counts_reconcile():
+    c = circumstances.squad_stability()["by_season"]
     for s in (S0304, S2526):
         v = c[s]
         # retained + incoming must equal the current squad size.
         assert v["retained"] + v["incoming"] == v["squad_size"]
         assert 0 <= v["retention_pct"] <= 100
-    # The Invincibles squad was materially more settled than the 2025/26 squad.
+        # minutes-weighted departures are a share of prior-season minutes.
+        assert 0 <= v["departed_minutes_pct"] <= 100
+        assert v["departed_minutes"] <= v["prior_total_minutes"]
+    # The Invincibles title squad was materially more settled (higher carryover).
     assert c[S0304]["retention_pct"] > c[S2526]["retention_pct"]
+    # Minutes-weighted departures come out comparable across eras (within ~3 pts):
+    # the upheaval gap is on the incoming side, not departures.
+    assert abs(c[S0304]["departed_minutes_pct"] - c[S2526]["departed_minutes_pct"]) < 3
 
 
 def test_fixture_congestion_totals_match_source():
@@ -77,5 +83,5 @@ def test_synthesis_combines_model_and_circumstances():
     assert out[S0304]["points_over_expected"] == pytest.approx(20.6)
     assert out[S0304]["margin_to_second"] == 11
     assert (
-        out[S2526]["incoming"] == circumstances.squad_continuity()["by_season"][S2526]["incoming"]
+        out[S2526]["incoming"] == circumstances.squad_stability()["by_season"][S2526]["incoming"]
     )

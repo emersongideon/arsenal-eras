@@ -19,7 +19,7 @@ SEASONS = (S0304, S2526)
 def build(model_by_season: dict, circumstances: dict) -> dict:
     """Combine model output with field-strength / squad context, per season."""
     field = circumstances["field_strength"]["by_season"]
-    cont = circumstances["squad_continuity"]["by_season"]
+    cont = circumstances["squad_stability"]["by_season"]
 
     per = {}
     for s in SEASONS:

@@ -307,40 +307,85 @@ export function PressureRobustnessChart({
   );
 }
 
-/** Squad make-up vs the prior season: retained vs newly-arrived (stacked). */
-export function SquadContinuityChart({
+/** Squad stability vs the prior season: retained + newly-arrived (stacked bar),
+ *  with a companion strip for the minutes-weighted departure figure (the share of
+ *  the prior season's team minutes that left the club). */
+export function SquadStabilityChart({
   bySeason,
 }: {
-  bySeason: Circumstances["squad_continuity"]["by_season"];
+  bySeason: Circumstances["squad_stability"]["by_season"];
 }) {
-  const data = (Object.keys(bySeason) as Season[]).map((s) => ({
+  const seasons = Object.keys(bySeason) as Season[];
+  const data = seasons.map((s) => ({
     season: s,
     Retained: bySeason[s].retained,
     "New in": bySeason[s].incoming,
   }));
   return (
-    <ResponsiveContainer width="100%" height={280}>
-      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -18 }}>
-        <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
-        <YAxis
-          stroke={AXIS}
-          tick={{ fontSize: 12 }}
-          label={{
-            value: "PL players",
-            angle: -90,
-            position: "insideLeft",
-            offset: 16,
-            fill: AXIS,
-            fontSize: 12,
-          }}
-        />
-        <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
-        <Legend verticalAlign="top" height={30} />
-        <Bar dataKey="Retained" stackId="a" fill="#2f6f4f" radius={[0, 0, 0, 0]} />
-        <Bar dataKey="New in" stackId="a" fill="#e0a458" radius={[4, 4, 0, 0]} />
-      </BarChart>
-    </ResponsiveContainer>
+    <>
+      <ResponsiveContainer width="100%" height={280}>
+        <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -18 }}>
+          <CartesianGrid stroke={GRID} vertical={false} />
+          <XAxis
+            dataKey="season"
+            stroke={AXIS}
+            tick={{ fontSize: 13, fontWeight: 700 }}
+          />
+          <YAxis
+            stroke={AXIS}
+            tick={{ fontSize: 12 }}
+            label={{
+              value: "PL players",
+              angle: -90,
+              position: "insideLeft",
+              offset: 16,
+              fill: AXIS,
+              fontSize: 12,
+            }}
+          />
+          <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+          <Legend verticalAlign="top" height={30} />
+          <Bar dataKey="Retained" stackId="a" fill="#2f6f4f" radius={[0, 0, 0, 0]} />
+          <Bar dataKey="New in" stackId="a" fill="#e0a458" radius={[4, 4, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+      <DepartedMinutesStrip bySeason={bySeason} />
+    </>
+  );
+}
+
+/** Companion visual: the minutes-weighted departure figure for each season, drawn
+ *  as two proportional bars so the "how much of last year's playing time left"
+ *  comparison is legible at a glance. */
+function DepartedMinutesStrip({
+  bySeason,
+}: {
+  bySeason: Circumstances["squad_stability"]["by_season"];
+}) {
+  const seasons = Object.keys(bySeason) as Season[];
+  const max = Math.max(...seasons.map((s) => bySeason[s].departed_minutes_pct), 1);
+  return (
+    <div className="dep-strip">
+      <p className="dep-strip-title">
+        Departures, weighted by last season&rsquo;s minutes
+        <span className="dim"> — share of the prior season&rsquo;s team minutes that left</span>
+      </p>
+      {seasons.map((s) => {
+        const b = bySeason[s];
+        return (
+          <div className={`dep-row ${s === "2003/04" ? "s0304" : "s2526"}`} key={s}>
+            <span className="dep-season">{s}</span>
+            <span className="dep-track">
+              <span
+                className="dep-fill"
+                style={{ width: `${(b.departed_minutes_pct / max) * 100}%` }}
+              />
+            </span>
+            <span className="dep-val">{b.departed_minutes_pct}%</span>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

@@ -22,7 +22,9 @@ export function DataSources() {
             <p style={{ margin: "10px 0 0" }}>
               Shots and xG from StatsBomb Open Data (Arsenal event-level); tables, squads
               and fixtures from public season records; minutes derived from lineup stints
-              on a 90-minute baseline.
+              on a 90-minute baseline. Prior-season (2002/03) minutes, used only for the
+              squad-departure figure, come from FBref&rsquo;s Standard Stats read via an
+              Internet Archive snapshot.
             </p>
           </div>
           <div className="card team-card s2526">
@@ -31,7 +33,8 @@ export function DataSources() {
             <p style={{ margin: "10px 0 0" }}>
               Shots and xG from Understat (per-match and per-player); tables, squads and
               fixtures from public records; player ages from birthdates, weighted by
-              minutes.
+              minutes. Prior-season (2024/25) minutes for the squad-departure figure also
+              from Understat.
             </p>
           </div>
         </div>

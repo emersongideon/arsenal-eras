@@ -30,7 +30,7 @@ the three kinds of claim are never blended.
 | Category | Meaning | Example in the app |
 |---|---|---|
 | 🟢 **Fact** | Looked-up historical record | Final tables, margins, squads, fixture dates |
-| 🔵 **Model output / measured** | Computed from the model, or directly from the data | Pressure index and expected points (model); squad continuity, minutes-weighted age, congestion (measured) |
+| 🔵 **Model output / measured** | Computed from the model, or directly from the data | Pressure index and expected points (model); squad stability, minutes-weighted age, congestion (measured) |
 | 🟠 **Interpretation** | A stated reading of the numbers | The "Read" note under a measured block, and the verdict |
 
 Every figure carries its category as a badge, and each interpretation is walled off
@@ -114,7 +114,7 @@ analysis/            data + model layer (importable, tested)
   loaders.py         raw StatsBomb / Understat  ->  canonical pandas frames
   transforms.py      groupby / merge / rolling aggregations
   model.py           PoissonRegressor xG->goals  ->  expected points
-  circumstances.py   Section B: title-race pressure index + squad continuity
+  circumstances.py   Section B: title-race pressure index + squad stability
   physical.py        Section C: minutes-weighted age + fixture congestion
   synthesis.py       Section D: model output re-read against the circumstances
   facts.py           cited final league tables
@@ -148,7 +148,7 @@ queries. SQLite earns its place as the query layer without the overhead of a sta
 | `GET /api/matches?season=` | per-match rows incl. rolling form (SQL) |
 | `GET /api/players?season=&min_shots=&sort_by=` | player aggregates (SQL) |
 | `GET /api/model?season=` | expected-points output + calibration |
-| `GET /api/circumstances` | Section B: title-race pressure index + squad continuity |
+| `GET /api/circumstances` | Section B: title-race pressure index + squad stability |
 | `GET /api/physical` | Section C: minutes-weighted age + fixture congestion |
 | `GET /api/synthesis` | Section D: model output re-read against the circumstances |
 

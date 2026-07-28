@@ -215,8 +215,27 @@ honesty** matters most.
     the full 19 rivals - so the gap narrows as `tau` grows and widens as it shrinks, but
     the lines never cross or touch anywhere tested (`tau = 3 -> 40`). The default marker
     sits at `tau=10`, the value quoted in the report body.
-  - *Squad continuity* - how much of the PL squad was retained from the prior season.
-    **Measured** (a set operation on sourced squad lists).
+  - *Squad stability* - how much upheaval each squad absorbed going into its title
+    season, measured three ways off the sourced squad lists: **players retained**
+    (share of *this* season's title-winning squad that was at the club the year before -
+    81.8% in 2003/04 vs 64.0% in 2025/26), **players joined** (new faces in the league
+    squad - 4 vs 9), and **players departed, weighted by minutes**. The minutes weighting
+    is the important part: a raw departure count is misleading (2003/04 actually lost
+    *more* players, 10 vs 8, but most were fringe). So each departure is weighted by the
+    minutes that player played *the season before*, and expressed as a share of the prior
+    season's total team minutes that left the club: `departed_minutes_pct =
+    sum(prior-season minutes of players who left) / total prior-season team minutes`.
+    That needs prior-season (2002/03 and 2024/25) minutes, which the base pipeline did
+    not have: 2024/25 comes from Understat (same source family as 2025/26); 2002/03 from
+    FBref's Standard Stats, read via an Internet Archive Wayback snapshot because live
+    FBref is Cloudflare-gated (cached under `data/raw/` for reproducibility). Names are
+    matched across sources with accent/case normalisation plus a tiny alias map (e.g.
+    FBref "Oleh Luzhny" -> squad-list "Oleh Luzhnyi"). **Measured.** The result is
+    deliberately un-tidy: the minutes-weighted departures come out *comparable* (16.7% in
+    2003/04 vs 15.6% in 2025/26 - if anything 2003/04 lost marginally more, losing Seaman,
+    Luzhnyi and van Bronckhorst). The upheaval gap between the eras is therefore on the
+    *incoming* side (signings + low carryover), not departures - and the report copy says
+    exactly that rather than the tidier "more out" story the counts might suggest.
 - **`physical.py` (Section C)** - two metrics that exist cleanly for BOTH eras:
   - *Minutes-weighted squad age* - birthdates weighted by that season's league minutes.
   - *Fixture congestion* - games-per-month and rest-gaps, computed from every
@@ -285,7 +304,7 @@ toggle (choice saved to localStorage):
   the whole UI).
 - **`components/charts.tsx`** - the recharts charts (title race, output bars, the
   interactive `tau`-sweep pressure-index robustness chart in the report plus the
-  per-rival pressure bars on the dashboard, squad continuity, squad age, fixture
+  per-rival pressure bars on the dashboard, squad stability, squad age, fixture
   congestion, expected-points, per-match scatter).
 - **`components/ui.tsx`** - shared pieces: the **category badge** (fact / measured /
   model output / interpretation - the honesty system made visual), a scroll-reveal
@@ -317,7 +336,7 @@ toggle (choice saved to localStorage):
   symmetric match is 50/50, higher xG raises win probability, the calibration
   identity, output shape), the transforms (season tallies, rolling window, derived
   per-90 columns), and the section builders (title-race margin matches the final
-  table, league spread, squad-continuity counts reconcile, fixture totals match the
+  table, league spread, squad-stability counts reconcile, fixture totals match the
   source, age is genuinely minutes-weighted). They test **logic and invariants**, not
   just that code runs.
 - **Linters/formatters:** `ruff` for Python (config in `pyproject.toml`) and

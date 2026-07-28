@@ -87,10 +87,10 @@ export function Conclusion({
       <Reveal delay={80}>
         <div className="method narrow" style={{ marginTop: 30 }}>
           <strong>Where this goes next, if it were live work.</strong> The pressure index
-          and continuity measures are not Arsenal-specific. Run across every title race,
-          they would give a season-difficulty baseline to judge any campaign against, ours
-          or a rival's. The same squad-continuity read applied forward is an input into
-          projecting how much a summer rebuild is likely to cost in points. That is the
+          and squad-stability measures are not Arsenal-specific. Run across every title
+          race, they would give a season-difficulty baseline to judge any campaign
+          against, ours or a rival's. The same squad-stability read applied forward is an
+          input into projecting how much a summer rebuild is likely to cost in points. That is the
           direction I would take it: from a retrospective on two seasons to a repeatable
           tool for characterising the season ahead.
         </div>
