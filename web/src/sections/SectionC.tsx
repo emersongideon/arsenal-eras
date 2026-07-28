@@ -138,7 +138,7 @@ export function SectionC({ p }: { p: Physical }) {
 
       <Reveal delay={60}>
         <p className="narrow dim handoff">
-          Field and fitness measured. Now against the model. ↓
+          The schedule was heavier and more compressed. Did it cost points? ↓
         </p>
       </Reveal>
     </Section>

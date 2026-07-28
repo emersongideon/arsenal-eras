@@ -5,7 +5,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from analysis import circumstances, physical, sources, synthesis
+from analysis import circumstances, congestion, loaders, physical, sources, synthesis
 from analysis.config import S0304, S2526
 
 
@@ -49,6 +49,27 @@ def test_squad_stability_counts_reconcile():
     # Minutes-weighted departures come out comparable across eras (within ~3 pts):
     # the upheaval gap is on the incoming side, not departures.
     assert abs(c[S0304]["departed_minutes_pct"] - c[S2526]["departed_minutes_pct"]) < 3
+
+
+def test_congestion_buckets_reconcile():
+    m = pd.concat(
+        [loaders.load_statsbomb_matches(), loaders.load_understat_matches()],
+        ignore_index=True,
+    )
+    c = congestion.build(m)["by_season"]
+    for s in (S0304, S2526):
+        v = c[s]
+        b = v["buckets"]
+        # every league game lands in exactly one bucket
+        assert b["short"]["games"] + b["normal"]["games"] == v["overall_games"] == 38
+        assert b["short"]["points"] + b["normal"]["points"] == v["overall_points"]
+        # PPG is points/games per bucket
+        for k in ("short", "normal"):
+            assert b[k]["ppg"] == pytest.approx(b[k]["points"] / b[k]["games"], abs=1e-3)
+        assert v["overall_ppg"] == pytest.approx(v["overall_points"] / 38, abs=1e-3)
+    # sample sizes match the earlier verification (all-competition rest basis)
+    assert c[S0304]["buckets"]["short"]["games"] == 10
+    assert c[S2526]["buckets"]["short"]["games"] == 12
 
 
 def test_fixture_congestion_totals_match_source():

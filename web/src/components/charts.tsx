@@ -4,6 +4,7 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
+  LabelList,
   Legend,
   Line,
   LineChart,
@@ -18,6 +19,7 @@ import {
 } from "recharts";
 import type {
   Circumstances,
+  Congestion,
   MatchRow,
   ModelResult,
   Physical,
@@ -781,6 +783,110 @@ export function CongestionTimeline({
         </div>
       </div>
     </div>
+  );
+}
+
+// ===========================================================================
+// Section D - performance under congestion
+// ===========================================================================
+
+const GOLD_TEXT = "#8a6610"; // AA-contrast gold for small text/labels on white
+
+/** League points-per-game in short-rest vs normal-rest games, both seasons, with
+ *  each season's overall PPG marked as a dashed reference line. Sample sizes are
+ *  printed on the bars so small buckets are not over-read. The y-axis is clipped
+ *  to 1.8-2.6 (and labelled) so the differences are legible without inventing them. */
+export function CongestionPpgChart({
+  bySeason,
+}: {
+  bySeason: Congestion["by_season"];
+}) {
+  const b0 = bySeason["2003/04"];
+  const b1 = bySeason["2025/26"];
+  const data = [
+    {
+      bucket: "Short rest (≤3 days)",
+      "2003/04": b0.buckets.short.ppg ?? 0,
+      "2025/26": b1.buckets.short.ppg ?? 0,
+      n0: b0.buckets.short.games,
+      n1: b1.buckets.short.games,
+    },
+    {
+      bucket: "Normal rest (4+ days)",
+      "2003/04": b0.buckets.normal.ppg ?? 0,
+      "2025/26": b1.buckets.normal.ppg ?? 0,
+      n0: b0.buckets.normal.games,
+      n1: b1.buckets.normal.games,
+    },
+  ];
+  const ppgFmt = (v: number | string) => Number(v).toFixed(2);
+  const nFmt = (v: number | string) => `n=${v}`;
+  return (
+    <ResponsiveContainer width="100%" height={330}>
+      <BarChart data={data} margin={{ top: 22, right: 104, bottom: 8, left: -6 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="bucket" stroke={AXIS} tick={{ fontSize: 12 }} />
+        <YAxis
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          domain={[1.8, 2.6]}
+          ticks={[1.8, 2.0, 2.2, 2.4, 2.6]}
+          allowDataOverflow
+          label={{
+            value: "league points per game",
+            angle: -90,
+            position: "insideLeft",
+            offset: 14,
+            fill: AXIS,
+            fontSize: 12,
+          }}
+        />
+        <Tooltip contentStyle={ttStyle} formatter={ppgFmt} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <Legend verticalAlign="top" height={30} />
+        <ReferenceLine
+          y={b0.overall_ppg}
+          stroke={GOLD}
+          strokeDasharray="5 5"
+          label={{
+            value: `2003/04 avg ${b0.overall_ppg.toFixed(2)}`,
+            position: "right",
+            fill: GOLD_TEXT,
+            fontSize: 11,
+          }}
+        />
+        <ReferenceLine
+          y={b1.overall_ppg}
+          stroke={RED}
+          strokeDasharray="5 5"
+          label={{
+            value: `2025/26 avg ${b1.overall_ppg.toFixed(2)}`,
+            position: "right",
+            fill: RED,
+            fontSize: 11,
+          }}
+        />
+        <Bar dataKey="2003/04" fill={GOLD} radius={[4, 4, 0, 0]}>
+          <LabelList dataKey="2003/04" position="top" formatter={ppgFmt} fontSize={12} />
+          <LabelList
+            dataKey="n0"
+            position="insideBottom"
+            formatter={nFmt}
+            fill="#fff"
+            fontSize={11}
+          />
+        </Bar>
+        <Bar dataKey="2025/26" fill={RED} radius={[4, 4, 0, 0]}>
+          <LabelList dataKey="2025/26" position="top" formatter={ppgFmt} fontSize={12} />
+          <LabelList
+            dataKey="n1"
+            position="insideBottom"
+            formatter={nFmt}
+            fill="#fff"
+            fontSize={11}
+          />
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
 

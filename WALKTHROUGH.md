@@ -263,10 +263,26 @@ honesty** matters most.
     list. This is also where the honesty note lives: modern tracking data (distance,
     sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately excluded rather
     than fabricated.
-- **`synthesis.py` (Section D)** - re-reads the measured expected-points model *through*
-  the circumstances: not "did they beat their xG?" but "against a stronger or weaker
-  field, and in what shape?". It only assembles measured numbers side by side; the
-  cumulative reading is presented in the frontend and tagged **interpretation**.
+- **`congestion.py` (Section D - "Performance under congestion")** - synthesises
+  Section C (rest-gaps) with Section A (results) to ask whether the more compressed
+  2025/26 schedule actually cost points. **Bucket definition:** each of the 38 LEAGUE
+  games per season is split into "short rest" (`<= 3` days) or "normal rest" (`4+` days),
+  where the rest is measured from the FULL fixture list across ALL competitions (a
+  midweek cup or European game tires the side too), i.e. the same rest-gap as Section C.
+  Points-per-game is league-only because cups are knockout and have no points; the season
+  opener has no preceding match, so its long pre-season rest counts as normal. Each
+  season's overall PPG is exported as a baseline. **Sample-size caveat (important):** the
+  short-rest buckets are only ~10-12 games, so per-bucket PPG is noisy - a one- or
+  two-result swing moves it by ~0.2. The payload carries the game counts, the chart prints
+  them on the bars, and the copy flags them, precisely so the small buckets are not
+  over-read. No verdict is baked into the data or the chart; the reading is deliberately
+  left to the section copy. (A league-only rest basis was also computed but rejected: its
+  short-rest buckets are n=6 and n=4, too small to mean anything.)
+- **`synthesis.py`** - re-reads the measured expected-points model *through* the
+  circumstances: not "did they beat their xG?" but "against a stronger or weaker field,
+  and in what shape?". It only assembles measured numbers side by side. This now feeds the
+  **Dashboard** and the concluding section rather than its own report section (Section D
+  was reallocated to congestion); the cumulative reading is tagged **interpretation**.
 
 ### Be ready to explain
 - *Why is rival xG missing for 2003/04, and how is that handled?* Understat (the only

@@ -15,7 +15,7 @@ const SECTIONS = [
   ["surface", "Surface"],
   ["circumstances", "Circumstances"],
   ["physical", "Physical"],
-  ["synthesis", "Synthesis"],
+  ["congestion", "Congestion"],
   ["verdict", "Verdict"],
 ] as const;
 
@@ -61,7 +61,7 @@ export function ReportView({ data }: { data: Dataset }) {
       <SectionA seasons={data.seasons} matches={data.matches} />
       <SectionB c={data.circumstances} />
       <SectionC p={data.physical} />
-      <SectionD model={data.model} synth={data.synthesis} physical={data.physical} />
+      <SectionD congestion={data.congestion} />
       <Conclusion
         synth={data.synthesis}
         physical={data.physical}

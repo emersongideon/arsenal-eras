@@ -191,6 +191,25 @@ export interface Synthesis {
   >;
 }
 
+// --- Section D: performance under congestion ------------------------------
+export interface Congestion {
+  rest_basis: string;
+  short_rest_max_days: number;
+  note: string;
+  by_season: Record<
+    Season,
+    {
+      overall_games: number;
+      overall_points: number;
+      overall_ppg: number;
+      buckets: {
+        short: { games: number; points: number; ppg: number | null };
+        normal: { games: number; points: number; ppg: number | null };
+      };
+    }
+  >;
+}
+
 export interface Meta {
   title: string;
   question: string;
@@ -208,5 +227,6 @@ export interface Dataset {
   model: Record<Season, ModelResult>;
   circumstances: Circumstances;
   physical: Physical;
+  congestion: Congestion;
   synthesis: Synthesis;
 }

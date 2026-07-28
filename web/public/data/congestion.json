@@ -1,0 +1,42 @@
+{
+  "metric": "congestion_performance",
+  "rest_basis": "all_competition",
+  "short_rest_max_days": 3,
+  "note": "Points-per-game over the 38 league games; rest measured from every competition. Short-rest buckets are small (~10-12 games), so treat the per-bucket PPG as indicative, not decisive.",
+  "by_season": {
+    "2003/04": {
+      "overall_games": 38,
+      "overall_points": 90,
+      "overall_ppg": 2.368,
+      "buckets": {
+        "short": {
+          "games": 10,
+          "points": 24,
+          "ppg": 2.4
+        },
+        "normal": {
+          "games": 28,
+          "points": 66,
+          "ppg": 2.357
+        }
+      }
+    },
+    "2025/26": {
+      "overall_games": 38,
+      "overall_points": 85,
+      "overall_ppg": 2.237,
+      "buckets": {
+        "short": {
+          "games": 12,
+          "points": 29,
+          "ppg": 2.417
+        },
+        "normal": {
+          "games": 26,
+          "points": 56,
+          "ppg": 2.154
+        }
+      }
+    }
+  }
+}

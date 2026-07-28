@@ -3,6 +3,7 @@
 // data via a REST/SQL layer, but the site doesn't need it.)
 import type {
   Circumstances,
+  Congestion,
   Dataset,
   MatchRow,
   Meta,
@@ -22,7 +23,7 @@ async function getJSON<T>(name: string): Promise<T> {
 }
 
 export async function loadDataset(): Promise<Dataset> {
-  const [meta, seasons, matches, model, circumstances, physical, synthesis] =
+  const [meta, seasons, matches, model, circumstances, physical, congestion, synthesis] =
     await Promise.all([
       getJSON<Meta>("meta.json"),
       getJSON<SeasonSummary[]>("seasons.json"),
@@ -30,7 +31,8 @@ export async function loadDataset(): Promise<Dataset> {
       getJSON<Record<Season, ModelResult>>("model.json"),
       getJSON<Circumstances>("circumstances.json"),
       getJSON<Physical>("physical.json"),
+      getJSON<Congestion>("congestion.json"),
       getJSON<Synthesis>("synthesis.json"),
     ]);
-  return { meta, seasons, matches, model, circumstances, physical, synthesis };
+  return { meta, seasons, matches, model, circumstances, physical, congestion, synthesis };
 }

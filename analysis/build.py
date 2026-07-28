@@ -8,7 +8,8 @@ Outputs (all consumed by the API / frontend):
   model.json          expected-points model output + calibration (Act 2 / Section A)
   circumstances.json  Section B: chasing pack, margin, league shape, squad stability
   physical.json       Section C: squad age + fixture congestion
-  synthesis.json      Section D: model output re-read against the circumstances
+  congestion.json     Section D: league PPG split by rest bucket (performance under load)
+  synthesis.json      model output re-read against the circumstances (Dashboard + verdict)
   meta.json           thesis, provenance, and the honesty framing
 """
 
@@ -18,7 +19,7 @@ import json
 
 import pandas as pd
 
-from . import circumstances, loaders, model, physical, synthesis, transforms
+from . import circumstances, congestion, loaders, model, physical, synthesis, transforms
 from . import config as C
 
 
@@ -47,9 +48,10 @@ def run() -> dict:
         C.S2526: model.season_model_result(m2526),
     }
 
-    # --- circumstances (B), physical (C), synthesis (D) -------------------
+    # --- circumstances (B), physical (C), congestion (D), synthesis -------
     circ_payload = circumstances.build()
     phys_payload = physical.build(players_tbl)
+    cong_payload = congestion.build(matches)
     synth_payload = synthesis.build(model_by_season, circ_payload)
 
     outputs = {
@@ -59,6 +61,7 @@ def run() -> dict:
         "model.json": model_by_season,
         "circumstances.json": circ_payload,
         "physical.json": phys_payload,
+        "congestion.json": cong_payload,
         "synthesis.json": synth_payload,
         "meta.json": {
             "title": "A framework to measure how hard a title was to win",
