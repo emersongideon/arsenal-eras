@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { Category, Season } from "../types";
 import { useReveal } from "../hooks/useReveal";
 
@@ -75,6 +75,34 @@ export function LimitationNote({
       {title ? <p className="limitation-title">{title}</p> : null}
       <p className="limitation-body">{children}</p>
     </aside>
+  );
+}
+
+/** A small "(i)" affordance that reveals plain-language definitions on hover or
+ *  focus (desktop) and on tap (mobile, via the click-toggled `open` class). */
+export function InfoTip({
+  label = "Definitions",
+  children,
+}: {
+  label?: string;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <span className={`infotip ${open ? "open" : ""}`}>
+      <button
+        type="button"
+        className="infotip-btn"
+        aria-label={label}
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        i
+      </button>
+      <span className="infotip-pop" role="tooltip">
+        {children}
+      </span>
+    </span>
   );
 }
 

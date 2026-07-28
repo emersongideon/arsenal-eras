@@ -4,7 +4,7 @@ import { Reveal, Section } from "../components/ui";
  *  and the two deliberate choices that shape the comparison. */
 export function DataSources() {
   return (
-    <Section id="sources" eyebrow="Before we start · the data">
+    <Section id="section-data" eyebrow="Before we start · the data">
       <Reveal>
         <h2>Where every number comes from</h2>
         <p className="lead narrow">
@@ -42,10 +42,14 @@ export function DataSources() {
 
       <Reveal delay={120}>
         <div className="method narrow" style={{ marginTop: 22 }}>
-          Two deliberate choices shape the comparison. The seasons use different xG
-          models, so xG is read within each season rather than across them. And rival-team
-          xG is not available for 2003/04, so the chasing pack is measured on actual
-          points, the same basis in both eras.
+          Two choices follow from the data, and they shape everything after. First, the two
+          seasons use different xG models (StatsBomb for 2003/04, Understat for 2025/26),
+          and different models are not directly comparable, so throughout this report xG is
+          only ever compared within a single season, never one era's xG against the
+          other's. Second, shot data for Arsenal's rivals does not exist for 2003/04, so
+          whenever we measure the strength of the chasing pack, we use actual league
+          points, which exist for both eras and can be compared directly. Keep both in
+          mind: xG stays inside its own season, and rivals are judged on points.
         </div>
       </Reveal>
 

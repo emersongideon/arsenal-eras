@@ -20,7 +20,7 @@ export function SectionC({ p }: { p: Physical }) {
     Math.round(age[s].over30_minutes_share * 100);
   return (
     <Section
-      id="physical"
+      id="section-c"
       eyebrow="Section C · The physical picture"
       style={{
         background: "#eef1f6",

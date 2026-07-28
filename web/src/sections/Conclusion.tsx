@@ -15,7 +15,7 @@ export function Conclusion({
   const s0 = seasons.find((x) => x.season === "2003/04")!;
 
   return (
-    <Section id="verdict" eyebrow="Section E · What this surfaces">
+    <Section id="section-e" eyebrow="Section E · What this surfaces">
       <Reveal>
         <h2>The finding, and where it goes next</h2>
         <p className="lead narrow">

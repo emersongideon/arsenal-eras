@@ -352,6 +352,19 @@ toggle (choice saved to localStorage):
   distinct from the interpretation blocks and the metric cards. Currently used in
   Section B part 2 (positional/depth data) and Section C (physical tracking data);
   future sections should reuse it rather than hand-rolling a bespoke note.
+  It also holds **`InfoTip`**, a small "(i)" affordance that reveals plain-language
+  term definitions on hover/focus (desktop) or tap (mobile); used in Section A to
+  define Goals for / Goals against / xG for / xG against without cluttering the prose.
+- **`components/TopBar.tsx`** - the persistent top navigation bar (rendered by `App`,
+  above whichever view is active). It carries the view toggle (left), the section nav
+  (centre), and the GitHub link (right). Every major section has a **stable anchor id**
+  (`section-data`, `section-a` ... `section-e`; the hero is `hook`); clicking a nav item
+  smooth-scrolls to that id, and a scroll-position **scroll-spy** highlights the section
+  currently in view (a scroll read rather than IntersectionObserver, so it stays correct
+  at the bottom of the page where the last section is too short to reach the viewport
+  middle). `html { scroll-padding-top }` offsets the fixed bar on anchor jumps. On mobile
+  the centre nav collapses into a hamburger dropdown. Section E's summary table can link
+  back to these same ids.
 - **`sections/*`** - one file per narrative section.
 
 ### Key decisions

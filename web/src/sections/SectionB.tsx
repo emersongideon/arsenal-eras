@@ -21,7 +21,7 @@ export function SectionB({ c }: { c: Circumstances }) {
   );
 
   return (
-    <Section id="circumstances" eyebrow="Section B · The field">
+    <Section id="section-b" eyebrow="Section B · The field">
       <Reveal>
         <h2>How much resistance each title was won against</h2>
         <p className="lead narrow">

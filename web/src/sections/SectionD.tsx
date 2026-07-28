@@ -8,7 +8,7 @@ export function SectionD({ congestion }: { congestion: Congestion }) {
   const s1 = c["2025/26"];
 
   return (
-    <Section id="congestion" eyebrow="Section D · Performance under congestion">
+    <Section id="section-d" eyebrow="Section D · Performance under congestion">
       <Reveal>
         <h2>Did the compressed schedule cost points?</h2>
         <p className="lead narrow">

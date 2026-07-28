@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { loadDataset } from "./data";
 import type { Dataset } from "./types";
-import { GitHubLink } from "./components/ui";
-import { ViewToggle, type View } from "./components/ViewToggle";
+import { TopBar } from "./components/TopBar";
+import { type View } from "./components/ViewToggle";
 import { ReportView } from "./ReportView";
 import { DashboardView } from "./DashboardView";
 
@@ -42,8 +42,7 @@ export default function App() {
 
   return (
     <>
-      <ViewToggle view={view} onChange={setView} />
-      <GitHubLink variant="header" />
+      <TopBar view={view} onChange={setView} />
       {view === "report" ? <ReportView data={data} /> : <DashboardView data={data} />}
     </>
   );

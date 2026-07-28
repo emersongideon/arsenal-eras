@@ -92,26 +92,42 @@ export function CumulativePointsChart({ matches }: { matches: MatchRow[] }) {
   );
 }
 
-/** Attacking & defensive output: goals vs xG, both seasons. */
+/** Attacking & defensive output: goals vs xG. Grouped BY SEASON so the season is
+ *  read straight off the x-axis (not distinguished by colour alone); the four
+ *  metrics are colour-coded (greens = attack, oranges = defence; solid = actual,
+ *  pale = expected) and every bar is labelled with its value. */
 export function OutputBars({ seasons }: { seasons: SeasonSummary[] }) {
   const s0 = seasons.find((s) => s.season === "2003/04")!;
   const s1 = seasons.find((s) => s.season === "2025/26")!;
-  const data = [
-    { metric: "Goals for", "2003/04": s0.goals_for, "2025/26": s1.goals_for },
-    { metric: "xG for", "2003/04": s0.xg_for, "2025/26": s1.xg_for },
-    { metric: "Goals against", "2003/04": s0.goals_against, "2025/26": s1.goals_against },
-    { metric: "xG against", "2003/04": s0.xg_against, "2025/26": s1.xg_against },
+  const row = (s: SeasonSummary) => ({
+    season: s.season,
+    "Goals for": s.goals_for,
+    "xG for": s.xg_for,
+    "Goals against": s.goals_against,
+    "xG against": s.xg_against,
+  });
+  const data = [row(s0), row(s1)]; // 2003/04 first (leftmost)
+  const fmt = (v: number | string) =>
+    Number.isInteger(Number(v)) ? String(v) : Number(v).toFixed(1);
+  const bars: [string, string][] = [
+    ["Goals for", "#2f6f4f"],
+    ["xG for", "#9fc9b4"],
+    ["Goals against", "#b4550a"],
+    ["xG against", "#e3b483"],
   ];
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: -12 }}>
+    <ResponsiveContainer width="100%" height={320}>
+      <BarChart data={data} margin={{ top: 22, right: 16, bottom: 8, left: -12 }}>
         <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey="metric" stroke={AXIS} tick={{ fontSize: 12 }} />
+        <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
         <YAxis stroke={AXIS} tick={{ fontSize: 12 }} />
         <Tooltip contentStyle={ttStyle} cursor={{ fill: "rgba(0,0,0,.03)" }} />
         <Legend verticalAlign="top" height={30} />
-        <Bar dataKey="2003/04" fill={GOLD} radius={[4, 4, 0, 0]} />
-        <Bar dataKey="2025/26" fill={RED} radius={[4, 4, 0, 0]} />
+        {bars.map(([key, fill]) => (
+          <Bar key={key} dataKey={key} fill={fill} radius={[3, 3, 0, 0]}>
+            <LabelList dataKey={key} position="top" formatter={fmt} fontSize={11} />
+          </Bar>
+        ))}
       </BarChart>
     </ResponsiveContainer>
   );
