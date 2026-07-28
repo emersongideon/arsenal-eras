@@ -118,8 +118,50 @@ export function SectionA({
         </div>
       </Reveal>
 
-      <Reveal delay={60}>
-        <p className="narrow dim handoff">The field, first. ↓</p>
+      <Reveal delay={80}>
+        <div className="forces">
+          <h3 className="forces-h">How hard was each title to win?</h3>
+          <p className="forces-lead narrow">
+            The table tells us how dominant each season was, not how hard it was to win.
+            Those are different questions. How hard a title is to win comes down to two
+            forces: the resistance from outside, meaning how strong the rest of the league
+            was, and the strain from inside, meaning how settled the squad was and how much
+            physical load it carried. The rest of this report measures each force in turn,
+            then combines them.
+          </p>
+
+          <div className="forces-diagram">
+            <div className="forces-inputs">
+              <div className="force-box outside">
+                <span className="force-tag">Outside</span>
+                <p className="force-name">The field</p>
+                <p className="force-desc">
+                  How much resistance the rest of the league applied.
+                </p>
+              </div>
+              <span className="forces-plus" aria-hidden="true">
+                +
+              </span>
+              <div className="force-box inside">
+                <span className="force-tag">Inside</span>
+                <p className="force-name">The squad and body</p>
+                <p className="force-desc">
+                  How settled the squad was and how heavy the physical load it carried.
+                </p>
+              </div>
+            </div>
+            <div className="forces-down" aria-hidden="true">
+              ↓
+            </div>
+            <div className="force-box outcome">
+              <p className="force-name">How hard the title was to win</p>
+            </div>
+          </div>
+
+          <p className="narrow dim handoff" style={{ marginTop: 24 }}>
+            We start on the outside: how much resistance the league itself applied. ↓
+          </p>
+        </div>
       </Reveal>
     </Section>
   );

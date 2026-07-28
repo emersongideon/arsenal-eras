@@ -365,7 +365,14 @@ toggle (choice saved to localStorage):
   middle). `html { scroll-padding-top }` offsets the fixed bar on anchor jumps. On mobile
   the centre nav collapses into a hamburger dropdown. Section E's summary table can link
   back to these same ids.
-- **`sections/*`** - one file per narrative section.
+- **`sections/*`** - one file per narrative section. Section A closes with a small
+  **"two forces" framework diagram** (a pure CSS/HTML concept diagram, no data): two
+  inputs, **the field / "outside"** and **the squad and body / "inside"**, combining into
+  "how hard the title was to win". This is the report's thesis and its through-line: those
+  exact "outside" / "inside" labels recur in Section B (the field / outside), Section C
+  (the squad and body / inside), and Section D (which combines the two). Keep the labels
+  consistent if you edit those sections; the diagram is the intuition, Section D is where
+  the two forces are actually combined.
 
 ### Key decisions
 - **Static-first.** The site depends on no backend at load time, which is what makes
