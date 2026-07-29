@@ -789,6 +789,29 @@ a {
   }
 }
 
+/* Section A team cards: mark the leading figure in each comparison row */
+.statline .v.win {
+  color: #15803d;
+  background: #e7f5ee;
+  border-radius: 7px;
+  padding: 2px 9px;
+}
+.win-mark {
+  font-size: 0.72em;
+  margin-right: 4px;
+  vertical-align: 1px;
+}
+.lead-tag {
+  margin-left: 8px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #15803d;
+  background: #e7f5ee;
+  vertical-align: 2px;
+}
+
 /* pivot line (Section A transition into the framework) */
 .pivot-line {
   max-width: 680px;

@@ -1,19 +1,31 @@
 import { content } from "../content";
 import { CumulativePointsChart, OutputBars } from "../components/charts";
 import { InfoTip, Reveal, Rich, Section, seasonClass } from "../components/ui";
-import type { MatchRow, SeasonSummary } from "../types";
+import type { SeasonSummary } from "../types";
+import type { MatchRow } from "../types";
 
 const t = content.a;
 
-function TeamCard({ s }: { s: SeasonSummary }) {
+type Lead = 0 | 1 | null;
+
+function TeamCard({
+  s,
+  idx,
+  leaders,
+}: {
+  s: SeasonSummary;
+  idx: 0 | 1;
+  leaders: Record<string, Lead>;
+}) {
   const cls = seasonClass(s.season);
-  const rows: [string, string | number][] = [
-    ["Record (W-D-L)", `${s.wins}-${s.draws}-${s.losses}`],
-    ["Goals for / against", `${s.goals_for} / ${s.goals_against}`],
-    ["Goal difference", (s.goal_difference > 0 ? "+" : "") + s.goal_difference],
-    ["xG for / against", `${s.xg_for} / ${s.xg_against}`],
-    ["Points per game", s.ppg.toFixed(2)],
+  const rows: [string, string, string][] = [
+    ["record", "Record (W-D-L)", `${s.wins}-${s.draws}-${s.losses}`],
+    ["goals", "Goals for / against", `${s.goals_for} / ${s.goals_against}`],
+    ["gd", "Goal difference", (s.goal_difference > 0 ? "+" : "") + s.goal_difference],
+    ["xg", "xG for / against", `${s.xg_for} / ${s.xg_against}`],
+    ["ppg", "Points per game", s.ppg.toFixed(2)],
   ];
+  const pointsWin = leaders.points === idx;
   return (
     <div className={`card team-card ${cls}`}>
       <span className="rail" />
@@ -27,18 +39,29 @@ function TeamCard({ s }: { s: SeasonSummary }) {
         <span className="season-tag">{s.season}</span>
         {s.unbeaten && <span className="season-tag">UNBEATEN</span>}
       </div>
-      <div className="big-num" style={{ margin: "6px 0 2px" }}>
+      <div className={`big-num ${pointsWin ? "win" : ""}`} style={{ margin: "6px 0 2px" }}>
         {s.points}
       </div>
       <div className="dim" style={{ marginBottom: 14, fontSize: 14 }}>
         league points
+        {pointsWin && <span className="lead-tag">▲ higher</span>}
       </div>
-      {rows.map(([k, v]) => (
-        <div className="statline" key={k}>
-          <span className="k">{k}</span>
-          <span className="v">{v}</span>
-        </div>
-      ))}
+      {rows.map(([k, label, v]) => {
+        const win = leaders[k] === idx;
+        return (
+          <div className="statline" key={k}>
+            <span className="k">{label}</span>
+            <span className={`v ${win ? "win" : ""}`}>
+              {win && (
+                <span className="win-mark" aria-hidden="true">
+                  ▲
+                </span>
+              )}
+              {v}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -52,6 +75,26 @@ export function SectionA({
 }) {
   const s0 = seasons.find((s) => s.season === "2003/04")!;
   const s1 = seasons.find((s) => s.season === "2025/26")!;
+
+  // Which season leads each dominance metric (0 = 2003/04, 1 = 2025/26, null = tie).
+  // xG is left neutral: it is a model estimate, only compared within a season.
+  const higher = (a: number, b: number): Lead => (a === b ? null : a > b ? 0 : 1);
+  const lower = (a: number, b: number): Lead => (a === b ? null : a < b ? 0 : 1);
+  const goals: Lead =
+    s0.goals_for >= s1.goals_for && s0.goals_against <= s1.goals_against
+      ? 0
+      : s1.goals_for >= s0.goals_for && s1.goals_against <= s0.goals_against
+        ? 1
+        : null;
+  const leaders: Record<string, Lead> = {
+    points: higher(s0.points, s1.points),
+    record: lower(s0.losses, s1.losses), // fewer losses = more dominant (unbeaten)
+    goals,
+    gd: higher(s0.goal_difference, s1.goal_difference),
+    xg: null,
+    ppg: higher(s0.ppg, s1.ppg),
+  };
+
   return (
     <Section id="section-a" eyebrow={t.eyebrow}>
       <Reveal>
@@ -59,14 +102,21 @@ export function SectionA({
         <p className="lead narrow">
           <Rich>{t.lead}</Rich>
         </p>
-        <p className="pivot-line">{t.pivot}</p>
       </Reveal>
 
       <Reveal delay={100}>
-        <div className="grid2" style={{ margin: "22px 0" }}>
-          <TeamCard s={s0} />
-          <TeamCard s={s1} />
+        <div className="grid2" style={{ margin: "22px 0 6px" }}>
+          <TeamCard s={s0} idx={0} leaders={leaders} />
+          <TeamCard s={s1} idx={1} leaders={leaders} />
         </div>
+        <p className="dim narrow" style={{ fontSize: 13, textAlign: "center" }}>
+          ▲ marks the higher figure. On every dominance measure, 2003/04 leads. (xG is a
+          model estimate, read within a season, so it is not marked.)
+        </p>
+      </Reveal>
+
+      <Reveal delay={60}>
+        <p className="pivot-line">{t.pivot}</p>
       </Reveal>
 
       <Reveal delay={70}>

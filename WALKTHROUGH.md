@@ -439,10 +439,15 @@ outside force, plus Arsenal's full two-force combined difficulty), E (the verdic
   middle). `html { scroll-padding-top }` offsets the fixed bar on anchor jumps. On mobile
   the centre nav collapses into a hamburger dropdown. Section E's contrast table links
   back to these same ids via its "From" column.
-- **`sections/*`** - one file per narrative section. In Section A the week-by-week
-  cumulative-points chart **marks the 2025/26 side's 5 defeats as dots** on its line (the
-  flat steps where no points came), so the loss count is visible not just stated; the
-  unbeaten 2003/04 line has none. Section A closes with a small
+- **`sections/*`** - one file per narrative section. In Section A the two team cards are
+  a **head-to-head comparison**: for each dominance metric the leading figure is marked
+  with a green "▲" (points, record/unbeaten, goals, goal difference, PPG all fall to
+  2003/04; xG is left unmarked because it is a model estimate read within a season). The
+  cards come before the "how hard was it to earn?" pivot line, so the points story reads
+  in one block. The week-by-week cumulative-points chart **marks the 2025/26 side's 5
+  defeats as dots** on its line (the flat steps where no points came), so the loss count
+  is visible not just stated; the unbeaten 2003/04 line has none. Section A closes with a
+  small
   **"two forces" framework diagram** (a pure CSS/HTML concept diagram, no data): two
   inputs, **the field / "outside"** and **the squad and body / "inside"**, combining into
   "how hard the title was to win". This is the report's thesis and its through-line: those
