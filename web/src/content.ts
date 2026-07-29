@@ -32,13 +32,35 @@ export const content = {
   data: {
     eyebrow: "Before we start · the data",
     heading: "Where every number comes from",
-    lead: "This report is built entirely from public records: shot-level event data, league tables, squads and fixtures. Every source is named here so any figure can be checked or rebuilt.",
-    src0304:
-      "Shots and xG from StatsBomb Open Data (Arsenal event-level); tables, squads and fixtures from public season records; minutes derived from lineup stints on a 90-minute baseline. Prior-season (2002/03) minutes, used only for the squad-departure figure, come from FBref's Standard Stats read via an Internet Archive snapshot.",
-    src2526:
-      "Shots and xG from Understat (per-match and per-player); tables, squads and fixtures from public records; player ages from birthdates, weighted by minutes. Prior-season (2024/25) minutes for the squad-departure figure also from Understat.",
-    choices:
-      "Two choices follow from the data, and they shape everything after. First, the two seasons use different xG models (StatsBomb for 2003/04, Understat for 2025/26), and different models are not directly comparable, so throughout this report xG is only ever compared within a single season, never one era's xG against the other's. Second, shot data for Arsenal's rivals does not exist for 2003/04, so whenever we measure the strength of the chasing pack, we use actual league points, which exist for both eras and can be compared directly. Keep both in mind: xG stays inside its own season, and rivals are judged on points.",
+    lead: "Everything here is built from public records, so any figure can be checked or rebuilt. Here is what goes into each season, and two things to keep in mind when reading the numbers.",
+    // Each row is [what the data is, where it comes from]. Edit freely.
+    sources: {
+      "2003/04": [
+        ["Shots and xG", "StatsBomb Open Data (event-level)"],
+        ["Tables, squads, fixtures", "Public season records"],
+        ["Minutes played", "StatsBomb lineups, 90-minute baseline"],
+        ["Player ages", "Birthdates, weighted by minutes"],
+        ["Prior-season minutes", "FBref 2002/03, via Internet Archive"],
+      ],
+      "2025/26": [
+        ["Shots and xG", "Understat (per-match and per-player)"],
+        ["Tables, squads, fixtures", "Public records"],
+        ["Minutes played", "Understat"],
+        ["Player ages", "Birthdates, weighted by minutes"],
+        ["Prior-season minutes", "Understat 2024/25"],
+      ],
+    },
+    caveatsHeading: "Two things to keep in mind",
+    caveats: [
+      {
+        title: "xG is compared within a season, never across the two",
+        body: "Expected goals (xG) is a model's estimate of how many goals the chances a team created should have produced. But 2003/04's xG comes from StatsBomb's model and 2025/26's from Understat's, and the two grade the same chance a little differently, like two thermometers calibrated in different units. Their numbers are not on one shared scale, so we only ever compare a season's xG to itself (did Arsenal beat or fall short of its own xG?), never one era's xG figure against the other's.",
+      },
+      {
+        title: "Rival strength is judged on league points",
+        body: "Shot data exists for Arsenal in 2003/04, but not for its rivals that season. So to measure how strong the chasing pack was, we use final league points, which exist for every club in both eras and can be compared directly.",
+      },
+    ],
     handoff: "With the sources named, the surface. ↓",
   },
 

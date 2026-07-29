@@ -3,8 +3,13 @@ import { Reveal, Section } from "../components/ui";
 
 const t = content.data;
 
-/** Provenance up front, not buried in a footer: which source covers which era,
- *  and the two deliberate choices that shape the comparison. */
+const ERAS = [
+  ["2003/04", "s0304"],
+  ["2025/26", "s2526"],
+] as const;
+
+/** Provenance up front, not buried in a footer: a scannable "what data, from
+ *  where" list per era, and the two caveats that shape the comparison. */
 export function DataSources() {
   return (
     <Section id="section-data" eyebrow={t.eyebrow}>
@@ -15,22 +20,35 @@ export function DataSources() {
 
       <Reveal delay={80}>
         <div className="grid2" style={{ marginTop: 22 }}>
-          <div className="card team-card s0304">
-            <span className="rail" />
-            <span className="season-tag">2003/04</span>
-            <p style={{ margin: "10px 0 0" }}>{t.src0304}</p>
-          </div>
-          <div className="card team-card s2526">
-            <span className="rail" />
-            <span className="season-tag">2025/26</span>
-            <p style={{ margin: "10px 0 0" }}>{t.src2526}</p>
-          </div>
+          {ERAS.map(([era, cls]) => (
+            <div className={`card team-card ${cls}`} key={era}>
+              <span className="rail" />
+              <span className="season-tag">{era}</span>
+              <div className="src-list">
+                {t.sources[era].map(([what, from]) => (
+                  <div className="src-row" key={what}>
+                    <span className="src-what">{what}</span>
+                    <span className="src-from">{from}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </Reveal>
 
       <Reveal delay={120}>
-        <div className="method narrow" style={{ marginTop: 22 }}>
-          {t.choices}
+        <p className="caveats-head narrow">{t.caveatsHeading}</p>
+        <div className="caveats narrow">
+          {t.caveats.map((c, i) => (
+            <div className="caveat" key={i}>
+              <p className="caveat-title">
+                <span className="caveat-num">{i + 1}</span>
+                {c.title}
+              </p>
+              <p className="caveat-body">{c.body}</p>
+            </div>
+          ))}
         </div>
       </Reveal>
 

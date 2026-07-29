@@ -712,6 +712,83 @@ a {
   }
 }
 
+/* data section: "what data, from where" list per era + caveat cards */
+.src-list {
+  margin-top: 12px;
+}
+.src-row {
+  display: flex;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+.src-row:first-child {
+  border-top: 0;
+}
+.src-what {
+  flex: 0 0 40%;
+  font-weight: 700;
+  color: var(--ink);
+}
+.src-from {
+  flex: 1 1 auto;
+  color: var(--muted);
+}
+.caveats-head {
+  margin: 30px auto 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.caveats {
+  display: grid;
+  gap: 12px;
+}
+.caveat {
+  background: var(--measured-soft);
+  border: 1px solid #cfd9f6;
+  border-left: 4px solid var(--measured);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 16px 15px;
+}
+.caveat-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 7px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.caveat-num {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--measured);
+  color: #fff;
+  font-size: 12.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.caveat-body {
+  margin: 0;
+  color: var(--body);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+@media (max-width: 560px) {
+  .src-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .src-what {
+    flex: none;
+  }
+}
+
 /* pivot line (Section A transition into the framework) */
 .pivot-line {
   max-width: 680px;
