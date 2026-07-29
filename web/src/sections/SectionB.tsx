@@ -113,39 +113,24 @@ export function SectionB({ c }: { c: Circumstances }) {
             <CategoryBadge category="measured" />
           </div>
           <p>
-            A settled team and a rebuilt one are not facing the same job. When most of a
-            squad has played together for a season or more, they already know each
-            other&rsquo;s movement and the manager&rsquo;s system; a team with many new
-            signings has to build that from scratch, which usually takes time. We measure
-            the upheaval each squad absorbed three ways: how many players were retained
-            from the previous season, how many joined, and how many departed, weighting
-            departures by the minutes those players had played the season before so that
-            losing a key player counts for more than losing a squad filler.
+            A settled team and a rebuilt one are not facing the same job. A squad that has
+            played together knows its movement and the manager&rsquo;s system; one with many
+            new signings has to build that from scratch, which takes time. So we measure the
+            upheaval each squad absorbed three ways: players retained, players joined, and
+            players departed, weighting departures by the minutes those players had played
+            the season before, so losing a key player counts for more than losing a squad
+            filler.
           </p>
           <p>
-            Weighting departures this way means the figure reflects not just how many
-            players left, but how much of the team that actually played walked out the
-            door.
-          </p>
-          <p>
-            Of the squad that won the title in 2003/04,{" "}
-            <b>{ct["2003/04"].retention_pct.toFixed(1)}%</b> had been at the club the
-            previous season and only {ct["2003/04"].incoming} players were new. The 2025/26
-            title squad was far less settled:{" "}
-            <b>{ct["2025/26"].retention_pct.toFixed(1)}%</b> carried over and{" "}
-            {ct["2025/26"].incoming} were new. The departures were comparable in weight,
-            though: the players who left before 2003/04 had accounted for{" "}
-            <b>{ct["2003/04"].departed_minutes_pct}%</b> of the prior season&rsquo;s league
-            minutes, against <b>{ct["2025/26"].departed_minutes_pct}%</b> before 2025/26.
-          </p>
-          <p>
-            Put plainly: imagine last season&rsquo;s team as 100 minutes of playing time.
-            The players who left before 2003/04 accounted for about{" "}
-            {Math.round(ct["2003/04"].departed_minutes_pct)} of those minutes, and before
-            2025/26 about {Math.round(ct["2025/26"].departed_minutes_pct)}. So while 2025/26
-            brought in far more new faces, the two sides lost a similar <b>share</b> of their
-            proven playing time. The difference between the eras is how much was <b>new</b>,
-            not how much departed.
+            The 2003/04 title squad was highly settled:{" "}
+            <b>{ct["2003/04"].retention_pct.toFixed(1)}%</b> carried over from the previous
+            season, with only {ct["2003/04"].incoming} new faces. The 2025/26 squad was far
+            less so: <b>{ct["2025/26"].retention_pct.toFixed(1)}%</b> carried over, with{" "}
+            {ct["2025/26"].incoming} new players. But the two lost a similar share of their
+            proven playing time. Imagine last season as 100 minutes on the pitch: the players
+            who left before 2003/04 accounted for about{" "}
+            {Math.round(ct["2003/04"].departed_minutes_pct)} of them, before 2025/26 about{" "}
+            {Math.round(ct["2025/26"].departed_minutes_pct)}.
           </p>
           <SquadStabilityChart bySeason={ct} />
           <LimitationNote>
@@ -155,13 +140,10 @@ export function SectionB({ c }: { c: Circumstances }) {
             one era would not make a fair comparison.
           </LimitationNote>
           <Reading>
-            The 2025/26 title was won amid real turnover on the incoming side: more than
-            twice as many new signings, and only two-thirds of the title squad carried
-            over from the year before. The weight of what left was similar to
-            2003/04&rsquo;s, so the difference is how much was new, not what departed. The
-            Invincibles, by contrast, were an already-settled group. A team integrating
-            that many new players usually needs time to gel, so in that respect the later
-            title asked more of its squad.
+            So the eras differ less than the raw squad turnover suggests. Both lost a similar
+            share of their established core; what set 2025/26 apart was the number of new
+            players it had to integrate, not a bigger loss of proven quality. It was a harder
+            integration job, not a deeper rebuild.
           </Reading>
         </div>
       </Reveal>

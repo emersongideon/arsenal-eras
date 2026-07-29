@@ -138,29 +138,15 @@ export function SectionC({ p, congestion }: { p: Physical; congestion: Congestio
           </p>
           <CongestionTimeline bySeason={fc} />
 
-          <Reading>
-            The 2025/26 side carried a heavier and more compressed schedule, with more games
-            and far more of them crammed into short-rest windows. This is the clearest
-            physical difference between the two seasons, and unlike tracking data, it can be
-            measured the same way for both.
-          </Reading>
-        </div>
-      </Reveal>
-
-      {/* C3 - the payoff: did the load cost points? (absorbed from old Section D) */}
-      <Reveal delay={60}>
-        <div className="card sublayer">
-          <div className="sublayer-head">
-            <h3>3. Did it cost points?</h3>
-            <CategoryBadge category="measured" />
-          </div>
-          <p>
-            So did it cost them? This is the test the whole section builds to: did either
-            side actually drop more points when it played on short rest? We take the same
-            rest-gaps from the fixture data and line them up against the points won in each
-            league game.
+          {/* closing beat of part 2: did the compressed schedule cost points? */}
+          <p className="chart-title" style={{ marginTop: 22 }}>
+            Did the compressed schedule cost points?
           </p>
-          <div className="chart-card" style={{ margin: "16px 0 6px" }}>
+          <p className="chart-sub">
+            The real test: did either side actually drop more points when it played on short
+            rest? We line the same rest-gaps up against the points won in each league game.
+          </p>
+          <div className="chart-card" style={{ margin: "8px 0 6px" }}>
             <p className="chart-title" style={{ margin: "0 6px 2px" }}>
               League points per game, by rest before the match
             </p>
@@ -178,13 +164,14 @@ export function SectionC({ p, congestion }: { p: Physical; congestion: Congestio
               treat the per-bucket figures as indicative rather than decisive.
             </p>
           </div>
-          <p>
-            The honest answer: it did not. Neither side&rsquo;s points per game dropped on
-            short rest relative to its own baseline; if anything both edged slightly higher.
-            So the heavier, more compressed 2025/26 calendar reads as a load the side
-            absorbed rather than a visible cost in dropped points. That is a genuine finding,
-            not a disappointment: the physical demand was real, but this side carried it.
-          </p>
+          <Reading>
+            So the compressed calendar did not, in the end, cost points: 2025/26&rsquo;s
+            points per game held up in short-rest games rather than dropping. That matters
+            for how we read the physical picture. The schedule was heavier, but the side
+            absorbed it, so the more telling physical difference between the two eras is not
+            the calendar but the age of the team carrying it, which is where we started this
+            section.
+          </Reading>
         </div>
       </Reveal>
 

@@ -253,14 +253,17 @@ honesty** matters most.
     *incoming* side (signings + low carryover), not departures - and the report copy says
     exactly that rather than the tidier "more out" story the counts might suggest. The
     frontend `SquadStabilityChart` shows all three movements (retained / joined / departed,
-    departures in an outgoing red) with a **raw/weighted toggle**: "By player count" is the
-    headcount view (grouped bars: joined differs a lot, 4 vs 9), and "By minutes" splits
-    last season's playing time into the share kept vs the share that left (a 100% stacked
-    bar), which is where the 16.7% / 15.6% departure figures live and where "similar share
-    of proven minutes lost despite far more bodies in" becomes visible. New arrivals have no
-    prior-season minutes, so they are intentionally absent from the weighted view (noted in
-    a caption). Retained-minutes share is derived in the frontend as `100 - departed_pct`
-    from the exported fields; no new data.
+    departures in an outgoing red) with a **raw/weighted toggle**, and both views are the
+    SAME three grouped bars so flipping is a clean value-morph. "By player count" is the
+    headcount view (joined differs a lot, 4 vs 9). "By minutes" weights each by last
+    season's minutes: the new-in bar **collapses to 0%** (new arrivals carried none of last
+    season's playing time), while retained/departed become shares of prior minutes, and the
+    departed shares come out close (16.7% vs 15.6%). So the flip itself demonstrates the
+    copy's point: 2025/26 moved far more players, but the share of proven minutes lost was
+    similar. Retained-minutes share is derived in the frontend as `100 - departed_pct` from
+    the exported fields; no new data. The stability body copy is three paragraphs (settled
+    vs rebuilt; the figures with the "100 minutes" analogy; and the takeaway that the eras
+    differ less than raw turnover suggests, a harder integration job not a deeper rebuild).
 - **`physical.py` (Section C)** - two metrics that exist cleanly for BOTH eras:
   - *Minutes-weighted squad age* - birthdates weighted by that season's league minutes
     (weighted age answers "how old was the team that actually played", not the flat
@@ -282,14 +285,17 @@ honesty** matters most.
     a grouped bar of the rest-gap buckets (the direct evidence that 2025/26 is weighted
     toward short rest: 30 games on 3 days' rest vs 13), and **Visual B**, a per-season
     Aug->May timeline where every match is a tick placed by date, short-rest games in a
-    hot colour, so the clusters (December, the modern European weeks) are visible; hover
-    gives competition, date and rest days. Totals reconstruct to 59 (2003/04) and 63
+    hot orange, plus **congested-stretch bands** (runs of 3+ games in quick succession)
+    shaded in a distinct indigo wash so "where games bunched" (December, the modern
+    January/February European weeks) reads at a glance without studying it; hover gives
+    competition, date and rest days. Totals reconstruct to 59 (2003/04) and 63
     (2025/26) and short-rest counts to 19 and 30, verified against the assembled fixture
     list. This is also where the honesty note lives: modern tracking data (distance,
     sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately excluded rather
     than fabricated.
-- **`congestion.py` (Section C, part 3 - "Did it cost points?")** - the physical
-  force's payoff, absorbed into Section C (it used to be its own Section D). Synthesises
+- **`congestion.py` (Section C, folded into part 2 as its closing beat)** - the physical
+  force's payoff (formerly its own Section D, then a part 3, now the closing beat of the
+  fixture-congestion part, so it is not a separate third point). Synthesises
   the rest-gaps (Section C part 2) with match results (Section A) to ask whether the more
   compressed 2025/26 schedule actually cost points. **Bucket definition:** each of the 38 LEAGUE
   games per season is split into "short rest" (`<= 3` days) or "normal rest" (`4+` days),
@@ -317,12 +323,20 @@ honesty** matters most.
   index); y = **over-performance**, actual minus model-expected points, from the SAME
   Poisson model fit per club on that club's 38 matches (per-match xG pulled once from
   Understat's EPL league page, `understat_epl_2025.json`). Every club's actual points is
-  cross-checked against the final table. The inside force is deliberately absent here
-  because squad/fixture data cannot be built to the Section B/C standard for rivals. (2)
+  cross-checked against the final table. Dots are **labelled directly** for Arsenal plus
+  the notable ones (top over-performers and clear outliers, short names); the crowded
+  mid-table is left to hover so labels stay legible. The inside force is deliberately
+  absent here because squad/fixture data cannot be built to the Section B/C standard for
+  rivals. (2)
   An **Arsenal-only combined** difficulty for its two complete-data seasons: equal-weighted
   average of three components normalised 0-1 across the two eras - outside (title-race
-  pressure), inside (minutes-weighted departures), inside (short-rest share). The recipe
-  box states the equal weighting is a tunable default. **Key honesty point:** on the peer
+  pressure), inside (minutes-weighted departures), inside (short-rest share). The chart
+  leads with the **RAW values** (each on its own scale: pressure 0.85 vs 1.36, departures
+  16.7% vs 15.6%, short-rest 32.2% vs 47.6%) so the true, non-binary size of each gap is
+  the headline; the normalised 0-1 combine (which looks binary because min-max across just
+  two seasons forces each component to 0 or 1) is demoted to a supporting element with a
+  note explaining why. The recipe box states the equal weighting is a tunable default.
+  **Key honesty point:** on the peer
   plane Arsenal sits at the LOWEST field resistance (it pulled clear of the pack) and the
   HIGHEST over-performance - top-left, not top-right. Nothing for peers is estimated; the
   interpretation copy is written to match where Arsenal actually lands.

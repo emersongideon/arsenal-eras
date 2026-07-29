@@ -478,7 +478,9 @@ export function SquadStabilityChart({
     const retainedPct =
       Math.round(((b.prior_total_minutes - b.departed_minutes) / b.prior_total_minutes) * 1000) /
       10;
-    return { season: s, Retained: retainedPct, Departed: b.departed_minutes_pct };
+    // New arrivals carry 0 of LAST season's minutes (they were not yet here), so
+    // weighting collapses that bar - which is exactly the point the flip makes.
+    return { season: s, Retained: retainedPct, "New in": 0, Departed: b.departed_minutes_pct };
   });
 
   const isMinutes = view === "minutes";
@@ -531,34 +533,21 @@ export function SquadStabilityChart({
             formatter={(v: number | string) => lbl(v)}
           />
           <Legend verticalAlign="top" height={30} />
-          {isMinutes ? (
-            <>
-              <Bar dataKey="Retained" stackId="a" fill={KEPT}>
-                <LabelList dataKey="Retained" position="insideTop" fill="#fff" fontSize={12} formatter={lbl} />
-              </Bar>
-              <Bar dataKey="Departed" stackId="a" fill={OUT} radius={[3, 3, 0, 0]}>
-                <LabelList dataKey="Departed" position="insideTop" fill="#fff" fontSize={12} formatter={lbl} />
-              </Bar>
-            </>
-          ) : (
-            <>
-              <Bar dataKey="Retained" fill={KEPT} radius={[3, 3, 0, 0]}>
-                <LabelList dataKey="Retained" position="top" fontSize={11} formatter={lbl} />
-              </Bar>
-              <Bar dataKey="New in" fill={NEWIN} radius={[3, 3, 0, 0]}>
-                <LabelList dataKey="New in" position="top" fontSize={11} formatter={lbl} />
-              </Bar>
-              <Bar dataKey="Departed" fill={OUT} radius={[3, 3, 0, 0]}>
-                <LabelList dataKey="Departed" position="top" fontSize={11} formatter={lbl} />
-              </Bar>
-            </>
-          )}
+          <Bar dataKey="Retained" fill={KEPT} radius={[3, 3, 0, 0]}>
+            <LabelList dataKey="Retained" position="top" fontSize={11} formatter={lbl} />
+          </Bar>
+          <Bar dataKey="New in" fill={NEWIN} radius={[3, 3, 0, 0]}>
+            <LabelList dataKey="New in" position="top" fontSize={11} formatter={lbl} />
+          </Bar>
+          <Bar dataKey="Departed" fill={OUT} radius={[3, 3, 0, 0]}>
+            <LabelList dataKey="Departed" position="top" fontSize={11} formatter={lbl} />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
 
       <p className="chart-note">
         {isMinutes
-          ? "Each season's bar is last season's playing time split into the share kept (retained) and the share that left (departed). New arrivals had no prior-season minutes, so they are not shown in this view."
+          ? `Weighted by last season's minutes. New arrivals contributed 0% of last season's playing time (they were not yet at the club), so the new-in bar collapses; what stayed sits against what left, and the departed share is close across the eras (${bySeason["2003/04"].departed_minutes_pct}% vs ${bySeason["2025/26"].departed_minutes_pct}%) even though 2025/26 moved far more players.`
           : "Headcount of players retained, joined and departed versus the prior season."}
       </p>
     </div>
@@ -1263,9 +1252,37 @@ function SynthTip({
  *  club); y = over-performance (actual minus model-expected points). Arsenal
  *  highlighted; peers muted, identified on hover. Top-right = crowded field AND
  *  beat the model. */
+const CLUB_SHORT: Record<string, string> = {
+  "Manchester City": "Man City",
+  "Manchester United": "Man Utd",
+  "Wolverhampton Wanderers": "Wolves",
+  "Nottingham Forest": "Forest",
+  "Tottenham Hotspur": "Spurs",
+  "Newcastle United": "Newcastle",
+  "West Ham United": "West Ham",
+  "Brighton & Hove Albion": "Brighton",
+  "Crystal Palace": "Palace",
+};
+// Labelled directly on the chart: Arsenal plus the notable dots (top over-performers
+// and the clear outliers). The crowded mid-table is left to hover, so labels stay
+// legible rather than overlapping into a mush.
+const NOTABLE = new Set([
+  "Manchester City",
+  "Manchester United",
+  "Aston Villa",
+  "Sunderland",
+  "Fulham",
+  "Wolverhampton Wanderers",
+  "Burnley",
+]);
+const short = (c: string) => CLUB_SHORT[c] ?? c;
+
 export function SynthesisScatter({ clubs }: { clubs: PeerClub[] }) {
+  const withLabel = (c: PeerClub) => ({ ...c, label: short(c.club) });
   const peers = clubs.filter((c) => !c.is_arsenal);
-  const arsenal = clubs.filter((c) => c.is_arsenal);
+  const notablePeers = peers.filter((c) => NOTABLE.has(c.club)).map(withLabel);
+  const otherPeers = peers.filter((c) => !NOTABLE.has(c.club));
+  const arsenal = clubs.filter((c) => c.is_arsenal).map(withLabel);
   const xs = clubs.map((c) => c.field_resistance);
   const ys = clubs.map((c) => c.over_performance);
   const xMax = Math.ceil(Math.max(...xs));
@@ -1312,60 +1329,107 @@ export function SynthesisScatter({ clubs }: { clubs: PeerClub[] }) {
           label={{ value: "met expectation", position: "insideRight", fill: "#9aa4b2", fontSize: 10 }}
         />
         <Tooltip content={<SynthTip />} cursor={{ strokeDasharray: "3 3" }} />
-        <Scatter data={peers} fill="#9aa4b2" fillOpacity={0.85} isAnimationActive={false} />
+        <Scatter data={otherPeers} fill="#9aa4b2" fillOpacity={0.85} isAnimationActive={false} />
+        <Scatter data={notablePeers} fill="#6b7482" fillOpacity={0.95} isAnimationActive={false}>
+          <LabelList dataKey="label" position="top" fontSize={10} fill="#5e6772" />
+        </Scatter>
         <Scatter data={arsenal} fill={RED} isAnimationActive={false}>
           <ZAxis range={[190, 190]} />
-          <LabelList dataKey="club" position="top" fontSize={12} fontWeight={700} fill={RED} />
+          <LabelList dataKey="label" position="top" fontSize={12} fontWeight={700} fill={RED} />
         </Scatter>
       </ScatterChart>
     </ResponsiveContainer>
   );
 }
 
-/** Part 2: Arsenal's full two-force combined difficulty across its two
- *  complete-data seasons. Each component normalised 0-1 across the two seasons,
- *  then equal-weighted into the Combined score. */
+/** Part 2: Arsenal's full two-force difficulty across its two complete-data
+ *  seasons. The RAW values are the headline (each on its own scale, so the true,
+ *  non-binary size of every gap is visible); the normalised 0-1 combine is demoted
+ *  to a supporting element showing how the 0.33 / 0.67 score is built. */
 export function ArsenalCombinedChart({
   combined,
 }: {
   combined: SynthesisD["arsenal_combined"];
 }) {
   const be = combined.by_era;
-  const data = [
+  const metrics: {
+    key: "field" | "departures" | "short_rest";
+    label: string;
+    fmt: (v: number) => string;
+  }[] = [
+    { key: "field", label: "Title-race pressure", fmt: (v) => v.toFixed(2) },
+    { key: "departures", label: "Minutes-weighted departures", fmt: (v) => `${v.toFixed(1)}%` },
+    { key: "short_rest", label: "Short-rest share of games", fmt: (v) => `${v.toFixed(1)}%` },
+  ];
+  const normData = [
     { label: "Field pressure", "2003/04": be["2003/04"].norm.field, "2025/26": be["2025/26"].norm.field },
     { label: "Departures", "2003/04": be["2003/04"].norm.departures, "2025/26": be["2025/26"].norm.departures },
     { label: "Short-rest", "2003/04": be["2003/04"].norm.short_rest, "2025/26": be["2025/26"].norm.short_rest },
     { label: "Combined", "2003/04": be["2003/04"].difficulty, "2025/26": be["2025/26"].difficulty },
   ];
   const fmt = (v: number | string) => Number(v).toFixed(2);
+
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data} margin={{ top: 22, right: 16, bottom: 8, left: -16 }}>
-        <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey="label" stroke={AXIS} tick={{ fontSize: 12 }} />
-        <YAxis
-          stroke={AXIS}
-          tick={{ fontSize: 12 }}
-          domain={[0, 1]}
-          ticks={[0, 0.5, 1]}
-          label={{
-            value: "normalised difficulty (0 to 1)",
-            angle: -90,
-            position: "insideLeft",
-            offset: 14,
-            fill: AXIS,
-            fontSize: 11,
-          }}
-        />
-        <Tooltip contentStyle={ttStyle} formatter={fmt} cursor={{ fill: "rgba(0,0,0,.03)" }} />
-        <Legend verticalAlign="top" height={30} />
-        <Bar dataKey="2003/04" fill={GOLD} radius={[3, 3, 0, 0]}>
-          <LabelList dataKey="2003/04" position="top" formatter={fmt} fontSize={11} />
-        </Bar>
-        <Bar dataKey="2025/26" fill={RED} radius={[3, 3, 0, 0]}>
-          <LabelList dataKey="2025/26" position="top" formatter={fmt} fontSize={11} />
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+    <div className="combined-chart">
+      <p className="combined-head">The raw values, the true size of each gap</p>
+      <div className="raw-metrics">
+        {metrics.map((m) => {
+          const a = be["2003/04"].raw[m.key];
+          const b = be["2025/26"].raw[m.key];
+          const max = Math.max(a, b) || 1;
+          return (
+            <div className="raw-metric" key={m.key}>
+              <p className="raw-metric-label">{m.label}</p>
+              {(
+                [
+                  ["2003/04", a, "s0304"],
+                  ["2025/26", b, "s2526"],
+                ] as const
+              ).map(([yr, val, cls]) => (
+                <div className={`raw-row ${cls}`} key={yr}>
+                  <span className="raw-yr">{yr}</span>
+                  <span className="raw-track">
+                    <span className="raw-fill" style={{ width: `${(val / max) * 100}%` }} />
+                  </span>
+                  <span className="raw-val">{m.fmt(val)}</span>
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="combined-head" style={{ marginTop: 18 }}>
+        How the equal-weighted score is built{" "}
+        <span className="dim">(each component scaled 0 to 1 across the two seasons, then averaged)</span>
+      </p>
+      <ResponsiveContainer width="100%" height={220}>
+        <BarChart data={normData} margin={{ top: 20, right: 16, bottom: 8, left: -16 }}>
+          <CartesianGrid stroke={GRID} vertical={false} />
+          <XAxis dataKey="label" stroke={AXIS} tick={{ fontSize: 11 }} />
+          <YAxis
+            stroke={AXIS}
+            tick={{ fontSize: 11 }}
+            domain={[0, 1]}
+            ticks={[0, 0.5, 1]}
+          />
+          <Tooltip contentStyle={ttStyle} formatter={fmt} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+          <Legend verticalAlign="top" height={28} />
+          <Bar dataKey="2003/04" fill={GOLD} radius={[3, 3, 0, 0]}>
+            <LabelList dataKey="2003/04" position="top" formatter={fmt} fontSize={10} />
+          </Bar>
+          <Bar dataKey="2025/26" fill={RED} radius={[3, 3, 0, 0]}>
+            <LabelList dataKey="2025/26" position="top" formatter={fmt} fontSize={10} />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+
+      <p className="chart-note">
+        The normalised bars look binary because each component is scaled across just two
+        seasons, so one season is always the maximum and the other the minimum. The raw
+        values above show the true size of each gap: on departures the two eras are nearly
+        identical, while on pressure and congestion 2025/26 is clearly higher.
+      </p>
+    </div>
   );
 }

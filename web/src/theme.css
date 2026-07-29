@@ -340,18 +340,20 @@ a {
   width: 1px;
   background: #e6e9ee;
 }
+/* congested-stretch bands use a distinct indigo wash, clearly different from the
+   hot-orange short-rest ticks, so "where games bunched" reads at a glance. */
 .tl-band {
   position: absolute;
   top: 0;
   bottom: 0;
-  background: rgba(255, 90, 31, 0.13);
-  border-left: 1px solid rgba(255, 90, 31, 0.35);
-  border-right: 1px solid rgba(255, 90, 31, 0.35);
+  background: rgba(79, 70, 229, 0.13);
+  border-left: 1px dashed rgba(79, 70, 229, 0.5);
+  border-right: 1px dashed rgba(79, 70, 229, 0.5);
   border-radius: 4px;
 }
 .tl-swatch.band {
-  background: rgba(255, 90, 31, 0.18);
-  border: 1px solid rgba(255, 90, 31, 0.5);
+  background: rgba(79, 70, 229, 0.16);
+  border: 1px dashed rgba(79, 70, 229, 0.6);
 }
 .tl-tick {
   position: absolute;
@@ -622,6 +624,86 @@ a {
   text-align: right;
   font-weight: 700;
   color: var(--ink);
+}
+
+/* Section D - Arsenal combined chart: raw-value mini bars (the headline) */
+.combined-chart {
+  margin-top: 4px;
+}
+.combined-head {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 6px 8px;
+}
+.combined-head .dim {
+  font-weight: 400;
+}
+.raw-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 0 4px;
+}
+.raw-metric {
+  background: #f6f8fa;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.raw-metric-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--body);
+}
+.raw-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+  font-size: 11.5px;
+}
+.raw-yr {
+  flex: 0 0 46px;
+  color: var(--muted);
+}
+.raw-row.s0304 .raw-yr {
+  color: var(--gold-text);
+  font-weight: 700;
+}
+.raw-row.s2526 .raw-yr {
+  color: var(--red-text);
+  font-weight: 700;
+}
+.raw-track {
+  flex: 1 1 auto;
+  height: 12px;
+  background: #e6e9ee;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.raw-fill {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+}
+.raw-row.s0304 .raw-fill {
+  background: var(--gold);
+}
+.raw-row.s2526 .raw-fill {
+  background: var(--red);
+}
+.raw-val {
+  flex: 0 0 48px;
+  text-align: right;
+  font-weight: 700;
+  color: var(--ink);
+}
+@media (max-width: 640px) {
+  .raw-metrics {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* pivot line (Section A transition into the framework) */
