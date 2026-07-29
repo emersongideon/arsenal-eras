@@ -68,7 +68,6 @@ export const content = {
     eyebrow: "Section A · The surface",
     heading: "What the table already tells us",
     lead: "The Invincibles finished on **90 points unbeaten**, plus 47 goal difference, 2.37 points per game. The 2025/26 team won the title on **85 points**, 26 wins and 5 losses, plus 44, 2.24 per game. By numbers alone, 2003/04 is the more dominant season.",
-    pivot: "What if we considered how hard each total was to earn?",
     cumeLeadIn:
       "First, just the shape of each title run: points accumulating week by week. Watch where each line flattens: a flat step is a game that did not bring three points.",
     cumeTitle: "The title race, week by week",
@@ -83,7 +82,7 @@ export const content = {
     link: "These two charts show what each season looked like on the surface: how the points came, and how the goals matched the chances. Neither yet says how **hard** that surface was to produce. That is what the rest of the report measures, starting with the two forces below.",
     forcesHeading: "How hard was each title to win?",
     forcesLead:
-      "The table tells us how dominant each season was, not how hard it was to win. Those are different questions. How hard a title is to win comes down to two forces: the resistance from outside, meaning how strong the rest of the league was, and the strain from inside, meaning how settled the squad was and how much physical load it carried. The rest of this report measures each force in turn, then combines them.",
+      "The table tells us how dominant each season was, not how hard it was to win. Those are different questions, and the second one has no official answer, so this report proposes one. The claim is simple: how hard a title was to win can be captured by a short list of measurable factors, and those factors fall into two forces. The resistance from outside is how strong the rest of the league was. The strain from inside is how settled the squad was and how much physical load it carried. Sections B and C measure each factor for both eras; Section D then scales them onto one axis and averages them into a single difficulty score, laid out so you can see every factor that went in and reweight it yourself.",
     forceOutsideTag: "Outside",
     forceOutsideName: "The field",
     forceOutsideDesc: "How much resistance the rest of the league applied.",

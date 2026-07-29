@@ -115,10 +115,6 @@ export function SectionA({
         </p>
       </Reveal>
 
-      <Reveal delay={60}>
-        <p className="pivot-line">{t.pivot}</p>
-      </Reveal>
-
       <Reveal delay={70}>
         <p className="narrow" style={{ margin: "6px auto 14px" }}>
           {t.cumeLeadIn}

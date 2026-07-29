@@ -1404,17 +1404,53 @@ export function ArsenalCombinedChart({
         })}
       </div>
 
-      <p className="combined-prose">
-        To combine these into one difficulty score, each component is scaled from 0 to 1
-        across the two seasons and the three are averaged with equal weight. Because there
-        are only two seasons, each component scales to either 0 or 1, so the average is
-        coarse by design: 2003/04 comes out at {be["2003/04"].difficulty.toFixed(2)} and
-        2025/26 at {be["2025/26"].difficulty.toFixed(2)}. The number to trust is not its
-        precision but its direction. It reflects the raw values above: the two eras are
-        nearly identical on departures, while 2025/26 is clearly higher on both title-race
-        pressure and fixture congestion. Two of the three forces point to 2025/26 as the
-        harder task, which is what the combined score reflects.
-      </p>
+      <div className="model-eq">
+        <p className="combined-head">The model, stated</p>
+        <p className="model-eq-formula">
+          difficulty = average of ( <b>field</b>, <b>departures</b>, <b>short-rest</b> ),
+          each scaled 0 to 1 across the two seasons
+        </p>
+        <div className="model-eq-scroll">
+          <div className="model-eq-grid">
+            <div className="meq-row meq-head">
+              <span className="meq-era" />
+              <span className="meq-c">field</span>
+              <span className="meq-c">departures</span>
+              <span className="meq-c">short-rest</span>
+              <span className="meq-arrow" aria-hidden="true" />
+              <span className="meq-d">difficulty</span>
+            </div>
+            {(
+              [
+                ["2003/04", "s0304"],
+                ["2025/26", "s2526"],
+              ] as const
+            ).map(([yr, cls]) => {
+              const n = be[yr].norm;
+              return (
+                <div className={`meq-row ${cls}`} key={yr}>
+                  <span className="meq-era">{yr}</span>
+                  <span className="meq-c">{n.field.toFixed(2)}</span>
+                  <span className="meq-c">{n.departures.toFixed(2)}</span>
+                  <span className="meq-c">{n.short_rest.toFixed(2)}</span>
+                  <span className="meq-arrow" aria-hidden="true">
+                    →
+                  </span>
+                  <span className="meq-d">{be[yr].difficulty.toFixed(2)}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <p className="model-eq-note">
+          With only two seasons each force scales to exactly 0 or 1, so the score is coarse
+          by design: read the direction, not the decimals. The two eras are nearly identical
+          on departures, while 2025/26 is higher on both title-race pressure and fixture
+          congestion. Two of the three forces point to 2025/26 as the harder task, which is
+          why it lands at {be["2025/26"].difficulty.toFixed(2)} against 2003/04's{" "}
+          {be["2003/04"].difficulty.toFixed(2)}.
+        </p>
+      </div>
     </div>
   );
 }

@@ -336,10 +336,14 @@ honesty** matters most.
   pressure), inside (minutes-weighted departures), inside (short-rest share). The only
   visual is the three **RAW-value cards** (each on its own scale: pressure 0.85 vs 1.36,
   departures 16.7% vs 15.6%, short-rest 32.2% vs 47.6%), which show the true, non-binary
-  size of each gap. The combine itself is then **stated in prose** (0.33 vs 0.67, coarse by
-  design because min-max across just two seasons forces each component to 0 or 1, so trust
-  the direction not the precision) - the normalised component bar chart was removed as
-  redundant with the raw cards. The recipe box states the equal weighting is a tunable
+  size of each gap. Below the raw cards a **stated-model block** ("The model, stated")
+  makes the synthesis explicit as an equation: the formula line, then a small grid showing
+  each **normalised** component plugged in per season (2003/04 `0.00 / 1.00 / 0.00`,
+  2025/26 `1.00 / 0.00 / 1.00`) with an arrow to the resulting **difficulty score** as the
+  headline figure (0.33 vs 0.67). This is the "conclusive equation" the synthesis needed to
+  actually show, not just describe; a note under it keeps the coarse-by-design caveat (min-max
+  across just two seasons forces each component to 0 or 1, so trust the direction not the
+  precision). The recipe box states the equal weighting is a tunable
   default.
   **Key honesty point:** on the peer
   plane Arsenal sits at the LOWEST field resistance (it pulled clear of the pack) and the
@@ -443,8 +447,11 @@ outside force, plus Arsenal's full two-force combined difficulty), E (the verdic
   a **head-to-head comparison**: for each dominance metric the leading figure is marked
   with a green "▲" (points, record/unbeaten, goals, goal difference, PPG all fall to
   2003/04; xG is left unmarked because it is a model estimate read within a season). The
-  cards come before the "how hard was it to earn?" pivot line, so the points story reads
-  in one block. The week-by-week cumulative-points chart **marks the 2025/26 side's 5
+  cards and the surface charts read as one uninterrupted "surface" block (there is no
+  separate pivot line; the framing turn is deferred to the forces block, whose lead now
+  states plainly that the report is *proposing* a difficulty model out of a short list of
+  measurable factors and will average them into one score in Section D). The week-by-week
+  cumulative-points chart **marks the 2025/26 side's 5
   defeats as dots** on its line (the flat steps where no points came), so the loss count
   is visible not just stated; the unbeaten 2003/04 line has none. Section A closes with a
   small
