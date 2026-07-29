@@ -106,6 +106,23 @@ export function InfoTip({
   );
 }
 
+/** Renders an editable copy string (from content.ts) with lightweight markup:
+ *  **bold** becomes <b>, `code` becomes <code>. Everything else is plain text. */
+export function Rich({ children }: { children: string }) {
+  const parts = children.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  return (
+    <>
+      {parts.map((seg, i) => {
+        if (seg.startsWith("**") && seg.endsWith("**"))
+          return <b key={i}>{seg.slice(2, -2)}</b>;
+        if (seg.startsWith("`") && seg.endsWith("`"))
+          return <code key={i}>{seg.slice(1, -1)}</code>;
+        return <span key={i}>{seg}</span>;
+      })}
+    </>
+  );
+}
+
 /** Wraps children in a scroll-reveal container. */
 export function Reveal({
   children,

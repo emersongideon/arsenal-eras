@@ -1,17 +1,16 @@
+import { content } from "../content";
 import { Reveal, Section } from "../components/ui";
+
+const t = content.data;
 
 /** Provenance up front, not buried in a footer: which source covers which era,
  *  and the two deliberate choices that shape the comparison. */
 export function DataSources() {
   return (
-    <Section id="section-data" eyebrow="Before we start · the data">
+    <Section id="section-data" eyebrow={t.eyebrow}>
       <Reveal>
-        <h2>Where every number comes from</h2>
-        <p className="lead narrow">
-          This dashboard is built entirely from public records: shot-level event data,
-          league tables, squads and fixtures. Every source is named here so any figure can
-          be checked or rebuilt.
-        </p>
+        <h2>{t.heading}</h2>
+        <p className="lead narrow">{t.lead}</p>
       </Reveal>
 
       <Reveal delay={80}>
@@ -19,42 +18,24 @@ export function DataSources() {
           <div className="card team-card s0304">
             <span className="rail" />
             <span className="season-tag">2003/04</span>
-            <p style={{ margin: "10px 0 0" }}>
-              Shots and xG from StatsBomb Open Data (Arsenal event-level); tables, squads
-              and fixtures from public season records; minutes derived from lineup stints
-              on a 90-minute baseline. Prior-season (2002/03) minutes, used only for the
-              squad-departure figure, come from FBref&rsquo;s Standard Stats read via an
-              Internet Archive snapshot.
-            </p>
+            <p style={{ margin: "10px 0 0" }}>{t.src0304}</p>
           </div>
           <div className="card team-card s2526">
             <span className="rail" />
             <span className="season-tag">2025/26</span>
-            <p style={{ margin: "10px 0 0" }}>
-              Shots and xG from Understat (per-match and per-player); tables, squads and
-              fixtures from public records; player ages from birthdates, weighted by
-              minutes. Prior-season (2024/25) minutes for the squad-departure figure also
-              from Understat.
-            </p>
+            <p style={{ margin: "10px 0 0" }}>{t.src2526}</p>
           </div>
         </div>
       </Reveal>
 
       <Reveal delay={120}>
         <div className="method narrow" style={{ marginTop: 22 }}>
-          Two choices follow from the data, and they shape everything after. First, the two
-          seasons use different xG models (StatsBomb for 2003/04, Understat for 2025/26),
-          and different models are not directly comparable, so throughout this report xG is
-          only ever compared within a single season, never one era's xG against the
-          other's. Second, shot data for Arsenal's rivals does not exist for 2003/04, so
-          whenever we measure the strength of the chasing pack, we use actual league
-          points, which exist for both eras and can be compared directly. Keep both in
-          mind: xG stays inside its own season, and rivals are judged on points.
+          {t.choices}
         </div>
       </Reveal>
 
       <Reveal delay={80}>
-        <p className="narrow dim handoff">With the sources named, the surface. ↓</p>
+        <p className="narrow dim handoff">{t.handoff}</p>
       </Reveal>
     </Section>
   );

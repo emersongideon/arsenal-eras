@@ -1,6 +1,9 @@
+import { content } from "../content";
 import { CumulativePointsChart, OutputBars } from "../components/charts";
-import { InfoTip, Reveal, Section, seasonClass } from "../components/ui";
+import { InfoTip, Reveal, Rich, Section, seasonClass } from "../components/ui";
 import type { MatchRow, SeasonSummary } from "../types";
+
+const t = content.a;
 
 function TeamCard({ s }: { s: SeasonSummary }) {
   const cls = seasonClass(s.season);
@@ -50,19 +53,13 @@ export function SectionA({
   const s0 = seasons.find((s) => s.season === "2003/04")!;
   const s1 = seasons.find((s) => s.season === "2025/26")!;
   return (
-    <Section id="section-a" eyebrow="Section A · The surface">
+    <Section id="section-a" eyebrow={t.eyebrow}>
       <Reveal>
-        <h2>What the table already tells us</h2>
+        <h2>{t.heading}</h2>
         <p className="lead narrow">
-          The Invincibles finished on <b>{s0.points} points unbeaten</b>, plus{" "}
-          {s0.goal_difference} goal difference, {s0.ppg.toFixed(2)} points per game. The
-          2025/26 team won the title on <b>{s1.points} points</b>, {s1.wins} wins and{" "}
-          {s1.losses} losses, plus {s1.goal_difference}, {s1.ppg.toFixed(2)} per game. By
-          numbers alone, 2003/04 is the more dominant season.
+          <Rich>{t.lead}</Rich>
         </p>
-        <p className="pivot-line">
-          What if we considered how hard each total was to earn?
-        </p>
+        <p className="pivot-line">{t.pivot}</p>
       </Reveal>
 
       <Reveal delay={100}>
@@ -74,110 +71,71 @@ export function SectionA({
 
       <Reveal delay={70}>
         <p className="narrow" style={{ margin: "6px auto 14px" }}>
-          First, just the shape of each title run: points accumulating week by week. Watch
-          where each line flattens: a flat step is a game that did not bring three points.
+          {t.cumeLeadIn}
         </p>
       </Reveal>
 
       <Reveal delay={80}>
         <div className="chart-card" style={{ marginBottom: 18 }}>
-          <p className="chart-title">The title race, week by week</p>
-          <p className="chart-sub">
-            Cumulative league points earned by Arsenal across all 38 matches, 2003/04 vs
-            2025/26. The 2025/26 side lost {s1.losses} times, marked as dots on its line;
-            each is a flat step where no points came. The 2003/04 line has none: unbeaten,
-            it never once flattened into a defeat.
-          </p>
+          <p className="chart-title">{t.cumeTitle}</p>
+          <p className="chart-sub">{t.cumeCaption}</p>
           <CumulativePointsChart matches={matches} />
         </div>
-      </Reveal>
-
-      <Reveal delay={60}>
-        <p className="narrow" style={{ marginBottom: 22 }}>
-          Those {s1.losses} defeats are the first hint that 2025/26 was pushed harder week
-          to week, which Section B examines directly by measuring how strong the chasing
-          pack was.
-        </p>
       </Reveal>
 
       <Reveal delay={80}>
         <div className="chart-card">
           <div className="chart-head-row">
             <p className="chart-title" style={{ margin: 0 }}>
-              Attack and defence: goals vs expected goals
+              {t.xgTitle}
             </p>
             <InfoTip label="What these terms mean">
-              <b>Goals for</b> = goals Arsenal actually scored. <b>Goals against</b> ={" "}
-              goals Arsenal actually conceded. <b>xG for</b> = expected goals, the
-              quality-weighted total of the chances Arsenal created (how many they should
-              have scored). <b>xG against</b> = the same for chances they allowed (how many
-              they should have conceded).
+              <Rich>{t.xgInfo}</Rich>
             </InfoTip>
           </div>
-          <p className="chart-sub">
-            Season totals for both ends of the pitch, grouped by season and labelled with
-            their values.
-          </p>
+          <p className="chart-sub">{t.xgSub}</p>
           <OutputBars seasons={seasons} />
-          <p className="chart-note">
-            2003/04 scored more than its xG (strong finishing), while 2025/26 scored fewer
-            than its high xG but conceded fewer than expected (a defensively efficient
-            title).
-          </p>
+          <p className="chart-note">{t.xgNote}</p>
         </div>
       </Reveal>
 
       <Reveal delay={60}>
         <p className="narrow" style={{ margin: "22px auto" }}>
-          These two charts show what each season looked like on the surface: how the points
-          came, and how the goals matched the chances. Neither yet says how <b>hard</b> that
-          surface was to produce. That is what the rest of the report measures, starting with
-          the two forces below.
+          <Rich>{t.link}</Rich>
         </p>
       </Reveal>
 
       <Reveal delay={80}>
         <div className="forces">
-          <h3 className="forces-h">How hard was each title to win?</h3>
-          <p className="forces-lead narrow">
-            The table tells us how dominant each season was, not how hard it was to win.
-            Those are different questions. How hard a title is to win comes down to two
-            forces: the resistance from outside, meaning how strong the rest of the league
-            was, and the strain from inside, meaning how settled the squad was and how much
-            physical load it carried. The rest of this report measures each force in turn,
-            then combines them.
-          </p>
+          <h3 className="forces-h">{t.forcesHeading}</h3>
+          <p className="forces-lead narrow">{t.forcesLead}</p>
 
           <div className="forces-diagram">
             <div className="forces-inputs">
               <div className="force-box outside">
-                <span className="force-tag">Outside</span>
-                <p className="force-name">The field</p>
-                <p className="force-desc">
-                  How much resistance the rest of the league applied.
-                </p>
+                <span className="force-tag">{t.forceOutsideTag}</span>
+                <p className="force-name">{t.forceOutsideName}</p>
+                <p className="force-desc">{t.forceOutsideDesc}</p>
               </div>
               <span className="forces-plus" aria-hidden="true">
                 +
               </span>
               <div className="force-box inside">
-                <span className="force-tag">Inside</span>
-                <p className="force-name">The squad and body</p>
-                <p className="force-desc">
-                  How settled the squad was and how heavy the physical load it carried.
-                </p>
+                <span className="force-tag">{t.forceInsideTag}</span>
+                <p className="force-name">{t.forceInsideName}</p>
+                <p className="force-desc">{t.forceInsideDesc}</p>
               </div>
             </div>
             <div className="forces-down" aria-hidden="true">
               ↓
             </div>
             <div className="force-box outcome">
-              <p className="force-name">How hard the title was to win</p>
+              <p className="force-name">{t.forceOutcome}</p>
             </div>
           </div>
 
           <p className="narrow dim handoff" style={{ marginTop: 24 }}>
-            We start on the outside: how much resistance the league itself applied. ↓
+            {t.forcesHandoff}
           </p>
         </div>
       </Reveal>

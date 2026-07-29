@@ -398,6 +398,16 @@ B (the field), C (the physical picture - age + fixture congestion + the
 points-under-congestion payoff), D (the synthesis: a whole-league peer scatter on the
 outside force, plus Arsenal's full two-force combined difficulty), E (the verdict).
 
+- **`content.ts`** - **the single editable copy file.** All the report's narrative
+  text (every heading, intro, paragraph, interpretation, callout, caption, handoff, the
+  framework-diagram labels and the Section E table rows) lives here as plain strings,
+  organised by section. Edit the words between the quotes; wrap a phrase in `**...**` for
+  bold or `` `...` `` for code, avoid the em dash, and write numbers straight into the
+  sentences (canonical figures are in `data/processed/*.json`). The section components are
+  thin and just render these strings through a tiny `Rich` helper (in `ui.tsx`) that turns
+  `**bold**`/`` `code` `` into `<b>`/`<code>`. NOT here: the browser tab title and footer
+  provenance (in `analysis/build.py` meta), and chart-internal labels / the Section D
+  combined-chart cards (in `charts.tsx`).
 - **`data.ts`** - loads the baked JSON from `/public/data`.
 - **`types.ts`** - TypeScript interfaces mirroring the JSON shape (type safety across
   the whole UI).

@@ -13,19 +13,13 @@ import { Conclusion } from "./sections/Conclusion";
 export function ReportView({ data }: { data: Dataset }) {
   return (
     <>
-      <Hero meta={data.meta} />
+      <Hero />
       <DataSources />
       <SectionA seasons={data.seasons} matches={data.matches} />
       <SectionB c={data.circumstances} />
       <SectionC p={data.physical} congestion={data.congestion} />
       <SectionD synthesisD={data.synthesisD} />
-      <Conclusion
-        synth={data.synthesis}
-        physical={data.physical}
-        circumstances={data.circumstances}
-        synthesisD={data.synthesisD}
-        seasons={data.seasons}
-      />
+      <Conclusion />
       <footer>
         <div className="wrap">
           <div>
