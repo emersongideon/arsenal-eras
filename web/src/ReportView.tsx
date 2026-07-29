@@ -22,6 +22,8 @@ export function ReportView({ data }: { data: Dataset }) {
       <Conclusion
         synth={data.synthesis}
         physical={data.physical}
+        circumstances={data.circumstances}
+        synthesisD={data.synthesisD}
         seasons={data.seasons}
       />
       <footer>

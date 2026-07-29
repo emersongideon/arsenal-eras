@@ -1,114 +1,169 @@
-import { Reveal, Section } from "../components/ui";
-import type { Physical, SeasonSummary, Synthesis } from "../types";
+import { CategoryBadge, Reveal, Section } from "../components/ui";
+import type {
+  Circumstances,
+  Physical,
+  SeasonSummary,
+  Synthesis,
+  SynthesisD,
+} from "../types";
+
+type FromRef = [label: string, anchor: string];
+
+function FromCell({ refs }: { refs: FromRef[] }) {
+  return (
+    <>
+      {refs.map(([label, anchor], i) => (
+        <span key={anchor}>
+          {i > 0 && " / "}
+          <a href={`#${anchor}`}>{label}</a>
+        </span>
+      ))}
+    </>
+  );
+}
 
 export function Conclusion({
   synth,
   physical,
+  circumstances,
+  synthesisD,
   seasons,
 }: {
   synth: Synthesis;
   physical: Physical;
+  circumstances: Circumstances;
+  synthesisD: SynthesisD;
   seasons: SeasonSummary[];
 }) {
   const s = synth.by_season;
+  const st = circumstances.squad_stability.by_season;
+  const age = physical.squad_age.by_season;
   const fc = physical.fixture_congestion.by_season;
+  const sd = synthesisD.arsenal_combined.by_era;
   const s0 = seasons.find((x) => x.season === "2003/04")!;
+  const s1 = seasons.find((x) => x.season === "2025/26")!;
+
+  const A: FromRef[] = [["A", "section-a"]];
+  const AB: FromRef[] = [["A", "section-a"], ["B", "section-b"]];
+  const B: FromRef[] = [["B", "section-b"]];
+  const C: FromRef[] = [["C", "section-c"]];
+  const D: FromRef[] = [["D", "section-d"]];
+
+  const rows: { dim: string; a: string; b: string; from: FromRef[]; hi?: boolean }[] = [
+    { dim: "Final position / dominance", a: `${s0.points} pts, unbeaten`, b: `${s1.points} pts, ${s1.losses} losses`, from: A },
+    { dim: "Winning margin over 2nd", a: `${s["2003/04"].margin_to_second} pts`, b: `${s["2025/26"].margin_to_second} pts`, from: AB },
+    { dim: "Title-race pressure (own era)", a: `${s["2003/04"].pressure_index}`, b: `${s["2025/26"].pressure_index}`, from: B },
+    { dim: "Squad retained", a: `${s["2003/04"].retention_pct.toFixed(1)}%`, b: `${s["2025/26"].retention_pct.toFixed(1)}%`, from: B },
+    { dim: "Minutes-weighted departures", a: `${st["2003/04"].departed_minutes_pct}%`, b: `${st["2025/26"].departed_minutes_pct}%`, from: B },
+    { dim: "Squad age (minutes-weighted)", a: `${age["2003/04"].minutes_weighted_age}`, b: `${age["2025/26"].minutes_weighted_age}`, from: C },
+    { dim: "Short-rest games", a: `${fc["2003/04"].short_rest_count} of ${fc["2003/04"].total_games}`, b: `${fc["2025/26"].short_rest_count} of ${fc["2025/26"].total_games}`, from: C },
+    { dim: "Points under congestion", a: "held (no drop)", b: "held (no drop)", from: C },
+    { dim: "Model over-performance", a: `+${s["2003/04"].points_over_expected}`, b: `+${s["2025/26"].points_over_expected}`, from: D },
+    { dim: "Combined difficulty (equal weight)", a: sd["2003/04"].difficulty.toFixed(2), b: sd["2025/26"].difficulty.toFixed(2), from: D, hi: true },
+  ];
 
   return (
     <Section id="section-e" eyebrow="Section E · What this surfaces">
       <Reveal>
-        <h2>The finding, and where it goes next</h2>
+        <h2>The verdict</h2>
         <p className="lead narrow">
-          The two titles were won in opposite ways, against different challenges. That is
-          the finding, and it comes from the measurements above, not from opinion.
-        </p>
-        <p className="narrow">
-          2003/04 was the more dominant season on every raw and model measure: the bigger
-          winning margin, the larger over-performance, and unbeaten across all{" "}
-          {s0.played} games. 2025/26 was won against a closer rival and with a less settled
-          squad. The data does not crown one task as harder than the other, and no single
-          number should. What it does is break &lsquo;difficulty&rsquo; into parts that can
-          each be measured and checked, so the judgement rests on evidence rather than
-          memory.
+          Everything the report measured, in one place, and then a call, marked clearly as
+          a judgement rather than a finding.
         </p>
       </Reveal>
 
-      <Reveal delay={80}>
-        <div className="verdict" style={{ marginTop: 26 }}>
-          <div className="col s0304">
-            <h3 style={{ color: "#8a6610" }}>
-              The case that 2003/04 faced the harder task
-            </h3>
-            <ul>
-              <li>
-                Went unbeaten across all {s0.played} games, which no side has managed
-                since.
-              </li>
-              <li>
-                Won by the bigger margin, {s["2003/04"].margin_to_second} points clear, and
-                beat the model by more, at +{s["2003/04"].points_over_expected}.
-              </li>
-              <li>
-                Did it with a settled squad, {s["2003/04"].retention_pct}% retained, and
-                never lost a match all season.
-              </li>
-              <li>
-                Scored more than its expected goals ({s0.goals_for} from{" "}
-                {s0.xg_for.toFixed(1)}), so the finishing backed up the chances.
-              </li>
-            </ul>
-          </div>
-          <div className="col s2526">
-            <h3 style={{ color: "#d90007" }}>
-              The case that 2025/26 faced the harder task
-            </h3>
-            <ul>
-              <li>
-                Faced a closer field: {s["2025/26"].margin_to_second} points clear of a
-                Manchester City side on {s["2025/26"].runner_up_points}, a pressure index
-                of {s["2025/26"].pressure_index} against {s["2003/04"].pressure_index}.
-              </li>
-              <li>
-                Won while rebuilding, with only {s["2025/26"].retention_pct}% of the squad
-                retained and {s["2025/26"].incoming} new players to settle in.
-              </li>
-              <li>
-                Carried a heavier, more compressed calendar ({fc["2025/26"].total_games}{" "}
-                games, {fc["2025/26"].short_rest_count} short-rest turnarounds against{" "}
-                {fc["2003/04"].total_games} and {fc["2003/04"].short_rest_count}) and,
-                notably, absorbed it: its points-per-game did not drop in short-rest games,
-                so the load was a condition it met rather than a cost it paid.
-              </li>
-              <li>
-                Beat the model by +{s["2025/26"].points_over_expected} while under-shooting
-                its xG, a title leaning more on defence.
-              </li>
-            </ul>
-          </div>
+      {/* E.1 - the contrast table */}
+      <Reveal delay={70}>
+        <div className="tbl-wrap" style={{ marginTop: 22 }}>
+          <table className="cmp-table">
+            <thead>
+              <tr>
+                <th>Dimension of difficulty</th>
+                <th className="s0304">2003/04</th>
+                <th className="s2526">2025/26</th>
+                <th>From</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.dim} className={r.hi ? "hi" : ""}>
+                  <td>{r.dim}</td>
+                  <td className="ta-c">{r.a}</td>
+                  <td className="ta-c">{r.b}</td>
+                  <td className="ta-c">
+                    <FromCell refs={r.from} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="dim" style={{ fontSize: 13, marginTop: 8 }}>
+            Each row links back to the section it came from.
+          </p>
         </div>
       </Reveal>
 
+      {/* E.2 - the model's even-handed result */}
       <Reveal delay={70}>
-        <p className="narrow" style={{ marginTop: 26 }}>
-          <strong>What the whole picture surfaces.</strong> Difficulty is not one thing, so
-          it does not reduce to one number. 2003/04 was the more dominant campaign; 2025/26
-          was won in tighter, more crowded conditions and still held its level under a
-          schedule that should have punished it. Which of those is the &lsquo;harder&rsquo;
-          task depends on what you weigh, and the honest answer is that the data lays out
-          the trade-off rather than settling it.
+        <h3 style={{ marginTop: 30 }}>What the model concludes, weighted evenly</h3>
+        <p className="narrow">
+          Weighted evenly, the model reaches a clear answer: 2025/26 faced the harder task.
+          It won against a tighter field, with a less settled squad, across a more congested
+          calendar, and its combined difficulty score ({sd["2025/26"].difficulty.toFixed(2)}
+          ) sits well above 2003/04&rsquo;s ({sd["2003/04"].difficulty.toFixed(2)}). Two of
+          the three forces point the same way. If difficulty is the even-weighted sum of
+          these forces, 2025/26 is the harder title.
         </p>
       </Reveal>
 
+      {/* E.3 - the human verdict, clearly a view */}
+      <Reveal delay={70}>
+        <h3 style={{ marginTop: 30 }}>The verdict, and it is a view</h3>
+        <div className="reading" style={{ marginTop: 10 }}>
+          <CategoryBadge category="interpretation" />
+          <p style={{ margin: "8px 0 0" }}>
+            Here I will step in with a view, and mark it clearly as a view, not a finding.
+            The model weights the three forces equally. I do not. To me, going unbeaten
+            across all 38 games is not one force among several to be averaged in; it is a
+            different category of hard. It allows no margin. One poor afternoon anywhere
+            across nine months ends it, and no side has managed it since. A high combined
+            difficulty score reflects a season that was demanding on average; an unbeaten
+            season reflects one that was unforgiving at every single step. By the weighting I
+            find most convincing, that makes 2003/04 the harder task.
+          </p>
+          <p style={{ margin: "12px 0 0" }}>
+            I want to be honest about what that is. It is a judgement about what to weight,
+            not a correction of the model. The even-handed reading points to 2025/26, and
+            anyone who weights the three forces as the model does, rather than singling out
+            the unbeaten run as I have, would reasonably conclude 2025/26 was harder. The
+            data lays out the trade-off cleanly; which way it tips depends on the one choice
+            the data cannot make for you, and I have made mine.
+          </p>
+        </div>
+      </Reveal>
+
+      {/* E.4 - where this goes next */}
       <Reveal delay={80}>
-        <div className="method narrow" style={{ marginTop: 26 }}>
-          <strong>Where this could go next.</strong> None of these measures are specific to
-          Arsenal or to these two seasons. Applied across every past title race, the
-          pressure index and the squad-stability measure would give a baseline for how hard
-          any season was to win, which any team's campaign could be judged against. The same
-          stability measure, pointed at a squad going into a new season, could help estimate
-          how much a summer of heavy signings might cost in points before a new group
-          settles. That is the natural next step: turning a look back at two seasons into a
-          repeatable way to read the season ahead.
+        <div className="method narrow" style={{ marginTop: 30 }}>
+          <strong>Where this goes next.</strong>
+          <ul style={{ margin: "10px 0 0", paddingLeft: 20 }}>
+            <li>
+              Run the pressure index and squad-stability measures across every past title
+              race, building a season-difficulty baseline any campaign can be judged against.
+            </li>
+            <li>
+              Point the squad-stability read forward, estimating how much a summer of heavy
+              signings might cost in points before a new group settles.
+            </li>
+            <li>
+              Extend the peer scatter&rsquo;s inside-force axis once league-wide squad and
+              fixture data is sourced, placing any club fully on both forces.
+            </li>
+            <li>
+              And with richer data there are further factors, opponent-adjusted strength and
+              match-state among them, that the model could fold in from here.
+            </li>
+          </ul>
         </div>
       </Reveal>
     </Section>

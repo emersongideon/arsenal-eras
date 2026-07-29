@@ -373,7 +373,7 @@ toggle (choice saved to localStorage):
   the data," then Section A (the surface), B (the field), C (the physical picture -
   now age + fixture congestion + the points-under-congestion payoff), D (synthesis,
   the synthesis: a whole-league peer scatter on the outside force, plus Arsenal's full
-  two-force combined difficulty), E (what this surfaces).
+  two-force combined difficulty), E (the verdict).
 - **Dashboard** (`DashboardView`): every metric side by side, a head-to-head comparison
   table plus all charts in a grid, for scanning and modelling.
 
@@ -404,8 +404,8 @@ toggle (choice saved to localStorage):
   currently in view (a scroll read rather than IntersectionObserver, so it stays correct
   at the bottom of the page where the last section is too short to reach the viewport
   middle). `html { scroll-padding-top }` offsets the fixed bar on anchor jumps. On mobile
-  the centre nav collapses into a hamburger dropdown. Section E's summary table can link
-  back to these same ids.
+  the centre nav collapses into a hamburger dropdown. Section E's contrast table links
+  back to these same ids via its "From" column.
 - **`sections/*`** - one file per narrative section. Section A closes with a small
   **"two forces" framework diagram** (a pure CSS/HTML concept diagram, no data): two
   inputs, **the field / "outside"** and **the squad and body / "inside"**, combining into
@@ -413,7 +413,16 @@ toggle (choice saved to localStorage):
   exact "outside" / "inside" labels recur in Section B (the field / outside), Section C
   (the squad and body / inside), and Section D (which combines the two). Keep the labels
   consistent if you edit those sections; the diagram is the intuition, Section D is where
-  the two forces are actually combined.
+  the two forces are actually combined. **Section E (`Conclusion`) is the verdict**, in
+  four parts: (1) a single contrast table of every difficulty dimension with a "From"
+  column hyperlinking to each source section (all figures pulled from the same JSON so
+  they stay in sync); (2) the model's even-handed result stated plainly (equal weighting
+  points to 2025/26); (3) the human verdict, tagged **interpretation** and explicitly
+  marked as a view not a finding (the author weights the unbeaten run above the average,
+  landing on 2003/04, while conceding a reader who weights as the model does lands on
+  2025/26); and (4) "where this goes next" as actionable bullets. The split of model
+  result from human verdict is deliberate: the data lays out the trade-off, the weighting
+  choice is owned as judgement.
 
 ### Key decisions
 - **Static-first.** The site depends on no backend at load time, which is what makes
