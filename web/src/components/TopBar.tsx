@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { GitHubLink } from "./ui";
-import { ViewToggle, type View } from "./ViewToggle";
 
 // Section anchors, in reading order. `short` labels the slim desktop bar; `long`
 // labels the mobile dropdown (which has room). Section E's summary table links
@@ -14,20 +13,17 @@ const NAV = [
   { id: "section-e", short: "E · Verdict", long: "E · What this surfaces" },
 ] as const;
 
-/** The persistent top bar: view toggle (left), section navigation with scroll-spy
- *  (centre, report view only), and the GitHub link (right). On narrow screens the
- *  section nav collapses into a hamburger menu. */
-export function TopBar({ view, onChange }: { view: View; onChange: (v: View) => void }) {
+/** The persistent top bar: section navigation with scroll-spy, and the GitHub
+ *  link. On narrow screens the section nav collapses into a hamburger menu. */
+export function TopBar() {
   const [active, setActive] = useState<string>(NAV[0].id);
   const [menuOpen, setMenuOpen] = useState(false);
-  const showSections = view === "report";
 
   // Scroll-spy: the active section is the last one whose top has scrolled past a
   // line just below the bar. A scroll-position read (rather than IntersectionObserver)
   // stays correct at the bottom of the page, where the final section can be too short
   // to reach the viewport middle. Forces the last section once scrolled to the end.
   useEffect(() => {
-    if (!showSections) return;
     const OFFSET = 90; // bar height + a little breathing room
     const onScroll = () => {
       let current: string = NAV[0].id;
@@ -42,7 +38,7 @@ export function TopBar({ view, onChange }: { view: View; onChange: (v: View) => 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [showSections]);
+  }, []);
 
   // Close the mobile menu on resize back to desktop.
   useEffect(() => {
@@ -60,45 +56,37 @@ export function TopBar({ view, onChange }: { view: View; onChange: (v: View) => 
   return (
     <header className="topbar">
       <div className="topbar-inner">
-        <div className="topbar-slot">
-          <ViewToggle view={view} onChange={onChange} />
-        </div>
-
-        {showSections && (
-          <nav className="topbar-nav" aria-label="Report sections">
-            {NAV.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                className={active === s.id ? "active" : ""}
-                aria-current={active === s.id ? "true" : undefined}
-                onClick={() => go(s.id)}
-              >
-                {s.short}
-              </button>
-            ))}
-          </nav>
-        )}
+        <nav className="topbar-nav" aria-label="Report sections">
+          {NAV.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              className={active === s.id ? "active" : ""}
+              aria-current={active === s.id ? "true" : undefined}
+              onClick={() => go(s.id)}
+            >
+              {s.short}
+            </button>
+          ))}
+        </nav>
 
         <div className="topbar-slot right">
-          {showSections && (
-            <button
-              type="button"
-              className={`topbar-burger ${menuOpen ? "open" : ""}`}
-              aria-label="Section menu"
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((o) => !o)}
-            >
-              <span />
-              <span />
-              <span />
-            </button>
-          )}
+          <button
+            type="button"
+            className={`topbar-burger ${menuOpen ? "open" : ""}`}
+            aria-label="Section menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
           <GitHubLink variant="header" />
         </div>
       </div>
 
-      {showSections && menuOpen && (
+      {menuOpen && (
         <nav className="topbar-menu" aria-label="Report sections">
           {NAV.map((s) => (
             <button

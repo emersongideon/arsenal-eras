@@ -1374,14 +1374,6 @@ export function ArsenalCombinedChart({
     { key: "departures", label: "Minutes-weighted departures", fmt: (v) => `${v.toFixed(1)}%` },
     { key: "short_rest", label: "Short-rest share of games", fmt: (v) => `${v.toFixed(1)}%` },
   ];
-  const normData = [
-    { label: "Field pressure", "2003/04": be["2003/04"].norm.field, "2025/26": be["2025/26"].norm.field },
-    { label: "Departures", "2003/04": be["2003/04"].norm.departures, "2025/26": be["2025/26"].norm.departures },
-    { label: "Short-rest", "2003/04": be["2003/04"].norm.short_rest, "2025/26": be["2025/26"].norm.short_rest },
-    { label: "Combined", "2003/04": be["2003/04"].difficulty, "2025/26": be["2025/26"].difficulty },
-  ];
-  const fmt = (v: number | string) => Number(v).toFixed(2);
-
   return (
     <div className="combined-chart">
       <p className="combined-head">The raw values, the true size of each gap</p>
@@ -1412,36 +1404,16 @@ export function ArsenalCombinedChart({
         })}
       </div>
 
-      <p className="combined-head" style={{ marginTop: 18 }}>
-        How the equal-weighted score is built{" "}
-        <span className="dim">(each component scaled 0 to 1 across the two seasons, then averaged)</span>
-      </p>
-      <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={normData} margin={{ top: 20, right: 16, bottom: 8, left: -16 }}>
-          <CartesianGrid stroke={GRID} vertical={false} />
-          <XAxis dataKey="label" stroke={AXIS} tick={{ fontSize: 11 }} />
-          <YAxis
-            stroke={AXIS}
-            tick={{ fontSize: 11 }}
-            domain={[0, 1]}
-            ticks={[0, 0.5, 1]}
-          />
-          <Tooltip contentStyle={ttStyle} formatter={fmt} cursor={{ fill: "rgba(0,0,0,.03)" }} />
-          <Legend verticalAlign="top" height={28} />
-          <Bar dataKey="2003/04" fill={GOLD} radius={[3, 3, 0, 0]}>
-            <LabelList dataKey="2003/04" position="top" formatter={fmt} fontSize={10} />
-          </Bar>
-          <Bar dataKey="2025/26" fill={RED} radius={[3, 3, 0, 0]}>
-            <LabelList dataKey="2025/26" position="top" formatter={fmt} fontSize={10} />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-
-      <p className="chart-note">
-        The normalised bars look binary because each component is scaled across just two
-        seasons, so one season is always the maximum and the other the minimum. The raw
-        values above show the true size of each gap: on departures the two eras are nearly
-        identical, while on pressure and congestion 2025/26 is clearly higher.
+      <p className="combined-prose">
+        To combine these into one difficulty score, each component is scaled from 0 to 1
+        across the two seasons and the three are averaged with equal weight. Because there
+        are only two seasons, each component scales to either 0 or 1, so the average is
+        coarse by design: 2003/04 comes out at {be["2003/04"].difficulty.toFixed(2)} and
+        2025/26 at {be["2025/26"].difficulty.toFixed(2)}. The number to trust is not its
+        precision but its direction. It reflects the raw values above: the two eras are
+        nearly identical on departures, while 2025/26 is clearly higher on both title-race
+        pressure and fixture congestion. Two of the three forces point to 2025/26 as the
+        harder task, which is what the combined score reflects.
       </p>
     </div>
   );

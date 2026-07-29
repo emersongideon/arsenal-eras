@@ -700,6 +700,12 @@ a {
   font-weight: 700;
   color: var(--ink);
 }
+.combined-prose {
+  margin: 16px 6px 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--body);
+}
 @media (max-width: 640px) {
   .raw-metrics {
     grid-template-columns: 1fr;

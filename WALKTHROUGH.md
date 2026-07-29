@@ -333,12 +333,14 @@ honesty** matters most.
   rivals. (2)
   An **Arsenal-only combined** difficulty for its two complete-data seasons: equal-weighted
   average of three components normalised 0-1 across the two eras - outside (title-race
-  pressure), inside (minutes-weighted departures), inside (short-rest share). The chart
-  leads with the **RAW values** (each on its own scale: pressure 0.85 vs 1.36, departures
-  16.7% vs 15.6%, short-rest 32.2% vs 47.6%) so the true, non-binary size of each gap is
-  the headline; the normalised 0-1 combine (which looks binary because min-max across just
-  two seasons forces each component to 0 or 1) is demoted to a supporting element with a
-  note explaining why. The recipe box states the equal weighting is a tunable default.
+  pressure), inside (minutes-weighted departures), inside (short-rest share). The only
+  visual is the three **RAW-value cards** (each on its own scale: pressure 0.85 vs 1.36,
+  departures 16.7% vs 15.6%, short-rest 32.2% vs 47.6%), which show the true, non-binary
+  size of each gap. The combine itself is then **stated in prose** (0.33 vs 0.67, coarse by
+  design because min-max across just two seasons forces each component to 0 or 1, so trust
+  the direction not the precision) - the normalised component bar chart was removed as
+  redundant with the raw cards. The recipe box states the equal weighting is a tunable
+  default.
   **Key honesty point:** on the peer
   plane Arsenal sits at the LOWEST field resistance (it pulled clear of the pack) and the
   HIGHEST over-performance - top-left, not top-right. Nothing for peers is estimated; the
@@ -388,15 +390,13 @@ A small **FastAPI** service that serves the processed data. Endpoints are in the
 ## 6. The frontend (`web/`)
 
 ### What it does
-A single-page **React + TypeScript** app with two views, switched by a persistent
-toggle (choice saved to localStorage):
-- **Report** (`ReportView`): the scroll-driven analytical read. Hook, "Before we start:
-  the data," then Section A (the surface), B (the field), C (the physical picture -
-  now age + fixture congestion + the points-under-congestion payoff), D (synthesis,
-  the synthesis: a whole-league peer scatter on the outside force, plus Arsenal's full
-  two-force combined difficulty), E (the verdict).
-- **Dashboard** (`DashboardView`): every metric side by side, a head-to-head comparison
-  table plus all charts in a grid, for scanning and modelling.
+A single-page **React + TypeScript** app, the scroll-driven analytical **Report**
+(`ReportView`) - the only view. (An earlier metrics **Dashboard** and its Report/Dashboard
+toggle were removed to keep the piece focused; `DashboardView.tsx` / `ViewToggle.tsx` are
+gone.) The report runs: Hook, "Before we start: the data," then Section A (the surface),
+B (the field), C (the physical picture - age + fixture congestion + the
+points-under-congestion payoff), D (the synthesis: a whole-league peer scatter on the
+outside force, plus Arsenal's full two-force combined difficulty), E (the verdict).
 
 - **`data.ts`** - loads the baked JSON from `/public/data`.
 - **`types.ts`** - TypeScript interfaces mirroring the JSON shape (type safety across
@@ -417,9 +417,11 @@ toggle (choice saved to localStorage):
   It also holds **`InfoTip`**, a small "(i)" affordance that reveals plain-language
   term definitions on hover/focus (desktop) or tap (mobile); used in Section A to
   define Goals for / Goals against / xG for / xG against without cluttering the prose.
-- **`components/TopBar.tsx`** - the persistent top navigation bar (rendered by `App`,
-  above whichever view is active). It carries the view toggle (left), the section nav
-  (centre), and the GitHub link (right). Every major section has a **stable anchor id**
+  `InfoTip` is also used at the high-tau edge of the Section B sweep chart for the
+  "why it stops at tau = 20" caveat.
+- **`components/TopBar.tsx`** - the persistent top navigation bar (rendered by `App`).
+  It carries the section nav (left/centre) and the GitHub link (right); there is no
+  view toggle any more (the dashboard was removed). Every major section has a **stable anchor id**
   (`section-data`, `section-a` ... `section-e`; the hero is `hook`); clicking a nav item
   smooth-scrolls to that id, and a scroll-position **scroll-spy** highlights the section
   currently in view (a scroll read rather than IntersectionObserver, so it stays correct
