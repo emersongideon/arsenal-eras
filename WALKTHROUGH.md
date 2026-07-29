@@ -221,7 +221,11 @@ honesty** matters most.
     it" aside so it does not interrupt the plain-language flow. Before the sweep chart a
     lightweight **`TauExplainer`** visual draws two example decay curves (low `tau=5` vs
     high `tau=20`) purely to build the intuition that "`tau` = how far back a rival still
-    matters" - it is illustrative, computed client-side, not season data. On the sweep
+    matters" - it is illustrative, computed client-side, not season data. The explainer text
+    spells out both axes (x = points a rival finished behind Arsenal, y = the weight it
+    gets) and the two curves are labelled DIRECTLY on the chart (no legend to map colours
+    to): "low tau, fades fast" on the steep curve, "high tau, fades slowly" on the shallow
+    one. On the sweep
     chart itself, dragging the marker updates a live readout (both indices + the ratio) and
     a live interpretation line. That interpretation keeps the FRAMING constant and only
     swaps the multiplier ("2025/26 shows Nx more ... at every setting 2025/26 stays higher,
@@ -406,7 +410,10 @@ toggle (choice saved to localStorage):
   middle). `html { scroll-padding-top }` offsets the fixed bar on anchor jumps. On mobile
   the centre nav collapses into a hamburger dropdown. Section E's contrast table links
   back to these same ids via its "From" column.
-- **`sections/*`** - one file per narrative section. Section A closes with a small
+- **`sections/*`** - one file per narrative section. In Section A the week-by-week
+  cumulative-points chart **marks the 2025/26 side's 5 defeats as dots** on its line (the
+  flat steps where no points came), so the loss count is visible not just stated; the
+  unbeaten 2003/04 line has none. Section A closes with a small
   **"two forces" framework diagram** (a pure CSS/HTML concept diagram, no data): two
   inputs, **the field / "outside"** and **the squad and body / "inside"**, combining into
   "how hard the title was to win". This is the report's thesis and its through-line: those

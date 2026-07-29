@@ -20,11 +20,14 @@ function Reading({ children }: { children: React.ReactNode }) {
 export function SectionB({ c }: { c: Circumstances }) {
   const f = c.field_strength.by_season;
   const ct = c.squad_stability.by_season;
+  const ratio10 = (
+    f["2025/26"].pressure_index / f["2003/04"].pressure_index
+  ).toFixed(2);
 
   return (
     <Section id="section-b" eyebrow="Section B · The field">
       <Reveal>
-        <h2>How much resistance each title was won against</h2>
+        <h2>Resistance map</h2>
         <p className="lead narrow">
           This is the first of the two forces from the framework: the resistance from
           outside, meaning how strong the rest of the league was. The same points total is
@@ -66,9 +69,13 @@ export function SectionB({ c }: { c: Circumstances }) {
             What τ does
           </p>
           <p className="chart-sub">
-            τ is just how far back a rival still matters. At a low τ the weight falls away
-            fast, so only very close rivals count; at a high τ it fades slowly, so even
-            distant sides still add a little.
+            The x-axis is how many points a rival finished behind Arsenal; the y-axis is the
+            weight that rival gets. τ controls how fast the weight falls as a rival finishes
+            further back. A <b>high</b> τ means the weight falls slowly, so even rivals who
+            finished well behind still count for something (a far-back rival still matters).
+            A <b>low</b> τ means the weight falls fast, so only rivals who finished very
+            close count at all. In short: higher τ means distant rivals still matter; lower τ
+            means only close rivals matter.
           </p>
           <TauExplainer />
 
@@ -86,10 +93,14 @@ export function SectionB({ c }: { c: Circumstances }) {
             mid-table and relegation sides, so that range is not informative here.
           </p>
           <Reading>
-            2003/04 was the more dominant season, but its nearest rival still finished{" "}
-            {f["2003/04"].margin} points back. In 2025/26 the closest rival finished only{" "}
-            {f["2025/26"].margin} points back and stayed in the race far longer, so the
-            title was contested for more of the season.
+            At the τ = 10 used in the report, 2025/26 shows {ratio10}× more title-race
+            pressure than 2003/04. Here is what that means in plain terms: in 2003/04 the
+            nearest rival finished {f["2003/04"].margin} points behind, already out of the
+            race with games to spare. In 2025/26 the nearest rival finished just{" "}
+            {f["2025/26"].margin} points behind and was still within reach late on. Arsenal
+            could not ease off in 2025/26 the way the Invincibles could once they had pulled
+            clear. That is what more title-race pressure means: the title stayed contested
+            for longer.
           </Reading>
         </div>
       </Reveal>

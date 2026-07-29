@@ -4,10 +4,12 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
+  Label,
   LabelList,
   Legend,
   Line,
   LineChart,
+  ReferenceDot,
   ReferenceLine,
   ResponsiveContainer,
   Scatter,
@@ -45,7 +47,9 @@ const ttStyle: React.CSSProperties = {
 // Section A - the surface
 // ===========================================================================
 
-/** Cumulative league points across the 38-game season (the "title race"). */
+/** Cumulative league points across the 38-game season (the "title race"). The
+ *  2025/26 line marks its 5 defeats as dots, so the reader can see where the flat
+ *  steps (games that brought no points) fell; 2003/04, unbeaten, has none. */
 export function CumulativePointsChart({ matches }: { matches: MatchRow[] }) {
   type WeekRow = { match_no: number } & Partial<Record<Season, number>>;
   const byWeek: Record<number, WeekRow> = {};
@@ -55,6 +59,30 @@ export function CumulativePointsChart({ matches }: { matches: MatchRow[] }) {
     byWeek[w][m.season] = m.cum_points;
   }
   const data = Object.values(byWeek).sort((a, b) => a.match_no - b.match_no);
+  const losses2526 = new Set(
+    matches.filter((m) => m.season === "2025/26" && m.result === "L").map((m) => m.match_no)
+  );
+  const lossDot = (props: {
+    cx?: number;
+    cy?: number;
+    payload?: { match_no: number };
+  }) => {
+    const mw = props.payload?.match_no;
+    if (mw != null && losses2526.has(mw) && props.cx != null && props.cy != null) {
+      return (
+        <circle
+          key={`loss-${mw}`}
+          cx={props.cx}
+          cy={props.cy}
+          r={5}
+          fill={RED}
+          stroke="#fff"
+          strokeWidth={2}
+        />
+      );
+    }
+    return <g key={`n-${mw}`} />;
+  };
   return (
     <ResponsiveContainer width="100%" height={320}>
       <LineChart data={data} margin={{ top: 8, right: 16, bottom: 24, left: -8 }}>
@@ -86,7 +114,8 @@ export function CumulativePointsChart({ matches }: { matches: MatchRow[] }) {
           dataKey="2025/26"
           stroke={RED}
           strokeWidth={3}
-          dot={false}
+          dot={lossDot}
+          activeDot={{ r: 5 }}
         />
       </LineChart>
     </ResponsiveContainer>
@@ -239,11 +268,9 @@ export function TauExplainer() {
           formatter={(v: number | string) => Number(v).toFixed(2)}
           labelFormatter={(g) => `${g} points behind`}
         />
-        <Legend verticalAlign="top" height={28} />
         <Line
           type="monotone"
           dataKey="low"
-          name="Low τ (5) · fades fast"
           stroke="#1d4ed8"
           strokeWidth={2.5}
           dot={false}
@@ -252,12 +279,30 @@ export function TauExplainer() {
         <Line
           type="monotone"
           dataKey="high"
-          name="High τ (20) · fades slowly"
           stroke="#0d9488"
           strokeWidth={2.5}
           dot={false}
           isAnimationActive={false}
         />
+        {/* labels placed directly on the chart, no legend to map colours to */}
+        <ReferenceDot x={8} y={0.14} r={0} isFront>
+          <Label
+            value="low τ, fades fast"
+            position="right"
+            fill="#1d4ed8"
+            fontSize={12}
+            fontWeight={700}
+          />
+        </ReferenceDot>
+        <ReferenceDot x={11.5} y={0.62} r={0} isFront>
+          <Label
+            value="high τ, fades slowly"
+            position="right"
+            fill="#0d9488"
+            fontSize={12}
+            fontWeight={700}
+          />
+        </ReferenceDot>
       </LineChart>
     </ResponsiveContainer>
   );

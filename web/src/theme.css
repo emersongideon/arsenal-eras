@@ -624,6 +624,17 @@ a {
   color: var(--ink);
 }
 
+/* pivot line (Section A transition into the framework) */
+.pivot-line {
+  max-width: 680px;
+  margin: 18px auto;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 23px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
 /* "what's significant" analytic callout (Section C fixture congestion) */
 .callout {
   background: var(--measured-soft);

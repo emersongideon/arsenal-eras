@@ -60,7 +60,9 @@ export function SectionA({
           {s1.losses} losses, plus {s1.goal_difference}, {s1.ppg.toFixed(2)} per game. By
           numbers alone, 2003/04 is the more dominant season.
         </p>
-        <p className="narrow">What if we considered how hard each total was to earn?</p>
+        <p className="pivot-line">
+          What if we considered how hard each total was to earn?
+        </p>
       </Reveal>
 
       <Reveal delay={100}>
@@ -70,14 +72,21 @@ export function SectionA({
         </div>
       </Reveal>
 
+      <Reveal delay={70}>
+        <p className="narrow" style={{ margin: "6px auto 14px" }}>
+          First, just the shape of each title run: points accumulating week by week. Watch
+          where each line flattens: a flat step is a game that did not bring three points.
+        </p>
+      </Reveal>
+
       <Reveal delay={80}>
         <div className="chart-card" style={{ marginBottom: 18 }}>
           <p className="chart-title">The title race, week by week</p>
           <p className="chart-sub">
             Cumulative league points earned by Arsenal across all 38 matches, 2003/04 vs
-            2025/26. The 2003/04 line never flattens into a defeat: the Invincibles dropped
-            points to draws but never lost. The 2025/26 side lost {s1.losses} times, the
-            flat single-match steps in its line.
+            2025/26. The 2025/26 side lost {s1.losses} times, marked as dots on its line;
+            each is a flat step where no points came. The 2003/04 line has none: unbeaten,
+            it never once flattened into a defeat.
           </p>
           <CumulativePointsChart matches={matches} />
         </div>
@@ -116,6 +125,15 @@ export function SectionA({
             title).
           </p>
         </div>
+      </Reveal>
+
+      <Reveal delay={60}>
+        <p className="narrow" style={{ margin: "22px auto" }}>
+          These two charts show what each season looked like on the surface: how the points
+          came, and how the goals matched the chances. Neither yet says how <b>hard</b> that
+          surface was to produce. That is what the rest of the report measures, starting with
+          the two forces below.
+        </p>
       </Reveal>
 
       <Reveal delay={80}>
