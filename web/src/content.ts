@@ -20,7 +20,7 @@ export const content = {
   hero: {
     title: "A framework to measure how hard a title was to win",
     subline:
-      "This is a worked example of turning shot-level and match data into a repeatable read on title-campaign difficulty. Built from StatsBomb and Understat event data through a Poisson expected-points model, with every figure tagged as fact, model output, or interpretation.",
+      "A worked example of turning shot-level and match data into a repeatable read on how hard a title was to win. The case study is Arsenal's two title sides, the unbeaten 2003/04 Invincibles and the 2025/26 winners: the table already crowns 2003/04 the more dominant, so the real question is which title was the harder to win, measured through the field each faced and the physical load each carried. Built from StatsBomb and Understat event data through a Poisson expected-points model, with every figure tagged as fact, model output, or interpretation.",
     cap0304Year: "2003/04",
     cap0304Line: "The Invincibles · 90 pts, unbeaten",
     cap2526Year: "2025/26",
