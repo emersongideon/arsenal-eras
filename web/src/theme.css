@@ -764,6 +764,17 @@ a {
   color: var(--body);
 }
 
+/* tau=20 caveat tooltip, tucked at the high-tau (right) end of the x-axis */
+.robust-chart-wrap {
+  position: relative;
+}
+.robust-tau-info {
+  position: absolute;
+  right: 6px;
+  bottom: 30px;
+  z-index: 6;
+}
+
 /* live interpretation under the tau-sweep readout */
 .robust-interp {
   margin: 8px 6px 0;

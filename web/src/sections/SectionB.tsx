@@ -20,9 +20,6 @@ function Reading({ children }: { children: React.ReactNode }) {
 export function SectionB({ c }: { c: Circumstances }) {
   const f = c.field_strength.by_season;
   const ct = c.squad_stability.by_season;
-  const ratio10 = (
-    f["2025/26"].pressure_index / f["2003/04"].pressure_index
-  ).toFixed(2);
 
   return (
     <Section id="section-b" eyebrow="Section B · The field">
@@ -87,20 +84,13 @@ export function SectionB({ c }: { c: Circumstances }) {
             range. Drag the marker to read the index for each season at any τ.
           </p>
           <PressureRobustnessChart sweep={c.field_strength.sweep} />
-          <p className="chart-sub" style={{ marginTop: 12 }}>
-            The chart stops at τ = 20 on purpose: beyond it the two indices keep converging,
-            but the measure stops meaning "genuine title threats" because it starts counting
-            mid-table and relegation sides, so that range is not informative here.
-          </p>
           <Reading>
-            At the τ = 10 used in the report, 2025/26 shows {ratio10}× more title-race
-            pressure than 2003/04. Here is what that means in plain terms: in 2003/04 the
-            nearest rival finished {f["2003/04"].margin} points behind, already out of the
-            race with games to spare. In 2025/26 the nearest rival finished just{" "}
-            {f["2025/26"].margin} points behind and was still within reach late on. Arsenal
-            could not ease off in 2025/26 the way the Invincibles could once they had pulled
-            clear. That is what more title-race pressure means: the title stayed contested
-            for longer.
+            What that more crowded race meant in plain terms: in 2003/04 the nearest rival
+            finished {f["2003/04"].margin} points behind, already out of the race with games
+            to spare. In 2025/26 the nearest rival finished just {f["2025/26"].margin} points
+            behind and was still within reach late on. Arsenal could not ease off in 2025/26
+            the way the Invincibles could once they had pulled clear. That is what more
+            title-race pressure means: the title stayed contested for longer.
           </Reading>
         </div>
       </Reveal>

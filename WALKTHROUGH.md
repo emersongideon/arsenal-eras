@@ -227,10 +227,13 @@ honesty** matters most.
     to): "low tau, fades fast" on the steep curve, "high tau, fades slowly" on the shallow
     one. On the sweep
     chart itself, dragging the marker updates a live readout (both indices + the ratio) and
-    a live interpretation line. That interpretation keeps the FRAMING constant and only
-    swaps the multiplier ("2025/26 shows Nx more ... at every setting 2025/26 stays higher,
-    so the ranking holds; only the size of the gap moves"), so dragging can never make the
-    finding look weaker - the ranking is invariant, only the gap size moves.
+    a live interpretation line. Only the LEADING figure updates ("At tau = N, 2025/26 shows
+    Mx more..."); the framing stays constant and lands on the honest takeaway - trust the
+    DIRECTION, not the exact number: the multiple runs from roughly 2x at low tau to about
+    1.3x at high tau, but 2025/26 is above 2003/04 at every setting, so dragging can never
+    make the finding look weaker. The "why the chart stops at tau = 20" caveat is no longer
+    inline prose; it lives in a subtle **`InfoTip`** ("(i)") tucked at the high-tau (right)
+    edge of the x-axis, opening on hover or tap.
   - *Squad stability* - how much upheaval each squad absorbed going into its title
     season, measured three ways off the sourced squad lists: **players retained**
     (share of *this* season's title-winning squad that was at the club the year before -

@@ -29,7 +29,7 @@ import type {
   SeasonSummary,
   SynthesisD,
 } from "../types";
-import { SEASON_COLOR } from "./ui";
+import { InfoTip, SEASON_COLOR } from "./ui";
 
 const GOLD = SEASON_COLOR["2003/04"];
 const RED = SEASON_COLOR["2025/26"];
@@ -332,6 +332,7 @@ export function PressureRobustnessChart({
 
   return (
     <div className="robust">
+      <div className="robust-chart-wrap">
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={data} margin={{ top: 18, right: 18, bottom: 26, left: -6 }}>
           <CartesianGrid stroke={GRID} />
@@ -413,6 +414,14 @@ export function PressureRobustnessChart({
           />
         </LineChart>
       </ResponsiveContainer>
+        <div className="robust-tau-info">
+          <InfoTip label="Why the chart stops at high tau">
+            The chart stops at τ = 20 on purpose. Beyond it the two lines keep converging,
+            but the measure stops meaning genuine title threats: it starts counting
+            mid-table and relegation sides as if they were contenders, which they were not.
+          </InfoTip>
+        </div>
+      </div>
 
       <label className="robust-slider" htmlFor={sliderId}>
         <span className="dim">Drag to move the marker</span>
@@ -441,9 +450,13 @@ export function PressureRobustnessChart({
       </div>
 
       <p className="robust-interp" aria-live="polite">
-        At this setting, 2025/26 shows <b>{ratio}×</b> more title-race pressure than
-        2003/04. At every setting across the range, 2025/26 stays higher, so the ranking
-        holds; only the size of the gap moves.
+        At <b>τ = {tau}</b>
+        {isDefault ? " used in the report" : ""}, 2025/26 shows <b>{ratio}×</b> more
+        title-race pressure than 2003/04. Drag the marker and that multiple shifts, from
+        roughly 2× at low τ down to about 1.3× at high τ, but 2025/26 stays above 2003/04 at
+        every setting. So the honest takeaway is the direction, not the exact number:
+        2025/26 faced a more crowded title race on any reasonable setting, even if how much
+        more depends on how far back you let rivals count.
       </p>
     </div>
   );
