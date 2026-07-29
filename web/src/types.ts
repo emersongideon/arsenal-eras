@@ -210,6 +210,36 @@ export interface Congestion {
   >;
 }
 
+// --- Section D: the synthesis --------------------------------------------
+export interface SynthesisD {
+  season: Season;
+  tau: number;
+  peer: {
+    note: string;
+    clubs: {
+      club: string;
+      field_resistance: number;
+      actual_points: number;
+      expected_points: number;
+      over_performance: number;
+      is_arsenal: boolean;
+    }[];
+  };
+  arsenal_combined: {
+    components: string[];
+    weights: string;
+    normalisation: string;
+    by_era: Record<
+      Season,
+      {
+        raw: { field: number; departures: number; short_rest: number };
+        norm: { field: number; departures: number; short_rest: number };
+        difficulty: number;
+      }
+    >;
+  };
+}
+
 export interface Meta {
   title: string;
   question: string;
@@ -229,4 +259,5 @@ export interface Dataset {
   physical: Physical;
   congestion: Congestion;
   synthesis: Synthesis;
+  synthesisD: SynthesisD;
 }

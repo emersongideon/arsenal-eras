@@ -25,6 +25,9 @@ UNDERSTAT_FILE = RAW / "understat_arsenal_2025.json"
 # is Cloudflare-gated). Both cached under data/raw for reproducibility.
 UNDERSTAT_2024_25_FILE = RAW / "understat_arsenal_2024.json"
 FBREF_2002_03_FILE = RAW / "fbref_arsenal_2002_03.json"
+# Understat EPL 2025/26 league page (all 20 clubs' per-match history), for the
+# Section D synthesis peer scatter (field resistance + expected points per club).
+UNDERSTAT_EPL_2025_FILE = RAW / "understat_epl_2025.json"
 
 TEAM = "Arsenal"
 ROLLING_N = 6  # rolling-form window (matches)

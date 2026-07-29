@@ -25,6 +25,7 @@ import type {
   Physical,
   Season,
   SeasonSummary,
+  SynthesisD,
 } from "../types";
 import { SEASON_COLOR } from "./ui";
 
@@ -1183,5 +1184,143 @@ function XgScatterTip({
       </div>
       <div>expected points {d.xpts.toFixed(2)}</div>
     </div>
+  );
+}
+
+// ===========================================================================
+// Section D - the synthesis
+// ===========================================================================
+
+type PeerClub = SynthesisD["peer"]["clubs"][number];
+
+function SynthTip({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: { payload: PeerClub }[];
+}) {
+  if (!active || !payload?.length) return null;
+  const d = payload[0].payload;
+  return (
+    <div className="tt">
+      <strong>{d.club}</strong>
+      <div>field resistance {d.field_resistance.toFixed(2)}</div>
+      <div>
+        over-performance {d.over_performance >= 0 ? "+" : ""}
+        {d.over_performance.toFixed(1)} pts
+      </div>
+    </div>
+  );
+}
+
+/** Part 1: peer scatter. x = field resistance (outside force, same for every
+ *  club); y = over-performance (actual minus model-expected points). Arsenal
+ *  highlighted; peers muted, identified on hover. Top-right = crowded field AND
+ *  beat the model. */
+export function SynthesisScatter({ clubs }: { clubs: PeerClub[] }) {
+  const peers = clubs.filter((c) => !c.is_arsenal);
+  const arsenal = clubs.filter((c) => c.is_arsenal);
+  const xs = clubs.map((c) => c.field_resistance);
+  const ys = clubs.map((c) => c.over_performance);
+  const xMax = Math.ceil(Math.max(...xs));
+  const yMin = Math.floor(Math.min(...ys) / 5) * 5;
+  const yMax = Math.ceil(Math.max(...ys) / 5) * 5;
+  return (
+    <ResponsiveContainer width="100%" height={380}>
+      <ScatterChart margin={{ top: 24, right: 20, bottom: 28, left: -2 }}>
+        <CartesianGrid stroke={GRID} />
+        <XAxis
+          type="number"
+          dataKey="field_resistance"
+          domain={[0, xMax]}
+          stroke={AXIS}
+          tick={{ fontSize: 11 }}
+          label={{
+            value: "field resistance faced  (position-race pressure, higher = more contested)",
+            position: "bottom",
+            offset: 12,
+            fill: AXIS,
+            fontSize: 11,
+          }}
+        />
+        <YAxis
+          type="number"
+          dataKey="over_performance"
+          domain={[yMin, yMax]}
+          stroke={AXIS}
+          tick={{ fontSize: 11 }}
+          label={{
+            value: "over-performance (pts vs model)",
+            angle: -90,
+            position: "insideLeft",
+            offset: 12,
+            fill: AXIS,
+            fontSize: 11,
+          }}
+        />
+        <ZAxis range={[70, 70]} />
+        <ReferenceLine
+          y={0}
+          stroke="#9aa4b2"
+          strokeDasharray="5 5"
+          label={{ value: "met expectation", position: "insideRight", fill: "#9aa4b2", fontSize: 10 }}
+        />
+        <Tooltip content={<SynthTip />} cursor={{ strokeDasharray: "3 3" }} />
+        <Scatter data={peers} fill="#9aa4b2" fillOpacity={0.85} isAnimationActive={false} />
+        <Scatter data={arsenal} fill={RED} isAnimationActive={false}>
+          <ZAxis range={[190, 190]} />
+          <LabelList dataKey="club" position="top" fontSize={12} fontWeight={700} fill={RED} />
+        </Scatter>
+      </ScatterChart>
+    </ResponsiveContainer>
+  );
+}
+
+/** Part 2: Arsenal's full two-force combined difficulty across its two
+ *  complete-data seasons. Each component normalised 0-1 across the two seasons,
+ *  then equal-weighted into the Combined score. */
+export function ArsenalCombinedChart({
+  combined,
+}: {
+  combined: SynthesisD["arsenal_combined"];
+}) {
+  const be = combined.by_era;
+  const data = [
+    { label: "Field pressure", "2003/04": be["2003/04"].norm.field, "2025/26": be["2025/26"].norm.field },
+    { label: "Departures", "2003/04": be["2003/04"].norm.departures, "2025/26": be["2025/26"].norm.departures },
+    { label: "Short-rest", "2003/04": be["2003/04"].norm.short_rest, "2025/26": be["2025/26"].norm.short_rest },
+    { label: "Combined", "2003/04": be["2003/04"].difficulty, "2025/26": be["2025/26"].difficulty },
+  ];
+  const fmt = (v: number | string) => Number(v).toFixed(2);
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={data} margin={{ top: 22, right: 16, bottom: 8, left: -16 }}>
+        <CartesianGrid stroke={GRID} vertical={false} />
+        <XAxis dataKey="label" stroke={AXIS} tick={{ fontSize: 12 }} />
+        <YAxis
+          stroke={AXIS}
+          tick={{ fontSize: 12 }}
+          domain={[0, 1]}
+          ticks={[0, 0.5, 1]}
+          label={{
+            value: "normalised difficulty (0 to 1)",
+            angle: -90,
+            position: "insideLeft",
+            offset: 14,
+            fill: AXIS,
+            fontSize: 11,
+          }}
+        />
+        <Tooltip contentStyle={ttStyle} formatter={fmt} cursor={{ fill: "rgba(0,0,0,.03)" }} />
+        <Legend verticalAlign="top" height={30} />
+        <Bar dataKey="2003/04" fill={GOLD} radius={[3, 3, 0, 0]}>
+          <LabelList dataKey="2003/04" position="top" formatter={fmt} fontSize={11} />
+        </Bar>
+        <Bar dataKey="2025/26" fill={RED} radius={[3, 3, 0, 0]}>
+          <LabelList dataKey="2025/26" position="top" formatter={fmt} fontSize={11} />
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 }

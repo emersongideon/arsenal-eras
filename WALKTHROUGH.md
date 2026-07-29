@@ -303,8 +303,25 @@ honesty** matters most.
 - **`synthesis.py`** - re-reads the measured expected-points model *through* the
   circumstances: not "did they beat their xG?" but "against a stronger or weaker field,
   and in what shape?". It only assembles measured numbers side by side. This now feeds the
-  **Dashboard** and the concluding section rather than its own report section (Section D
-  was reallocated to congestion); the cumulative reading is tagged **interpretation**.
+  **Dashboard** and the concluding section rather than its own report section; the
+  cumulative reading is tagged **interpretation**.
+- **`synthesis_d.py` (Section D - "The synthesis")** - combines the two forces, honestly
+  bounded by what data exists for rival clubs. **Two elements.** (1) A **peer scatter** of
+  all 20 clubs: x = **field resistance** (the outside force only), a generalised
+  position-race pressure `sum over other clubs of exp(-|points gap|/10)` computed
+  identically for every club from the final table (for the champion it equals Section B's
+  index); y = **over-performance**, actual minus model-expected points, from the SAME
+  Poisson model fit per club on that club's 38 matches (per-match xG pulled once from
+  Understat's EPL league page, `understat_epl_2025.json`). Every club's actual points is
+  cross-checked against the final table. The inside force is deliberately absent here
+  because squad/fixture data cannot be built to the Section B/C standard for rivals. (2)
+  An **Arsenal-only combined** difficulty for its two complete-data seasons: equal-weighted
+  average of three components normalised 0-1 across the two eras - outside (title-race
+  pressure), inside (minutes-weighted departures), inside (short-rest share). The recipe
+  box states the equal weighting is a tunable default. **Key honesty point:** on the peer
+  plane Arsenal sits at the LOWEST field resistance (it pulled clear of the pack) and the
+  HIGHEST over-performance - top-left, not top-right. Nothing for peers is estimated; the
+  interpretation copy is written to match where Arsenal actually lands.
 
 ### Be ready to explain
 - *Why is rival xG missing for 2003/04, and how is that handled?* Understat (the only
@@ -355,7 +372,8 @@ toggle (choice saved to localStorage):
 - **Report** (`ReportView`): the scroll-driven analytical read. Hook, "Before we start:
   the data," then Section A (the surface), B (the field), C (the physical picture -
   now age + fixture congestion + the points-under-congestion payoff), D (synthesis,
-  reserved - combines the two forces; being built), E (what this surfaces).
+  the synthesis: a whole-league peer scatter on the outside force, plus Arsenal's full
+  two-force combined difficulty), E (what this surfaces).
 - **Dashboard** (`DashboardView`): every metric side by side, a head-to-head comparison
   table plus all charts in a grid, for scanning and modelling.
 

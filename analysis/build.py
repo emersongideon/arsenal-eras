@@ -8,8 +8,10 @@ Outputs (all consumed by the API / frontend):
   model.json          expected-points model output + calibration (Act 2 / Section A)
   circumstances.json  Section B: chasing pack, margin, league shape, squad stability
   physical.json       Section C: squad age + fixture congestion
-  congestion.json     Section D: league PPG split by rest bucket (performance under load)
+  congestion.json     Section C: league PPG split by rest bucket (points under load)
   synthesis.json      model output re-read against the circumstances (Dashboard + verdict)
+  synthesis_d.json    Section D: peer scatter (field resistance vs over-performance)
+                      + Arsenal's full two-force combined difficulty
   meta.json           thesis, provenance, and the honesty framing
 """
 
@@ -19,7 +21,16 @@ import json
 
 import pandas as pd
 
-from . import circumstances, congestion, loaders, model, physical, synthesis, transforms
+from . import (
+    circumstances,
+    congestion,
+    loaders,
+    model,
+    physical,
+    synthesis,
+    synthesis_d,
+    transforms,
+)
 from . import config as C
 
 
@@ -53,6 +64,7 @@ def run() -> dict:
     phys_payload = physical.build(players_tbl)
     cong_payload = congestion.build(matches)
     synth_payload = synthesis.build(model_by_season, circ_payload)
+    synth_d_payload = synthesis_d.build(circ_payload, phys_payload)
 
     outputs = {
         "seasons.json": _round_records(summaries),
@@ -63,6 +75,7 @@ def run() -> dict:
         "physical.json": phys_payload,
         "congestion.json": cong_payload,
         "synthesis.json": synth_payload,
+        "synthesis_d.json": synth_d_payload,
         "meta.json": {
             "title": "A framework to measure how hard a title was to win",
             "question": "A framework to measure how hard a title was to win",

@@ -1,0 +1,207 @@
+{
+  "metric": "synthesis_d",
+  "season": "2025/26",
+  "tau": 10.0,
+  "peer": {
+    "note": "x = field resistance (outside force only), measured identically for every club; y = actual minus model-expected points. The inside force is not on this axis because it cannot be measured to the same standard for rival clubs.",
+    "clubs": [
+      {
+        "club": "Chelsea",
+        "field_resistance": 8.95,
+        "actual_points": 52,
+        "expected_points": 58.3,
+        "over_performance": -6.3,
+        "is_arsenal": false
+      },
+      {
+        "club": "Fulham",
+        "field_resistance": 8.95,
+        "actual_points": 52,
+        "expected_points": 47.5,
+        "over_performance": 4.5,
+        "is_arsenal": false
+      },
+      {
+        "club": "Brighton & Hove Albion",
+        "field_resistance": 8.85,
+        "actual_points": 53,
+        "expected_points": 53.6,
+        "over_performance": -0.6,
+        "is_arsenal": false
+      },
+      {
+        "club": "Brentford",
+        "field_resistance": 8.85,
+        "actual_points": 53,
+        "expected_points": 55.7,
+        "over_performance": -2.7,
+        "is_arsenal": false
+      },
+      {
+        "club": "Everton",
+        "field_resistance": 8.64,
+        "actual_points": 49,
+        "expected_points": 46.6,
+        "over_performance": 2.4,
+        "is_arsenal": false
+      },
+      {
+        "club": "Newcastle United",
+        "field_resistance": 8.64,
+        "actual_points": 49,
+        "expected_points": 54.4,
+        "over_performance": -5.4,
+        "is_arsenal": false
+      },
+      {
+        "club": "Sunderland",
+        "field_resistance": 8.44,
+        "actual_points": 54,
+        "expected_points": 44.4,
+        "over_performance": 9.6,
+        "is_arsenal": false
+      },
+      {
+        "club": "Leeds United",
+        "field_resistance": 8.12,
+        "actual_points": 47,
+        "expected_points": 54.5,
+        "over_performance": -7.5,
+        "is_arsenal": false
+      },
+      {
+        "club": "Crystal Palace",
+        "field_resistance": 7.55,
+        "actual_points": 45,
+        "expected_points": 53.1,
+        "over_performance": -8.1,
+        "is_arsenal": false
+      },
+      {
+        "club": "Nottingham Forest",
+        "field_resistance": 7.2,
+        "actual_points": 44,
+        "expected_points": 46.7,
+        "over_performance": -2.7,
+        "is_arsenal": false
+      },
+      {
+        "club": "Bournemouth",
+        "field_resistance": 7.18,
+        "actual_points": 57,
+        "expected_points": 55.3,
+        "over_performance": 1.7,
+        "is_arsenal": false
+      },
+      {
+        "club": "Liverpool",
+        "field_resistance": 6.04,
+        "actual_points": 60,
+        "expected_points": 56.3,
+        "over_performance": 3.7,
+        "is_arsenal": false
+      },
+      {
+        "club": "Tottenham Hotspur",
+        "field_resistance": 6.02,
+        "actual_points": 41,
+        "expected_points": 48.6,
+        "over_performance": -7.6,
+        "is_arsenal": false
+      },
+      {
+        "club": "West Ham United",
+        "field_resistance": 5.19,
+        "actual_points": 39,
+        "expected_points": 44.8,
+        "over_performance": -5.8,
+        "is_arsenal": false
+      },
+      {
+        "club": "Aston Villa",
+        "field_resistance": 4.51,
+        "actual_points": 65,
+        "expected_points": 52.2,
+        "over_performance": 12.8,
+        "is_arsenal": false
+      },
+      {
+        "club": "Manchester United",
+        "field_resistance": 3.24,
+        "actual_points": 71,
+        "expected_points": 60.6,
+        "over_performance": 10.4,
+        "is_arsenal": false
+      },
+      {
+        "club": "Manchester City",
+        "field_resistance": 2.23,
+        "actual_points": 78,
+        "expected_points": 66.4,
+        "over_performance": 11.6,
+        "is_arsenal": false
+      },
+      {
+        "club": "Burnley",
+        "field_resistance": 1.89,
+        "actual_points": 22,
+        "expected_points": 37.5,
+        "over_performance": -15.5,
+        "is_arsenal": false
+      },
+      {
+        "club": "Wolverhampton Wanderers",
+        "field_resistance": 1.69,
+        "actual_points": 20,
+        "expected_points": 41.5,
+        "over_performance": -21.5,
+        "is_arsenal": false
+      },
+      {
+        "club": "Arsenal",
+        "field_resistance": 1.36,
+        "actual_points": 85,
+        "expected_points": 69.2,
+        "over_performance": 15.8,
+        "is_arsenal": true
+      }
+    ]
+  },
+  "arsenal_combined": {
+    "components": [
+      "field",
+      "departures",
+      "short_rest"
+    ],
+    "weights": "equal",
+    "normalisation": "min-max across Arsenal's two complete-data seasons",
+    "by_era": {
+      "2003/04": {
+        "raw": {
+          "field": 0.85,
+          "departures": 16.7,
+          "short_rest": 32.2
+        },
+        "norm": {
+          "field": 0.0,
+          "departures": 1.0,
+          "short_rest": 0.0
+        },
+        "difficulty": 0.333
+      },
+      "2025/26": {
+        "raw": {
+          "field": 1.36,
+          "departures": 15.6,
+          "short_rest": 47.6
+        },
+        "norm": {
+          "field": 1.0,
+          "departures": 0.0,
+          "short_rest": 1.0
+        },
+        "difficulty": 0.667
+      }
+    }
+  }
+}

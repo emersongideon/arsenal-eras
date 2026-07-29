@@ -18,7 +18,7 @@ export function ReportView({ data }: { data: Dataset }) {
       <SectionA seasons={data.seasons} matches={data.matches} />
       <SectionB c={data.circumstances} />
       <SectionC p={data.physical} congestion={data.congestion} />
-      <SectionD />
+      <SectionD synthesisD={data.synthesisD} />
       <Conclusion
         synth={data.synthesis}
         physical={data.physical}
