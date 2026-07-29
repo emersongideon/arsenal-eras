@@ -2,10 +2,26 @@ import { ArsenalCombinedChart, SynthesisScatter } from "../components/charts";
 import { CategoryBadge, LimitationNote, Reveal, Section } from "../components/ui";
 import type { SynthesisD } from "../types";
 
+/** Interpretation block (interpretation pill), rendering its children directly so
+ *  it can hold multiple paragraphs. */
+function Reading({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="reading">
+      <CategoryBadge category="interpretation" />
+      {children}
+    </div>
+  );
+}
+
 export function SectionD({ synthesisD }: { synthesisD: SynthesisD }) {
   const sd = synthesisD;
   const raw0 = sd.arsenal_combined.by_era["2003/04"].raw;
   const raw1 = sd.arsenal_combined.by_era["2025/26"].raw;
+  const ars = sd.peer.clubs.find((c) => c.is_arsenal)!;
+  const sundOver =
+    sd.peer.clubs.find((c) => c.club === "Sunderland")?.over_performance ?? 9.6;
+  const d03 = sd.arsenal_combined.by_era["2003/04"].difficulty.toFixed(2);
+  const d25 = sd.arsenal_combined.by_era["2025/26"].difficulty.toFixed(2);
 
   return (
     <Section id="section-d" eyebrow="Section D · The synthesis">
@@ -42,7 +58,29 @@ export function SectionD({ synthesisD }: { synthesisD: SynthesisD }) {
             Arsenal is highlighted in red; hover or tap any dot for its club and values. The
             dashed line is the model&rsquo;s expectation (zero over-performance).
           </p>
-          {/* INTERPRETATION: to be written together once positions are confirmed. */}
+          <Reading>
+            <p style={{ margin: "8px 0 0" }}>
+              Arsenal sits far top-left: it faced the least crowded title race in the league,
+              because it pulled clear at the top, but it beat its expected points by more than
+              any other club (+{ars.over_performance}). Its story on this plane is vertical,
+              not horizontal. It did not survive a dogfight; it over-delivered against its own
+              underlying numbers by the widest margin in the division.
+            </p>
+            <p style={{ margin: "12px 0 0" }}>
+              This looks like it contradicts Section B, which found 2025/26&rsquo;s title race
+              more crowded than 2003/04&rsquo;s. It does not: the reference points differ.
+              Compared to the Invincibles&rsquo; cakewalk, 2025/26 was a tighter race. Compared
+              to this season&rsquo;s mid-table, where Chelsea, Fulham and Brighton sat packed
+              together around a field resistance of 9, Arsenal&rsquo;s race at the top was the
+              most one-sided in the league. Crowding depends on who you measure against.
+            </p>
+            <p style={{ margin: "12px 0 0" }}>
+              The &ldquo;hard field and still beat the model&rdquo; quadrant, top-right,
+              belongs to sides like Sunderland (+{sundOver} in a crowded lower-mid-table) and
+              Fulham. Arsenal&rsquo;s achievement is a different shape: not resistance overcome,
+              but expectation exceeded.
+            </p>
+          </Reading>
         </div>
       </Reveal>
 
@@ -81,7 +119,19 @@ export function SectionD({ synthesisD }: { synthesisD: SynthesisD }) {
               hiding it in a single number.
             </p>
           </aside>
-          {/* INTERPRETATION: to be written together once values are confirmed. */}
+          <Reading>
+            <p style={{ margin: "8px 0 0" }}>
+              Applying the full method to Arsenal&rsquo;s two complete-data seasons, the
+              equal-weighted difficulty comes out higher for 2025/26 ({d25}) than 2003/04 (
+              {d03}). It is a genuine trade-off, not a landslide: 2025/26 faced more
+              title-race pressure and a far more congested calendar, while 2003/04 lost
+              marginally more of its proven playing time to departures. Two of the three
+              forces point to 2025/26 as the harder task. This is the model&rsquo;s
+              even-handed reading, with every force weighted equally. Whether that is the
+              right weighting, and whether it settles the question, is what the final section
+              takes up.
+            </p>
+          </Reading>
         </div>
       </Reveal>
 
