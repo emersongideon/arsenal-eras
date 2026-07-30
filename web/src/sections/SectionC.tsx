@@ -1,8 +1,6 @@
 import { content } from "../content";
 import {
-  CongestionPpgChart,
   CongestionTimeline,
-  RestGapChart,
   SquadAgeScatter,
   SquadStabilityChart,
 } from "../components/charts";
@@ -14,7 +12,7 @@ import {
   Rich,
   Section,
 } from "../components/ui";
-import type { Circumstances, Congestion, Physical } from "../types";
+import type { Circumstances, Physical } from "../types";
 
 const t = content.c;
 
@@ -29,19 +27,10 @@ function Reading({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function SectionC({
-  c,
-  p,
-  congestion,
-}: {
-  c: Circumstances;
-  p: Physical;
-  congestion: Congestion;
-}) {
+export function SectionC({ c, p }: { c: Circumstances; p: Physical }) {
   const stab = c.squad_stability.by_season;
   const age = p.squad_age.by_season;
   const fc = p.fixture_congestion.by_season;
-  const cg = congestion.by_season;
   return (
     <Section
       id="section-c"
@@ -93,24 +82,7 @@ export function SectionC({
       {/* Demoted: the fixture calendar, explored but inconclusive, collapsed by default */}
       <Reveal delay={60}>
         <Collapsible summary={t.calHeader}>
-          <p style={{ marginTop: 14 }}>{t.calLead}</p>
-          <p>{t.congBody1}</p>
-          <p>
-            <Rich>{t.congBody2}</Rich>
-          </p>
-
-          <p className="chart-title" style={{ marginTop: 6 }}>
-            {t.restTitle}
-          </p>
-          <p className="chart-sub">{t.restSub}</p>
-          <RestGapChart bySeason={fc} />
-
-          <div className="callout">
-            <p className="callout-eyebrow">{t.calloutLabel}</p>
-            <p className="callout-body">
-              <Rich>{t.calloutBody}</Rich>
-            </p>
-          </div>
+          <p style={{ marginTop: 14 }}>{t.calBody}</p>
 
           <p className="chart-title" style={{ marginTop: 20 }}>
             {t.timelineTitle}
@@ -118,23 +90,7 @@ export function SectionC({
           <p className="chart-sub">{t.timelineSub}</p>
           <CongestionTimeline bySeason={fc} />
 
-          <p className="chart-title" style={{ marginTop: 22 }}>
-            {t.ppgBeatTitle}
-          </p>
-          <p className="chart-sub">{t.ppgBeatSub}</p>
-          <div className="chart-card" style={{ margin: "8px 0 6px" }}>
-            <p className="chart-title" style={{ margin: "0 6px 2px" }}>
-              {t.ppgChartTitle}
-            </p>
-            <p className="chart-sub">{t.ppgChartSub}</p>
-            <CongestionPpgChart bySeason={cg} />
-            <p className="dim" style={{ fontSize: 13, marginTop: 8 }}>
-              {t.ppgSample}
-            </p>
-          </div>
-
           <LimitationNote>{t.calGpsLimitation}</LimitationNote>
-          <Reading>{t.calClosing}</Reading>
         </Collapsible>
       </Reveal>
 
