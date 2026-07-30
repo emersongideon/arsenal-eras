@@ -106,6 +106,43 @@ export function InfoTip({
   );
 }
 
+/** A disclosure block: an always-visible summary line plus a tap/click control
+ *  that reveals the body. Collapsed by default; the body is only mounted when
+ *  open (so charts inside measure their width against a visible container). Works
+ *  on mobile because the whole header is a real button. */
+export function Collapsible({
+  summary,
+  openLabel = "Show the full analysis",
+  closeLabel = "Hide the full analysis",
+  children,
+}: {
+  summary: ReactNode;
+  openLabel?: string;
+  closeLabel?: string;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`collapsible ${open ? "open" : ""}`}>
+      <button
+        type="button"
+        className="collapsible-head"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <span className="collapsible-summary">{summary}</span>
+        <span className="collapsible-cta">
+          {open ? closeLabel : openLabel}
+          <span className="collapsible-chev" aria-hidden="true">
+            ▾
+          </span>
+        </span>
+      </button>
+      {open && <div className="collapsible-body">{children}</div>}
+    </div>
+  );
+}
+
 /** Renders an editable copy string (from content.ts) with lightweight markup:
  *  **bold** becomes <b>, `code` becomes <code>. Everything else is plain text. */
 export function Rich({ children }: { children: string }) {

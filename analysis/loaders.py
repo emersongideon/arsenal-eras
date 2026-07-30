@@ -12,8 +12,11 @@ Canonical per-player DataFrame columns:
 
 from __future__ import annotations
 
+import csv
 import json
 import urllib.request
+from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -267,3 +270,52 @@ def load_understat_players(path: Path = C.UNDERSTAT_FILE) -> pd.DataFrame:
             }
         )
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------
+# Week-by-week league tables (all clubs), for the cumulative pressure metric
+# ---------------------------------------------------------------------------
+def _cumulative(games: dict[str, list[tuple]]) -> dict[str, list[int]]:
+    """{club: [(date, points), ...]} -> {club: [cumulative points after game 1..N]},
+    each club's games ordered by date (so index k is 'after k games played')."""
+    out: dict[str, list[int]] = {}
+    for club, gl in games.items():
+        gl = sorted(gl, key=lambda x: x[0])
+        running = 0
+        seq = []
+        for _, pts in gl:
+            running += pts
+            seq.append(running)
+        out[club] = seq
+    return out
+
+
+def load_weekly_points_2003_04(path: Path = C.FOOTBALLDATA_2003_04_FILE) -> dict[str, list[int]]:
+    """Every 2003/04 club's cumulative points after each of its 38 matches, from
+    the football-data.co.uk results CSV (date, home/away, full-time goals)."""
+    games: dict[str, list[tuple]] = defaultdict(list)
+    with path.open(newline="") as f:
+        for r in csv.DictReader(f):
+            if not r.get("HomeTeam"):
+                continue
+            d = datetime.strptime(r["Date"], "%d/%m/%y")
+            h, a = r["HomeTeam"], r["AwayTeam"]
+            hg, ag = int(r["FTHG"]), int(r["FTAG"])
+            hp = 3 if hg > ag else (1 if hg == ag else 0)
+            ap = 3 if ag > hg else (1 if hg == ag else 0)
+            games[h].append((d, hp))
+            games[a].append((d, ap))
+    return _cumulative(games)
+
+
+def load_weekly_points_2025_26(path: Path = C.UNDERSTAT_EPL_2025_FILE) -> dict[str, list[int]]:
+    """Every 2025/26 club's cumulative points after each of its 38 matches, from
+    Understat's league-page per-club match history (date, points)."""
+    teams = json.loads(path.read_text())["teams"]
+    games: dict[str, list[tuple]] = defaultdict(list)
+    for t in teams.values():
+        name = t["title"]
+        for m in t["history"]:
+            d = datetime.strptime(m["date"][:10], "%Y-%m-%d")
+            games[name].append((d, int(m["pts"])))
+    return _cumulative(games)

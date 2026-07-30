@@ -38,7 +38,6 @@ export function DataSources() {
       </Reveal>
 
       <Reveal delay={120}>
-        <p className="caveats-head narrow">{t.caveatsHeading}</p>
         <div className="caveats narrow">
           {t.caveats.map((c, i) => (
             <div className="caveat" key={i}>

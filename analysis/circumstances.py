@@ -35,73 +35,142 @@ between the two seasons holds throughout).
 from __future__ import annotations
 
 import json
+import math
 import unicodedata
 
 import numpy as np
 
 from . import config as C
-from . import facts, sources
+from . import facts, loaders, sources
 from .config import S0304, S2526
 
 SEASONS = (S0304, S2526)
-PRESSURE_TAU = 10.0  # points: decay scale for title-race pressure
+PRESSURE_TAU = 10.0  # points: closeness sensitivity of the weekly pressure weight
+AHEAD_MULT = 2.0  # a rival ABOVE Arsenal that week counts double (chasing > leading)
 TAU_GRID = (7.0, 10.0, 13.0)  # robustness check
-# Interactive robustness sweep: below 5 both indices sit near zero (unreadable);
-# above 20 the "effective threats" reading degrades (distant relegation sides start
-# to count) and the two curves converge toward n_rivals=19. 5-20 is the region where
-# the comparison is both readable and defensible. See WALKTHROUGH.md.
+# Interactive robustness sweep. Below 5 the weekly weights collapse toward only
+# level-on-points rivals; above 20 they flatten so distant teams begin to count as
+# if they were contenders. 5-20 is where the comparison is readable and defensible.
 TAU_SWEEP_RANGE = (5.0, 20.0)
 TAU_SWEEP_STEP = 0.5
 
 
-def _pressure_index(champ_points: int, rival_points: list[int], tau: float) -> float:
+def _final_pressure_index(champ_points: int, rival_points: list[int], tau: float) -> float:
+    """Legacy final-table index, kept only for the per-rival contribution
+    breakdown, not the headline metric."""
     gaps = champ_points - np.asarray(rival_points, dtype=float)
     return float(np.exp(-gaps / tau).sum())
 
 
-def _pressure_sweep() -> dict:
-    """Pressure index for both seasons across a swept decay scale tau, so the
-    reader can verify the ranking (2025/26 > 2003/04) is stable, not an artefact
-    of tau=10. Computed here in the pipeline; the frontend only reads the JSON."""
+def _cumulative_pressure(weekly: dict[str, list[int]], target: str, tau: float,
+                         mult: float = AHEAD_MULT) -> float:
+    """Title-race pressure ENDURED by `target` across the whole season. Each week
+    (after k games played, k = 1..38), every rival is weighted exp(-|gap|/tau) by
+    how close it sits to `target` on points, doubled if the rival is ABOVE `target`
+    that week. Summed across all rivals and all 38 weeks."""
+    seq_t = weekly[target]
+    total = 0.0
+    for k in range(len(seq_t)):
+        tp = seq_t[k]
+        for club, seq in weekly.items():
+            if club == target:
+                continue
+            rp = seq[k]
+            w = math.exp(-abs(tp - rp) / tau)
+            if rp > tp:
+                w *= mult
+            total += w
+    return total
+
+
+def _weekly_tables() -> dict[str, dict[str, list[int]]]:
+    return {
+        S0304: loaders.load_weekly_points_2003_04(),
+        S2526: loaders.load_weekly_points_2025_26(),
+    }
+
+
+def _validate_weekly(weekly: dict[str, dict[str, list[int]]]) -> None:
+    """Guard: the rebuilt week-by-week tables must reproduce the known finals, so a
+    bad or truncated source cannot silently distort the metric."""
+    for s in SEASONS:
+        for club, seq in weekly[s].items():
+            if len(seq) != 38:
+                raise ValueError(f"{s}: {club} has {len(seq)} games, expected 38")
+        champ, champ_pts = facts.FINAL_TABLE[s][0]
+        if weekly[s].get(champ, [None])[-1] != champ_pts:
+            raise ValueError(
+                f"{s}: rebuilt {champ} final = {weekly[s].get(champ, ['?'])[-1]} "
+                f"!= known table {champ_pts}"
+            )
+
+
+def _pressure_sweep(weekly: dict[str, dict[str, list[int]]]) -> dict:
+    """Relative pressure index (2003/04 = 1.00 at every tau) for both seasons across
+    a swept tau, so the reader can verify the ranking (2025/26 higher) is stable, not
+    an artefact of tau=10. The report shows this relative index, not the raw sums."""
     lo, hi = TAU_SWEEP_RANGE
     taus = np.round(np.arange(lo, hi + TAU_SWEEP_STEP / 2, TAU_SWEEP_STEP), 1)
-    rival_pts = {
-        s: [p for _, p in facts.FINAL_TABLE[s][1:]] for s in SEASONS
-    }
-    champ_pts = {s: facts.FINAL_TABLE[s][0][1] for s in SEASONS}
-    points = [
-        {
+    points = []
+    for t in taus:
+        raw = {s: _cumulative_pressure(weekly[s], C.TEAM, float(t)) for s in SEASONS}
+        base = raw[S0304]
+        points.append({
             "tau": float(t),
-            **{s: round(_pressure_index(champ_pts[s], rival_pts[s], float(t)), 3) for s in SEASONS},
-        }
-        for t in taus
-    ]
+            **{s: round(raw[s] / base, 3) for s in SEASONS},
+        })
     return {
         "default_tau": PRESSURE_TAU,
         "range": [float(lo), float(hi)],
         "step": TAU_SWEEP_STEP,
-        "n_rivals": len(rival_pts[SEASONS[0]]),
+        "n_rivals": len(weekly[S0304]) - 1,
         "points": points,
     }
 
 
 def field_strength() -> dict:
-    """Title-race pressure index over the whole 20-team table, per season."""
+    """Cumulative week-by-week title-race pressure Arsenal endured, per season.
+
+    Each gameweek, every rival is weighted by how close it sat to Arsenal on the
+    table, exp(-gap/tau), with rivals ABOVE Arsenal counted 2x (chasing is harder
+    than leading), summed across all 38 weeks. Reported as a relative index
+    (2003/04 = 1.00); the raw summed values are kept alongside for the repo."""
+    weekly = _weekly_tables()
+    _validate_weekly(weekly)
+
+    raw_pressure = {s: _cumulative_pressure(weekly[s], C.TEAM, PRESSURE_TAU) for s in SEASONS}
+    base = raw_pressure[S0304]
+    rel = {s: raw_pressure[s] / base for s in SEASONS}
+    # relative index at each robustness-grid tau (for the "holds across tau" note)
+    rel_by_tau: dict[str, dict[int, float]] = {s: {} for s in SEASONS}
+    for t in TAU_GRID:
+        raw_t = {s: _cumulative_pressure(weekly[s], C.TEAM, t) for s in SEASONS}
+        for s in SEASONS:
+            rel_by_tau[s][int(t)] = round(raw_t[s] / raw_t[S0304], 2)
+
     out = {
         "metric": "field_strength",
         "tau": PRESSURE_TAU,
-        "xg_note": (
-            "Rival-team xG exists for 2025/26 (Understat) but not for 2003/04, so the "
-            "field is measured on actual points - the fair like-for-like measure."
+        "ahead_multiplier": AHEAD_MULT,
+        "method": (
+            "Cumulative week by week: each of the 38 gameweeks, every rival is weighted "
+            "exp(-|points gap to Arsenal| / tau) with tau=10, and rivals above Arsenal "
+            "that week count 2x, summed across all rivals and all weeks. Shown as a "
+            "relative index (2003/04 = 1.00). The direction (2025/26 higher) holds across "
+            "tau 5 to 20 and with or without the 2x, so it does not depend on those "
+            "stated choices."
         ),
-        "sweep": _pressure_sweep(),
+        "xg_note": (
+            "Pressure is measured on league points, which exist for every club in both "
+            "eras, so the two seasons are compared on the same basis."
+        ),
+        "sweep": _pressure_sweep(weekly),
         "by_season": {},
     }
     for s in SEASONS:
         table = facts.FINAL_TABLE[s]
         champ_team, champ_pts = table[0]
-        rivals = table[1:]  # the other 19 teams
-        rival_pts = [p for _, p in rivals]
+        rivals = table[1:]
 
         contributions = []
         for pos, (team, pts) in enumerate(rivals, start=2):
@@ -120,13 +189,12 @@ def field_strength() -> dict:
             "runner_up": rivals[0][0],
             "runner_up_points": rivals[0][1],
             "margin": champ_pts - rivals[0][1],
-            "pressure_index": round(_pressure_index(champ_pts, rival_pts, PRESSURE_TAU), 2),
+            # headline metric: cumulative weekly pressure, as a relative index
+            "pressure_index": round(rel[s], 2),
+            "pressure_index_raw": round(raw_pressure[s], 2),
             "teams_within_10": int(sum(1 for c in contributions if c["gap"] <= 10)),
             "teams_within_15": int(sum(1 for c in contributions if c["gap"] <= 15)),
-            # ordering between seasons should be stable across these decay scales:
-            "pressure_by_tau": {
-                int(t): round(_pressure_index(champ_pts, rival_pts, t), 2) for t in TAU_GRID
-            },
+            "pressure_by_tau": rel_by_tau[s],
             "contributions": contributions,
         }
     return out

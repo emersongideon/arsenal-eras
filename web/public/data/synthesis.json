@@ -6,7 +6,7 @@
       "points_over_expected": 20.6,
       "runner_up_points": 79,
       "margin_to_second": 11,
-      "pressure_index": 0.85,
+      "pressure_index": 1.0,
       "retention_pct": 81.8,
       "incoming": 4
     },
@@ -16,7 +16,7 @@
       "points_over_expected": 15.8,
       "runner_up_points": 78,
       "margin_to_second": 7,
-      "pressure_index": 1.36,
+      "pressure_index": 1.17,
       "retention_pct": 64.0,
       "incoming": 9
     }

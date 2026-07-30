@@ -1,6 +1,6 @@
 import { content } from "../content";
-import { CumulativePointsChart, OutputBars } from "../components/charts";
-import { InfoTip, Reveal, Rich, Section, seasonClass } from "../components/ui";
+import { CumulativePointsChart } from "../components/charts";
+import { Reveal, Rich, Section, seasonClass } from "../components/ui";
 import type { SeasonSummary } from "../types";
 import type { MatchRow } from "../types";
 
@@ -129,22 +129,6 @@ export function SectionA({
         </div>
       </Reveal>
 
-      <Reveal delay={80}>
-        <div className="chart-card">
-          <div className="chart-head-row">
-            <p className="chart-title" style={{ margin: 0 }}>
-              {t.xgTitle}
-            </p>
-            <InfoTip label="What these terms mean">
-              <Rich>{t.xgInfo}</Rich>
-            </InfoTip>
-          </div>
-          <p className="chart-sub">{t.xgSub}</p>
-          <OutputBars seasons={seasons} />
-          <p className="chart-note">{t.xgNote}</p>
-        </div>
-      </Reveal>
-
       <Reveal delay={60}>
         <p className="narrow" style={{ margin: "22px auto" }}>
           <Rich>{t.link}</Rich>
@@ -153,9 +137,6 @@ export function SectionA({
 
       <Reveal delay={80}>
         <div className="forces">
-          <h3 className="forces-h">{t.forcesHeading}</h3>
-          <p className="forces-lead narrow">{t.forcesLead}</p>
-
           <div className="forces-diagram">
             <div className="forces-inputs">
               <div className="force-box outside">

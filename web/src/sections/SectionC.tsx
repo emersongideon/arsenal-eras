@@ -4,9 +4,17 @@ import {
   CongestionTimeline,
   RestGapChart,
   SquadAgeScatter,
+  SquadStabilityChart,
 } from "../components/charts";
-import { CategoryBadge, LimitationNote, Reveal, Rich, Section } from "../components/ui";
-import type { Congestion, Physical } from "../types";
+import {
+  CategoryBadge,
+  Collapsible,
+  LimitationNote,
+  Reveal,
+  Rich,
+  Section,
+} from "../components/ui";
+import type { Circumstances, Congestion, Physical } from "../types";
 
 const t = content.c;
 
@@ -21,7 +29,16 @@ function Reading({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function SectionC({ p, congestion }: { p: Physical; congestion: Congestion }) {
+export function SectionC({
+  c,
+  p,
+  congestion,
+}: {
+  c: Circumstances;
+  p: Physical;
+  congestion: Congestion;
+}) {
+  const stab = c.squad_stability.by_season;
   const age = p.squad_age.by_season;
   const fc = p.fixture_congestion.by_season;
   const cg = congestion.by_season;
@@ -40,32 +57,46 @@ export function SectionC({ p, congestion }: { p: Physical; congestion: Congestio
         <p className="lead narrow">{t.lead}</p>
       </Reveal>
 
-      {/* C1 - squad age */}
+      {/* C1 - squad stability (moved from Section B) */}
       <Reveal delay={60}>
         <div className="card sublayer">
           <div className="sublayer-head">
-            <h3>{t.p1Title}</h3>
+            <h3>{t.stabTitle}</h3>
             <CategoryBadge category="measured" />
           </div>
-          <p>{t.p1Body1}</p>
+          <p>{t.stabBody1}</p>
           <p>
-            <Rich>{t.p1Body2}</Rich>
+            <Rich>{t.stabBody2}</Rich>
           </p>
-          <SquadAgeScatter bySeason={age} />
-          <Reading>{t.p1Reading}</Reading>
+          <SquadStabilityChart bySeason={stab} />
+          <LimitationNote>{t.stabLimitation}</LimitationNote>
+          <Reading>{t.stabReading}</Reading>
         </div>
       </Reveal>
 
-      {/* C2 - fixture congestion */}
+      {/* C2 - squad age */}
       <Reveal delay={60}>
         <div className="card sublayer">
           <div className="sublayer-head">
-            <h3>{t.p2Title}</h3>
+            <h3>{t.ageTitle}</h3>
             <CategoryBadge category="measured" />
           </div>
-          <p>{t.p2Body1}</p>
+          <p>{t.ageBody1}</p>
           <p>
-            <Rich>{t.p2Body2}</Rich>
+            <Rich>{t.ageBody2}</Rich>
+          </p>
+          <SquadAgeScatter bySeason={age} />
+          <Reading>{t.ageReading}</Reading>
+        </div>
+      </Reveal>
+
+      {/* Demoted: the fixture calendar, explored but inconclusive, collapsed by default */}
+      <Reveal delay={60}>
+        <Collapsible summary={t.calHeader}>
+          <p style={{ marginTop: 14 }}>{t.calLead}</p>
+          <p>{t.congBody1}</p>
+          <p>
+            <Rich>{t.congBody2}</Rich>
           </p>
 
           <p className="chart-title" style={{ marginTop: 6 }}>
@@ -87,7 +118,6 @@ export function SectionC({ p, congestion }: { p: Physical; congestion: Congestio
           <p className="chart-sub">{t.timelineSub}</p>
           <CongestionTimeline bySeason={fc} />
 
-          {/* closing beat of part 2: did the compressed schedule cost points? */}
           <p className="chart-title" style={{ marginTop: 22 }}>
             {t.ppgBeatTitle}
           </p>
@@ -102,13 +132,10 @@ export function SectionC({ p, congestion }: { p: Physical; congestion: Congestio
               {t.ppgSample}
             </p>
           </div>
-          <Reading>{t.p2Reading}</Reading>
-        </div>
-      </Reveal>
 
-      {/* Methodological note - the gap stated, not filled */}
-      <Reveal delay={60}>
-        <LimitationNote>{t.limitation}</LimitationNote>
+          <LimitationNote>{t.calGpsLimitation}</LimitationNote>
+          <Reading>{t.calClosing}</Reading>
+        </Collapsible>
       </Reveal>
 
       <Reveal delay={60}>

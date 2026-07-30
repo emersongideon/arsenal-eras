@@ -53,6 +53,9 @@ export function Conclusion() {
             {t.tableNote}
           </p>
         </div>
+        <p className="narrow dim" style={{ fontSize: 13.5, marginTop: 12 }}>
+          {t.overPerfNote}
+        </p>
       </Reveal>
 
       {/* E.2 - the model's even-handed result */}

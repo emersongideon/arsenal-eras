@@ -791,8 +791,131 @@ a {
   line-height: 1.6;
   color: var(--body);
 }
+
+/* Section D: interactive weighting tool (auto-normalising sliders + live score) */
+.weigh-tool {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fafbfc;
+  padding: 16px 18px;
+}
+.weigh-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.weigh-row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.weigh-label {
+  font-size: 13.5px;
+  color: var(--body);
+}
+.weigh-pct {
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.weigh-row input[type="range"] {
+  width: 100%;
+  accent-color: #4f46e5;
+  height: 22px;
+  cursor: pointer;
+}
+.weigh-reset {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  cursor: pointer;
+}
+.weigh-reset:hover:not(:disabled) {
+  background: #f1f4f8;
+}
+.weigh-reset:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.weigh-out {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.weigh-score {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.weigh-score.lead.s0304 {
+  border-color: var(--gold);
+  background: #fbf7ec;
+}
+.weigh-score.lead.s2526 {
+  border-color: var(--red);
+  background: #fdf0f1;
+}
+.weigh-score-yr {
+  font-size: 13px;
+  font-weight: 700;
+}
+.weigh-score.s0304 .weigh-score-yr {
+  color: var(--gold-text);
+}
+.weigh-score.s2526 .weigh-score-yr {
+  color: var(--red-text);
+}
+.weigh-score-val {
+  margin-left: auto;
+  font-size: 26px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.weigh-score-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 6px;
+  color: #fff;
+}
+.weigh-score.s0304 .weigh-score-tag {
+  background: var(--gold-text);
+}
+.weigh-score.s2526 .weigh-score-tag {
+  background: var(--red-text);
+}
+.weigh-verdict {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--body);
+}
+
 @media (max-width: 640px) {
   .raw-metrics {
+    grid-template-columns: 1fr;
+  }
+  .weigh-out {
     grid-template-columns: 1fr;
   }
 }
@@ -1111,6 +1234,64 @@ a {
   font-size: 14.5px;
   line-height: 1.55;
 }
+/* Collapsible disclosure (Section C's demoted fixture-calendar exploration) */
+.collapsible {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+.collapsible-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 18px;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--body);
+}
+.collapsible-head:hover {
+  background: #f6f8fa;
+}
+.collapsible-summary {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--body);
+}
+.collapsible-cta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent, #b4123a);
+  white-space: nowrap;
+}
+.collapsible-chev {
+  transition: transform 0.18s ease;
+  font-size: 12px;
+}
+.collapsible.open .collapsible-chev {
+  transform: rotate(180deg);
+}
+.collapsible-body {
+  padding: 4px 18px 20px;
+  border-top: 1px solid var(--line);
+}
+@media (max-width: 560px) {
+  .collapsible-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
 .reading p {
   color: #5a3410;
 }

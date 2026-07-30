@@ -10,8 +10,8 @@ Outputs (all consumed by the API / frontend):
   physical.json       Section C: squad age + fixture congestion
   congestion.json     Section C: league PPG split by rest bucket (points under load)
   synthesis.json      model output re-read against the circumstances (Dashboard + verdict)
-  synthesis_d.json    Section D: peer scatter (field resistance vs over-performance)
-                      + Arsenal's full two-force combined difficulty
+  synthesis_d.json    Section D: Arsenal's two-force combined difficulty
+                      (normalised title-race pressure + departures + fixture load)
   meta.json           thesis, provenance, and the honesty framing
 """
 

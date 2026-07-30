@@ -190,50 +190,30 @@ the tight games:
 This is the depth of the argument (Sections B-D), and where the **data-availability
 honesty** matters most.
 
-- **`circumstances.py` (Section B)** - two measured angles on how hard the league was:
-  - *Field strength - a title-race pressure index.* Quoting the pack's points is shallow
-    (a team 30 points back was never a threat), so instead I weight every one of the 19
-    rivals by `exp(-gap / tau)` - its points behind the champion, exponentially decayed -
-    and sum them into a distance-discounted "effective number of title threats". It's
-    highest when several teams finish near the top. This single metric replaces the old
-    shallow "who came 2nd/3rd", "winning margin" and "points spread" views. **Measured**
-    (a computation on the final tables; rival xG doesn't exist for 2003/04, so it's
-    points-based for both).
-
-    *The `tau` robustness check (the interactive chart).* `tau` is the one free knob: it
-    sets how fast a rival's weight fades with distance. Low `tau` means pressure fades
-    fast, so only very close rivals count; high `tau` means it fades slowly, so even
-    distant sides add a little. To avoid defending a single value, `_pressure_sweep()`
-    computes the index for both seasons across `tau = 5 -> 20` (step 0.5) and exports it
-    as `field_strength.sweep`; the frontend's `PressureRobustnessChart` plots the two
-    curves and gives the reader a draggable marker to read off both values at any `tau`.
-    How to read it: the 2025/26 (red) line sits above 2003/04 (gold) at every point in the
-    range, so the ordering is a property of the field, not of the parameter; only the
-    absolute numbers move. Range choice, verified against the printed sweep: below `tau=5`
-    both indices sit near zero (unreadable); above `tau=20` the "effective threats" reading
-    degrades (distant relegation sides start to count) and the two curves converge toward
-    the full 19 rivals - so the gap narrows as `tau` grows and widens as it shrinks, but
-    the lines never cross or touch anywhere tested (`tau = 3 -> 40`). The default marker
-    sits at `tau=10`, the value quoted in the report body.
-
-    *Presenting it (Section B copy).* The lead-in is reasoning-first (why closer rivals
-    mean a harder title) and the formula is demoted into a small "the maths, if you want
-    it" aside so it does not interrupt the plain-language flow. Before the sweep chart a
-    lightweight **`TauExplainer`** visual draws two example decay curves (low `tau=5` vs
-    high `tau=20`) purely to build the intuition that "`tau` = how far back a rival still
-    matters" - it is illustrative, computed client-side, not season data. The explainer text
-    spells out both axes (x = points a rival finished behind Arsenal, y = the weight it
-    gets) and the two curves are labelled DIRECTLY on the chart (no legend to map colours
-    to): "low tau, fades fast" on the steep curve, "high tau, fades slowly" on the shallow
-    one. On the sweep
-    chart itself, dragging the marker updates a live readout (both indices + the ratio) and
-    a live interpretation line. Only the LEADING figure updates ("At tau = N, 2025/26 shows
-    Mx more..."); the framing stays constant and lands on the honest takeaway - trust the
-    DIRECTION, not the exact number: the multiple runs from roughly 2x at low tau to about
-    1.3x at high tau, but 2025/26 is above 2003/04 at every setting, so dragging can never
-    make the finding look weaker. The "why the chart stops at tau = 20" caveat is no longer
-    inline prose; it lives in a subtle **`InfoTip`** ("(i)") tucked at the high-tau (right)
-    edge of the x-axis, opening on hover or tap.
+- **`circumstances.py` (Section B / the field)** - the outside force, a **week-by-week
+  title-race pressure index**. (This module also computes squad stability, but that metric
+  now renders in Section C, the inside force - see below.)
+  - *The metric.* The final table is only a snapshot; pressure is really endured across the
+    whole season, so the index is CUMULATIVE. Every club's week-by-week points path is
+    rebuilt (2025/26 from Understat's league page; 2003/04 from a football-data.co.uk results
+    CSV, `data/raw/footballdata_epl_2003_04.csv`, the only source with every 2003/04 club's
+    results). For each of the 38 gameweeks, every rival is weighted `exp(-|gap| / tau)` (gap =
+    its points from Arsenal that week, `tau=10`) by how close it sits, and rivals ABOVE
+    Arsenal are counted `2x` (chasing is harder than leading). Summed over all rivals and all
+    weeks. Reported as a RELATIVE INDEX: 2003/04 = 1.00, 2025/26 = 1.17 (about 17% more
+    pressure); the raw sums (187.52 / 219.85) are kept as `pressure_index_raw` for the repo.
+    The `2x` and `tau` are stated CHOICES, not facts; the direction (2025/26 higher) holds
+    across `tau = 5 -> 20` and with or without the `2x`. **Measured** on league points, which
+    exist for every club in both eras. `_validate_weekly()` errors if a rebuilt weekly table
+    ever fails to reproduce the known final table, so a bad source cannot silently distort it.
+  - *The tau sweep (interactive).* `_pressure_sweep()` recomputes the index for both seasons
+    across `tau = 5 -> 20` (step 0.5) as the relative index (2003/04 = 1.00 at every tau),
+    exported as `field_strength.sweep`. `PressureRobustnessChart` plots the two lines with a
+    draggable marker and a live readout; 2025/26 stays above 2003/04 throughout (the multiple
+    runs ~1.18x down to ~1.13x, never parity), so the ordering is a property of the field, not
+    the parameter. The old two-curve "What tau does" explainer (`TauExplainer`) was REMOVED in
+    a tightening pass; the sweep carries tau on its own. A subtle `InfoTip` at the high-tau
+    edge explains why the chart stops at `tau = 20`.
   - *Squad stability* - how much upheaval each squad absorbed going into its title
     season, measured three ways off the sourced squad lists: **players retained**
     (share of *this* season's title-winning squad that was at the club the year before -
@@ -318,37 +298,23 @@ honesty** matters most.
   and in what shape?". It only assembles measured numbers side by side. This now feeds the
   **Dashboard** and the concluding section rather than its own report section; the
   cumulative reading is tagged **interpretation**.
-- **`synthesis_d.py` (Section D - "The synthesis")** - combines the two forces, honestly
-  bounded by what data exists for rival clubs. **Two elements.** (1) A **peer scatter** of
-  all 20 clubs: x = **field resistance** (the outside force only), a generalised
-  position-race pressure `sum over other clubs of exp(-|points gap|/10)` computed
-  identically for every club from the final table (for the champion it equals Section B's
-  index); y = **over-performance**, actual minus model-expected points, from the SAME
-  Poisson model fit per club on that club's 38 matches (per-match xG pulled once from
-  Understat's EPL league page, `understat_epl_2025.json`). Every club's actual points is
-  cross-checked against the final table. Dots are **labelled directly** for Arsenal plus
-  the notable ones (top over-performers and clear outliers, short names); the crowded
-  mid-table is left to hover so labels stay legible. The inside force is deliberately
-  absent here because squad/fixture data cannot be built to the Section B/C standard for
-  rivals. (2)
-  An **Arsenal-only combined** difficulty for its two complete-data seasons: equal-weighted
-  average of three components normalised 0-1 across the two eras - outside (title-race
-  pressure), inside (minutes-weighted departures), inside (short-rest share). The only
-  visual is the three **RAW-value cards** (each on its own scale: pressure 0.85 vs 1.36,
-  departures 16.7% vs 15.6%, short-rest 32.2% vs 47.6%), which show the true, non-binary
-  size of each gap. Below the raw cards a **stated-model block** ("The model, stated")
-  makes the synthesis explicit as an equation: the formula line, then a small grid showing
-  each **normalised** component plugged in per season (2003/04 `0.00 / 1.00 / 0.00`,
-  2025/26 `1.00 / 0.00 / 1.00`) with an arrow to the resulting **difficulty score** as the
-  headline figure (0.33 vs 0.67). This is the "conclusive equation" the synthesis needed to
-  actually show, not just describe; a note under it keeps the coarse-by-design caveat (min-max
-  across just two seasons forces each component to 0 or 1, so trust the direction not the
-  precision). The recipe box states the equal weighting is a tunable
-  default.
-  **Key honesty point:** on the peer
-  plane Arsenal sits at the LOWEST field resistance (it pulled clear of the pack) and the
-  HIGHEST over-performance - top-left, not top-right. Nothing for peers is estimated; the
-  interpretation copy is written to match where Arsenal actually lands.
+- **`synthesis_d.py` (Section D - "The synthesis")** - combines the two forces into ONE
+  difficulty score per era, for Arsenal's two complete-data seasons. The earlier all-20-clubs
+  **peer scatter** (field resistance vs over-performance) was REMOVED: the report compares
+  only 2003/04 vs 2025/26 throughout, and over-performance is a "how well did they do" measure,
+  not a difficulty measure, so it no longer lives in Section D (it survives only as a one-line
+  footnote under the Section E table). What remains: `difficulty` = weighted average of three
+  components, each min-max normalised across the two eras - outside (title-race pressure, the
+  relative index 1.00 / 1.17), inside (minutes-weighted departures 16.7% / 15.6%), inside
+  (short-rest share 32.2% / 47.6%). The frontend shows the three **raw-value cards**, then an
+  **interactive weighting tool** (`ArsenalWeightingTool`): three auto-normalising sliders
+  (default `45 / 45 / 10`, short-rest low because Section C found its points effect
+  inconclusive) that always sum to 100%, with the resulting difficulty for both seasons
+  recomputed live and the harder season flagged. At the default the score is 2003/04 =
+  **0.45** vs 2025/26 = **0.55** (2025/26 narrowly harder). Because there are only two seasons
+  each component normalises to a 0 or 1 extreme, so the score is coarse by design (read the
+  direction, not the decimals); the pipeline stores an equal-weight `difficulty` reference and
+  the UI recomputes for any chosen weights.
 
 ### Be ready to explain
 - *Why is rival xG missing for 2003/04, and how is that handled?* Understat (the only
@@ -398,9 +364,10 @@ A single-page **React + TypeScript** app, the scroll-driven analytical **Report*
 (`ReportView`) - the only view. (An earlier metrics **Dashboard** and its Report/Dashboard
 toggle were removed to keep the piece focused; `DashboardView.tsx` / `ViewToggle.tsx` are
 gone.) The report runs: Hook, "Before we start: the data," then Section A (the surface),
-B (the field), C (the physical picture - age + fixture congestion + the
-points-under-congestion payoff), D (the synthesis: a whole-league peer scatter on the
-outside force, plus Arsenal's full two-force combined difficulty), E (the verdict).
+B (the field - the week-by-week title-race pressure index), C (the squad and body - squad
+stability + age, with fixture congestion demoted to a collapsible exploration), D (the
+synthesis - the two forces combined into one difficulty score via an interactive weighting
+tool), E (the verdict).
 
 - **`content.ts`** - **the single editable copy file.** All the report's narrative
   text (every heading, intro, paragraph, interpretation, callout, caption, handoff, the
@@ -426,13 +393,13 @@ outside force, plus Arsenal's full two-force combined difficulty), E (the verdic
   deliberately leaves out") for stating something deliberately not measured (usually
   because the data does not exist for both eras). It is styled as its own category,
   distinct from the interpretation blocks and the metric cards. Currently used in
-  Section B part 2 (positional/depth data) and Section C (physical tracking data);
+  Section C (squad depth/positional data, and physical tracking data);
   future sections should reuse it rather than hand-rolling a bespoke note.
-  It also holds **`InfoTip`**, a small "(i)" affordance that reveals plain-language
-  term definitions on hover/focus (desktop) or tap (mobile); used in Section A to
-  define Goals for / Goals against / xG for / xG against without cluttering the prose.
-  `InfoTip` is also used at the high-tau edge of the Section B sweep chart for the
-  "why it stops at tau = 20" caveat.
+  It also holds **`Collapsible`** (the tap-to-expand disclosure used for Section C's
+  demoted fixture-calendar exploration) and **`InfoTip`**, a small "(i)" affordance that
+  reveals plain-language text on hover/focus (desktop) or tap (mobile); `InfoTip` is used
+  at the high-tau edge of the Section B sweep chart for the "why it stops at tau = 20"
+  caveat.
 - **`components/TopBar.tsx`** - the persistent top navigation bar (rendered by `App`).
   It carries the section nav (left/centre) and the GitHub link (right); there is no
   view toggle any more (the dashboard was removed). Every major section has a **stable anchor id**
@@ -448,9 +415,9 @@ outside force, plus Arsenal's full two-force combined difficulty), E (the verdic
   with a green "▲" (points, record/unbeaten, goals, goal difference, PPG all fall to
   2003/04; xG is left unmarked because it is a model estimate read within a season). The
   cards and the surface charts read as one uninterrupted "surface" block (there is no
-  separate pivot line; the framing turn is deferred to the forces block, whose lead now
-  states plainly that the report is *proposing* a difficulty model out of a short list of
-  measurable factors and will average them into one score in Section D). The week-by-week
+  separate pivot line; the framing turn is a single tight block after the chart, stating
+  the report builds a difficulty measure from two forces, which the rest of the report
+  measures then combines). The week-by-week
   cumulative-points chart **marks the 2025/26 side's 5
   defeats as dots** on its line (the flat steps where no points came), so the loss count
   is visible not just stated; the unbeaten 2003/04 line has none. Section A closes with a
@@ -464,11 +431,13 @@ outside force, plus Arsenal's full two-force combined difficulty), E (the verdic
   the two forces are actually combined. **Section E (`Conclusion`) is the verdict**, in
   four parts: (1) a single contrast table of every difficulty dimension with a "From"
   column hyperlinking to each source section (all figures pulled from the same JSON so
-  they stay in sync); (2) the model's even-handed result stated plainly (equal weighting
-  points to 2025/26); (3) the human verdict, tagged **interpretation** and explicitly
-  marked as a view not a finding (the author weights the unbeaten run above the average,
-  landing on 2003/04, while conceding a reader who weights as the model does lands on
-  2025/26); and (4) "where this goes next" as actionable bullets. The split of model
+  they stay in sync), with over-performance moved OUT of the difficulty table into a
+  one-line footnote (it measures how well, not how hard); (2) the model's result under the
+  default weighting (45/45/10), which puts 2025/26 narrowly ahead, 0.55 to 0.45; (3) the
+  human verdict, tagged **interpretation** and explicitly marked as a view not a finding
+  (the author weights the unbeaten run above the average, landing on 2003/04, while
+  conceding a reader who weights as the model does lands on 2025/26); and (4) "where this
+  goes next" as actionable bullets. The split of model
   result from human verdict is deliberate: the data lays out the trade-off, the weighting
   choice is owned as judgement.
 

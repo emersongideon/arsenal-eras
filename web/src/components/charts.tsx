@@ -242,7 +242,7 @@ export function TauExplainer() {
           stroke={AXIS}
           tick={{ fontSize: 11 }}
           label={{
-            value: "points a rival finished behind Arsenal",
+            value: "points a rival sits from Arsenal that week",
             position: "bottom",
             offset: 10,
             fill: AXIS,
@@ -266,7 +266,7 @@ export function TauExplainer() {
         <Tooltip
           contentStyle={ttStyle}
           formatter={(v: number | string) => Number(v).toFixed(2)}
-          labelFormatter={(g) => `${g} points behind`}
+          labelFormatter={(g) => `${g} points apart`}
         />
         <Line
           type="monotone"
@@ -324,11 +324,10 @@ export function PressureRobustnessChart({
   const row =
     data.find((d) => Math.abs(d.tau - tau) < sweep.step / 2) ??
     data.reduce((a, b) => (Math.abs(b.tau - tau) < Math.abs(a.tau - tau) ? b : a));
-  const a = row["2003/04"];
+  const a = row["2003/04"]; // baseline, always 1.00
   const b = row["2025/26"];
   const ratio = a > 0 ? (b / a).toFixed(2) : "-";
   const isDefault = Math.abs(tau - sweep.default_tau) < 1e-9;
-  const yMax = Math.ceil(Math.max(...data.map((d) => d["2025/26"])) + 0.5);
 
   return (
     <div className="robust">
@@ -344,7 +343,7 @@ export function PressureRobustnessChart({
             tick={{ fontSize: 12 }}
             allowDecimals={false}
             label={{
-              value: "decay scale  τ  (how far back a rival still counts)",
+              value: "decay scale  τ  (how far back on the table a rival still counts each week)",
               position: "bottom",
               offset: 10,
               fill: AXIS,
@@ -354,9 +353,10 @@ export function PressureRobustnessChart({
           <YAxis
             stroke={AXIS}
             tick={{ fontSize: 12 }}
-            domain={[0, yMax]}
+            domain={[0.9, 1.3]}
+            ticks={[0.9, 1.0, 1.1, 1.2, 1.3]}
             label={{
-              value: "pressure index",
+              value: "pressure, indexed to 2003/04 = 1.00",
               angle: -90,
               position: "insideLeft",
               offset: 16,
@@ -366,7 +366,7 @@ export function PressureRobustnessChart({
           />
           <Tooltip
             contentStyle={ttStyle}
-            formatter={(v: number) => v.toFixed(3)}
+            formatter={(v: number) => v.toFixed(2)}
             labelFormatter={(t) => `τ = ${t}`}
           />
           <Legend verticalAlign="top" height={30} />
@@ -416,9 +416,10 @@ export function PressureRobustnessChart({
       </ResponsiveContainer>
         <div className="robust-tau-info">
           <InfoTip label="Why the chart stops at high tau">
-            The chart stops at τ = 20 on purpose. Beyond it the two lines keep converging,
-            but the measure stops meaning genuine title threats: it starts counting
-            mid-table and relegation sides as if they were contenders, which they were not.
+            The chart stops at τ = 20 on purpose. Beyond it the weekly weights flatten so
+            far that distant mid-table and relegation sides start counting as genuine title
+            threats, which they were not. Within 5 to 20 the comparison stays meaningful,
+            and 2025/26 sits above 2003/04 throughout.
           </InfoTip>
         </div>
       </div>
@@ -443,20 +444,16 @@ export function PressureRobustnessChart({
           {isDefault && <span className="dim"> (used in the report)</span>}:
         </span>
         <span className="robust-vals">
-          <span className="s0304">2003/04 = {a.toFixed(3)}</span>
-          <span className="s2526">2025/26 = {b.toFixed(3)}</span>
+          <span className="s0304">2003/04 = {a.toFixed(2)} (baseline)</span>
+          <span className="s2526">2025/26 = {b.toFixed(2)}</span>
           <span className="dim">2025/26 is {ratio}× higher</span>
         </span>
       </div>
 
-      <p className="robust-interp" aria-live="polite">
-        At <b>τ = {tau}</b>
-        {isDefault ? " used in the report" : ""}, 2025/26 shows <b>{ratio}×</b> more
-        title-race pressure than 2003/04. Drag the marker and that multiple shifts, from
-        roughly 2× at low τ down to about 1.3× at high τ, but 2025/26 stays above 2003/04 at
-        every setting. So the honest takeaway is the direction, not the exact number:
-        2025/26 faced a more crowded title race on any reasonable setting, even if how much
-        more depends on how far back you let rivals count.
+      <p className="robust-interp">
+        The multiple shifts with tau, from about 1.18x to 1.13x, but never falls to parity.
+        The honest takeaway is the direction, not the exact number: 2025/26 faced a more
+        contested race on any reasonable setting.
       </p>
     </div>
   );
@@ -1238,127 +1235,9 @@ function XgScatterTip({
 // Section D - the synthesis
 // ===========================================================================
 
-type PeerClub = SynthesisD["peer"]["clubs"][number];
-
-function SynthTip({
-  active,
-  payload,
-}: {
-  active?: boolean;
-  payload?: { payload: PeerClub }[];
-}) {
-  if (!active || !payload?.length) return null;
-  const d = payload[0].payload;
-  return (
-    <div className="tt">
-      <strong>{d.club}</strong>
-      <div>field resistance {d.field_resistance.toFixed(2)}</div>
-      <div>
-        over-performance {d.over_performance >= 0 ? "+" : ""}
-        {d.over_performance.toFixed(1)} pts
-      </div>
-    </div>
-  );
-}
-
-/** Part 1: peer scatter. x = field resistance (outside force, same for every
- *  club); y = over-performance (actual minus model-expected points). Arsenal
- *  highlighted; peers muted, identified on hover. Top-right = crowded field AND
- *  beat the model. */
-const CLUB_SHORT: Record<string, string> = {
-  "Manchester City": "Man City",
-  "Manchester United": "Man Utd",
-  "Wolverhampton Wanderers": "Wolves",
-  "Nottingham Forest": "Forest",
-  "Tottenham Hotspur": "Spurs",
-  "Newcastle United": "Newcastle",
-  "West Ham United": "West Ham",
-  "Brighton & Hove Albion": "Brighton",
-  "Crystal Palace": "Palace",
-};
-// Labelled directly on the chart: Arsenal plus the notable dots (top over-performers
-// and the clear outliers). The crowded mid-table is left to hover, so labels stay
-// legible rather than overlapping into a mush.
-const NOTABLE = new Set([
-  "Manchester City",
-  "Manchester United",
-  "Aston Villa",
-  "Sunderland",
-  "Fulham",
-  "Wolverhampton Wanderers",
-  "Burnley",
-]);
-const short = (c: string) => CLUB_SHORT[c] ?? c;
-
-export function SynthesisScatter({ clubs }: { clubs: PeerClub[] }) {
-  const withLabel = (c: PeerClub) => ({ ...c, label: short(c.club) });
-  const peers = clubs.filter((c) => !c.is_arsenal);
-  const notablePeers = peers.filter((c) => NOTABLE.has(c.club)).map(withLabel);
-  const otherPeers = peers.filter((c) => !NOTABLE.has(c.club));
-  const arsenal = clubs.filter((c) => c.is_arsenal).map(withLabel);
-  const xs = clubs.map((c) => c.field_resistance);
-  const ys = clubs.map((c) => c.over_performance);
-  const xMax = Math.ceil(Math.max(...xs));
-  const yMin = Math.floor(Math.min(...ys) / 5) * 5;
-  const yMax = Math.ceil(Math.max(...ys) / 5) * 5;
-  return (
-    <ResponsiveContainer width="100%" height={380}>
-      <ScatterChart margin={{ top: 24, right: 20, bottom: 28, left: -2 }}>
-        <CartesianGrid stroke={GRID} />
-        <XAxis
-          type="number"
-          dataKey="field_resistance"
-          domain={[0, xMax]}
-          stroke={AXIS}
-          tick={{ fontSize: 11 }}
-          label={{
-            value: "field resistance faced  (position-race pressure, higher = more contested)",
-            position: "bottom",
-            offset: 12,
-            fill: AXIS,
-            fontSize: 11,
-          }}
-        />
-        <YAxis
-          type="number"
-          dataKey="over_performance"
-          domain={[yMin, yMax]}
-          stroke={AXIS}
-          tick={{ fontSize: 11 }}
-          label={{
-            value: "over-performance (pts vs model)",
-            angle: -90,
-            position: "insideLeft",
-            offset: 12,
-            fill: AXIS,
-            fontSize: 11,
-          }}
-        />
-        <ZAxis range={[70, 70]} />
-        <ReferenceLine
-          y={0}
-          stroke="#9aa4b2"
-          strokeDasharray="5 5"
-          label={{ value: "met expectation", position: "insideRight", fill: "#9aa4b2", fontSize: 10 }}
-        />
-        <Tooltip content={<SynthTip />} cursor={{ strokeDasharray: "3 3" }} />
-        <Scatter data={otherPeers} fill="#9aa4b2" fillOpacity={0.85} isAnimationActive={false} />
-        <Scatter data={notablePeers} fill="#6b7482" fillOpacity={0.95} isAnimationActive={false}>
-          <LabelList dataKey="label" position="top" fontSize={10} fill="#5e6772" />
-        </Scatter>
-        <Scatter data={arsenal} fill={RED} isAnimationActive={false}>
-          <ZAxis range={[190, 190]} />
-          <LabelList dataKey="label" position="top" fontSize={12} fontWeight={700} fill={RED} />
-        </Scatter>
-      </ScatterChart>
-    </ResponsiveContainer>
-  );
-}
-
-/** Part 2: Arsenal's full two-force difficulty across its two complete-data
- *  seasons. The RAW values are the headline (each on its own scale, so the true,
- *  non-binary size of every gap is visible); the normalised 0-1 combine is demoted
- *  to a supporting element showing how the 0.33 / 0.67 score is built. */
+/** Arsenal's two-force difficulty across its two complete-data seasons. The RAW
+ *  values are shown (each on its own scale, so the true size of every gap is
+ *  visible); the normalised 0-1 components feed the interactive weighting tool. */
 export function ArsenalCombinedChart({
   combined,
 }: {
@@ -1370,7 +1249,7 @@ export function ArsenalCombinedChart({
     label: string;
     fmt: (v: number) => string;
   }[] = [
-    { key: "field", label: "Title-race pressure", fmt: (v) => v.toFixed(2) },
+    { key: "field", label: "Title-race pressure (index)", fmt: (v) => v.toFixed(2) },
     { key: "departures", label: "Minutes-weighted departures", fmt: (v) => `${v.toFixed(1)}%` },
     { key: "short_rest", label: "Short-rest share of games", fmt: (v) => `${v.toFixed(1)}%` },
   ];
@@ -1403,52 +1282,105 @@ export function ArsenalCombinedChart({
           );
         })}
       </div>
+    </div>
+  );
+}
 
-      <div className="model-eq">
-        <p className="combined-head">The model, stated</p>
-        <p className="model-eq-formula">
-          difficulty = average of ( <b>field</b>, <b>departures</b>, <b>short-rest</b> ),
-          each scaled 0 to 1 across the two seasons
-        </p>
-        <div className="model-eq-scroll">
-          <div className="model-eq-grid">
-            <div className="meq-row meq-head">
-              <span className="meq-era" />
-              <span className="meq-c">field</span>
-              <span className="meq-c">departures</span>
-              <span className="meq-c">short-rest</span>
-              <span className="meq-arrow" aria-hidden="true" />
-              <span className="meq-d">difficulty</span>
+/** Interactive combine: three auto-normalising weight sliders (summing to 100%)
+ *  over the three normalised components, with the resulting difficulty score for
+ *  both seasons recomputed live. Default leans on pressure and departures and
+ *  down-weights short-rest, whose points effect Section C found inconclusive. */
+const WEIGHT_DEFAULT = [45, 45, 10]; // field, departures, short_rest
+
+export function ArsenalWeightingTool({
+  combined,
+}: {
+  combined: SynthesisD["arsenal_combined"];
+}) {
+  const be = combined.by_era;
+  const comps: { key: "field" | "departures" | "short_rest"; label: string }[] = [
+    { key: "field", label: "Title-race pressure" },
+    { key: "departures", label: "Minutes-weighted departures" },
+    { key: "short_rest", label: "Short-rest share" },
+  ];
+  const [w, setW] = useState<number[]>(WEIGHT_DEFAULT);
+
+  // Move one weight to v; redistribute the remainder across the other two in
+  // proportion to their current values so the three always sum to 100.
+  function move(i: number, raw: number) {
+    const v = Math.max(0, Math.min(100, raw));
+    const others = [0, 1, 2].filter((j) => j !== i);
+    const remaining = 100 - v;
+    const sumOthers = others.reduce((s, j) => s + w[j], 0);
+    const next = [...w];
+    next[i] = v;
+    others.forEach((j) => {
+      next[j] = sumOthers > 0 ? (w[j] / sumOthers) * remaining : remaining / 2;
+    });
+    setW(next);
+  }
+
+  // Whole-number weights for display that still add to exactly 100.
+  const shown = w.map((x) => Math.round(x));
+  const drift = 100 - shown.reduce((a, b) => a + b, 0);
+  if (drift !== 0) shown[w.indexOf(Math.max(...w))] += drift;
+
+  const score = (era: "2003/04" | "2025/26") =>
+    comps.reduce((s, c, i) => s + (w[i] / 100) * be[era].norm[c.key], 0);
+  const s0 = score("2003/04");
+  const s1 = score("2025/26");
+  const harder = Math.abs(s1 - s0) < 1e-9 ? null : s1 > s0 ? "2025/26" : "2003/04";
+
+  return (
+    <div className="weigh-tool">
+      <div className="weigh-sliders">
+        {comps.map((c, i) => (
+          <div className="weigh-row" key={c.key}>
+            <div className="weigh-row-head">
+              <span className="weigh-label">{c.label}</span>
+              <span className="weigh-pct">{shown[i]}%</span>
             </div>
-            {(
-              [
-                ["2003/04", "s0304"],
-                ["2025/26", "s2526"],
-              ] as const
-            ).map(([yr, cls]) => {
-              const n = be[yr].norm;
-              return (
-                <div className={`meq-row ${cls}`} key={yr}>
-                  <span className="meq-era">{yr}</span>
-                  <span className="meq-c">{n.field.toFixed(2)}</span>
-                  <span className="meq-c">{n.departures.toFixed(2)}</span>
-                  <span className="meq-c">{n.short_rest.toFixed(2)}</span>
-                  <span className="meq-arrow" aria-hidden="true">
-                    →
-                  </span>
-                  <span className="meq-d">{be[yr].difficulty.toFixed(2)}</span>
-                </div>
-              );
-            })}
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={Math.round(w[i])}
+              aria-label={`Weight for ${c.label}`}
+              onChange={(e) => move(i, Number(e.target.value))}
+            />
           </div>
-        </div>
-        <p className="model-eq-note">
-          With only two seasons each force scales to exactly 0 or 1, so the score is coarse
-          by design: read the direction, not the decimals. The two eras are nearly identical
-          on departures, while 2025/26 is higher on both title-race pressure and fixture
-          congestion. Two of the three forces point to 2025/26 as the harder task, which is
-          why it lands at {be["2025/26"].difficulty.toFixed(2)} against 2003/04's{" "}
-          {be["2003/04"].difficulty.toFixed(2)}.
+        ))}
+        <button
+          type="button"
+          className="weigh-reset"
+          onClick={() => setW(WEIGHT_DEFAULT)}
+          disabled={shown.every((x, i) => x === WEIGHT_DEFAULT[i])}
+        >
+          Reset to default (45 / 45 / 10)
+        </button>
+      </div>
+
+      <div className="weigh-out">
+        {(
+          [
+            ["2003/04", s0, "s0304"],
+            ["2025/26", s1, "s2526"],
+          ] as const
+        ).map(([yr, sc, cls]) => (
+          <div className={`weigh-score ${cls} ${harder === yr ? "lead" : ""}`} key={yr}>
+            <span className="weigh-score-yr">{yr}</span>
+            <span className="weigh-score-val">{sc.toFixed(2)}</span>
+            {harder === yr && <span className="weigh-score-tag">harder</span>}
+          </div>
+        ))}
+        <p className="weigh-verdict">
+          {harder
+            ? `At this weighting, ${harder} is the harder title (${(harder === "2025/26"
+                ? s1
+                : s0
+              ).toFixed(2)} against ${(harder === "2025/26" ? s0 : s1).toFixed(2)}).`
+            : `At this weighting the two seasons tie (${s0.toFixed(2)} each).`}
         </p>
       </div>
     </div>
