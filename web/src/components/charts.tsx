@@ -520,19 +520,20 @@ export function SquadStabilityChart({
       <ResponsiveContainer width="100%" height={290}>
         <BarChart
           data={isMinutes ? minutesData : countData}
-          margin={{ top: 20, right: 16, bottom: 8, left: -14 }}
+          margin={{ top: 20, right: 16, bottom: 8, left: 6 }}
         >
           <CartesianGrid stroke={GRID} vertical={false} />
           <XAxis dataKey="season" stroke={AXIS} tick={{ fontSize: 13, fontWeight: 700 }} />
           <YAxis
             stroke={AXIS}
             tick={{ fontSize: 12 }}
+            width={54}
             domain={isMinutes ? [0, 100] : [0, "auto"]}
             label={{
               value: isMinutes ? "% of last season's minutes" : "PL players",
               angle: -90,
               position: "insideLeft",
-              offset: 12,
+              offset: 0,
               fill: AXIS,
               fontSize: 12,
             }}
@@ -557,7 +558,7 @@ export function SquadStabilityChart({
 
       <p className="chart-note">
         {isMinutes
-          ? `Weighted by last season's minutes. New arrivals contributed 0% of last season's playing time (they were not yet at the club), so the new-in bar collapses; what stayed sits against what left, and the departed share is close across the eras (${bySeason["2003/04"].departed_minutes_pct}% vs ${bySeason["2025/26"].departed_minutes_pct}%) even though 2025/26 moved far more players.`
+          ? `Weighted by last season's minutes. New arrivals show 0% because they had not played for the club yet, so that bar collapses; what stayed sits against what left. The departed share is close across eras (${bySeason["2003/04"].departed_minutes_pct}% vs ${bySeason["2025/26"].departed_minutes_pct}%) despite 2025/26 moving far more players.`
           : "Headcount of players retained, joined and departed versus the prior season."}
       </p>
     </div>

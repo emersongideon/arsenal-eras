@@ -104,23 +104,23 @@ export const content = {
   c: {
     eyebrow: "Section C · The squad and body",
     heading: "The squad and body",
-    lead: "The second force is internal: the squad Arsenal fielded, and whether it could carry the season. It has two sides that show clear differences, how settled the squad was and how old, and one that does not, the fixture load. The first two lead; the calendar sits as an exploration at the end.",
+    lead: "The second force is internal: the squad Arsenal fielded, and whether it could carry the season. Two measures separate the eras, how settled the squad was and how old. We also looked at the fixture load, but it did not matter much, so it sits as an exploration at the end.",
 
     // Part 1 - squad stability (moved from Section B)
     stabTitle: "1. Squad stability",
-    stabBody1: "A squad that has played together knows its movement and the manager's system; one with many new signings has to build that from scratch, which takes time. So we measure the upheaval each squad absorbed three ways: players retained, players joined, and players departed. Departures are weighted by minutes lost, the share of last season's playing time that walked out the door, so losing a key player counts for more than losing a squad filler.",
-    stabBody2: "The 2003/04 title squad was highly settled: **81.8%** carried over from the previous season, with only 4 new faces. The 2025/26 squad was far less so: **64.0%** carried over, with 9 new players. But both lost a similar share of playing time to departures. Of every 100 minutes played the previous season, the players who then left took about **17 minutes** in 2003/04 and **16** in 2025/26.",
+    stabBody1: "A squad that has played together knows its movement and the manager's system; a rebuilt one must build that from scratch, which takes time. So we measure the upheaval three ways: players retained, joined, and departed.",
+    stabBody2: "The 2003/04 title squad was highly settled: **81.8%** carried over from the previous season, with only 4 new faces. The 2025/26 squad was far less so: **64.0%** carried over, with 9 new players. But the number of players tells you less than how important they were. When a player leaves, the club loses whatever they contributed on the pitch, and a regular leaves a bigger hole than a reserve. So we measure how much of last season's actual playing time walked out the door. By that measure the two eras are close: the players who left before 2003/04 had covered about **17%** of the previous season's minutes, and before 2025/26 about **16%**. Roughly the same size of hole, even though 2025/26 changed far more players.",
     stabLimitation:
-      "Squad depth and positional cover matter too, and a fuller version of this would include them. We leave them out because reliable position-by-position data does not exist for the 2003/04 squad, and a measure available for only one era would not make a fair comparison.",
+      "Squad depth and positional cover matter too, but reliable position-by-position data does not exist for 2003/04, and a measure for only one era would not make a fair comparison.",
     stabReading:
       "Both eras lost a similar share of their core; what set 2025/26 apart was integrating more new players, not a bigger loss of proven quality.",
 
     // Part 2 - squad age
     ageTitle: "2. Squad age, weighted by minutes played",
     ageBody1: "We weight each player's age by the minutes they actually played: the age of the team really on the pitch, not everyone on the books.",
-    ageBody2: "By this measure, the Invincibles were a **27.8**-year-old side, and 27% of their playing minutes went to players aged 30 or over. The 2025/26 side was younger, at **26.5**, with only 15% of minutes going to over-30s.",
+    ageBody2: "The Invincibles were a **27.8**-year-old side, 27% of their minutes going to players 30 or over. The 2025/26 side was younger at **26.5**, only 15% to over-30s.",
     ageReading:
-      "So 2025/26 was both younger and less settled, a squad still coming together rather than one at settled maturity.",
+      "So 2025/26 was both younger and less settled, still coming together rather than at settled maturity.",
 
     // Demoted, collapsible exploration - the fixture calendar
     calHeader:
@@ -138,7 +138,7 @@ export const content = {
   d: {
     eyebrow: "Section D · The synthesis",
     heading: "Putting the two forces together",
-    lead: "Sections B and C measured the two forces separately. This section combines them into a single difficulty score for each era. The recipe is simple: each of the three components is scaled across the two seasons, then averaged using weights you can set yourself. Difficulty combines the outside force (title-race pressure) and the inside forces (squad departures and fixture load), nothing else.",
+    lead: "Sections B and C measured the two forces separately; this section combines them into one difficulty score per era. Each of the three components is scaled across the two seasons, then averaged using weights you set: the outside force (title-race pressure) and the inside forces (squad departures and fixture load).",
     synthTitle: "Building the difficulty score",
     weightIntro:
       "There is no single right way to weigh three forces, so the weighting is yours. The default leans on pressure and departures and weights short-rest low, since its effect on points was inconclusive. Move the sliders to see the answer shift.",
@@ -166,13 +166,13 @@ export const content = {
     ] as { dim: string; a: string; b: string; from: FromRef[]; hi?: boolean }[],
     tableNote: "Each row links back to the section it came from.",
     overPerfNote:
-      "Separately, and not a difficulty measure: Arsenal beat the model by +20.6 in 2003/04 and +15.8 in 2025/26, a measure of how well it did, not how hard the task was.",
+      "Separately, and not a difficulty measure: Arsenal beat the model by +20.6 in 2003/04 and +15.8 in 2025/26, how well it did, not how hard the task was.",
     e2Title: "What the default weighting concludes",
     e2Body: "Under the default weighting, the model gives 2025/26 the harder task, but narrowly: 0.55 to 0.45. The gap rests on a title race tighter by about 17% and a less settled squad; the calendar is weighted down as inconclusive. The honest read is not a clear win, but a marginal one on a weighting you can change.",
     e3Title: "The verdict, and it is a view",
     e3: [
-      "Here I step in with a view, marked as a view, not a finding. The model puts 2025/26 narrowly ahead. I do not. Going unbeaten across 38 games is not one force to be averaged in; it is a different category of hard. It allows no margin, one poor afternoon ends it, and no side has done it since. By the weighting I find most convincing, that makes 2003/04 the harder task.",
-      "It is a judgement about what to weight, not a correction of the model, and the margin makes it easy to hold: the model's lead for 2025/26 is only 0.55 to 0.45, resting on a race tighter by 17%, not a landslide. When the even-handed read is that close, whether never losing is worth more than everything else is enough to tip it. Weight the forces as the model does and 2025/26 edges it; weight the unbeaten run as I do and 2003/04 takes it.",
+      "Here I step in with a view. The model puts 2025/26 narrowly ahead. I do not. Going unbeaten across 38 games is not one force to be averaged in; it is a different category of hard. It allows no margin, one poor afternoon ends it, and no side has done it since. By the weighting I find most convincing, that makes 2003/04 the harder task.",
+      "It is a judgement about what to weight, not a correction of the model, and the margin makes it easy to hold: a narrow lead, not a landslide. When the even-handed read is that close, whether never losing is worth more than everything else is enough to tip it. Weight the forces as the model does and 2025/26 edges it; weight the unbeaten run as I do and 2003/04 takes it.",
     ],
     e4Label: "Where this goes next.",
     e4Bullets: [

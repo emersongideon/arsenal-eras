@@ -258,41 +258,31 @@ honesty** matters most.
     older because Lehmann and Pirès are big dots past 30). Player names are cleaned to a
     familiar label via `sources.PLAYER_DISPLAY_NAME` (label only; age/minutes untouched) -
     StatsBomb's raw strings are formal ("Laureano Bisan-Etame Mayer" -> "Lauren").
-  - *Fixture congestion* - the section is about COMPRESSION, not raw volume, so it is
-    built from the **rest gap** between consecutive competitive matches (the difference
-    in days between each match date and the one before it, across all competitions; the
-    season opener has no preceding match and carries no gap). From those gaps the pipeline
-    exports (a) `rest_buckets` - how many games followed a `<=2 / 3 / 4-5 / 6-7 / 8+` day
-    rest, and (b) `matches` - the full per-match list with each game's date, competition,
-    rest days, and a `short` flag (`<=3` days). The frontend draws two views: **Visual A**,
-    a grouped bar of the rest-gap buckets (the direct evidence that 2025/26 is weighted
-    toward short rest: 30 games on 3 days' rest vs 13), and **Visual B**, a per-season
-    Aug->May timeline where every match is a tick placed by date, short-rest games in a
-    hot orange, plus **congested-stretch bands** (runs of 3+ games in quick succession)
-    shaded in a distinct indigo wash so "where games bunched" (December, the modern
-    January/February European weeks) reads at a glance without studying it; hover gives
-    competition, date and rest days. Totals reconstruct to 59 (2003/04) and 63
-    (2025/26) and short-rest counts to 19 and 30, verified against the assembled fixture
-    list. This is also where the honesty note lives: modern tracking data (distance,
-    sprints, GPS) has **no 2003/04 equivalent**, so it is deliberately excluded rather
-    than fabricated.
-- **`congestion.py` (Section C, folded into part 2 as its closing beat)** - the physical
-  force's payoff (formerly its own Section D, then a part 3, now the closing beat of the
-  fixture-congestion part, so it is not a separate third point). Synthesises
-  the rest-gaps (Section C part 2) with match results (Section A) to ask whether the more
-  compressed 2025/26 schedule actually cost points. **Bucket definition:** each of the 38 LEAGUE
-  games per season is split into "short rest" (`<= 3` days) or "normal rest" (`4+` days),
-  where the rest is measured from the FULL fixture list across ALL competitions (a
-  midweek cup or European game tires the side too), i.e. the same rest-gap as Section C.
-  Points-per-game is league-only because cups are knockout and have no points; the season
-  opener has no preceding match, so its long pre-season rest counts as normal. Each
-  season's overall PPG is exported as a baseline. **Sample-size caveat (important):** the
-  short-rest buckets are only ~10-12 games, so per-bucket PPG is noisy - a one- or
-  two-result swing moves it by ~0.2. The payload carries the game counts, the chart prints
-  them on the bars, and the copy flags them, precisely so the small buckets are not
-  over-read. No verdict is baked into the data or the chart; the reading is deliberately
-  left to the section copy. (A league-only rest basis was also computed but rejected: its
-  short-rest buckets are n=6 and n=4, too small to mean anything.)
+  - *Fixture congestion* - about COMPRESSION, not raw volume, so it is built from the
+    **rest gap** between consecutive competitive matches (days between each match date and
+    the one before, across all competitions; the opener carries no gap). The pipeline exports
+    `rest_buckets` (games after a `<=2 / 3 / 4-5 / 6-7 / 8+` day rest) and `matches` (the full
+    per-match list with date, competition, rest days, and a `short` flag for `<=3` days).
+    Totals reconstruct to 59 (2003/04) and 63 (2025/26), short-rest counts to 19 and 30,
+    verified against the assembled fixture list. In the frontend this whole branch is a
+    **collapsed, inconclusive exploration** (it did not move the picture), slimmed to one
+    paragraph, ONE chart, and the tracking-data note. The chart is the per-season Aug->May
+    **timeline** where every match is a tick placed by date, short-rest games in hot orange,
+    plus **congested-stretch bands** (runs of 3+ games) in an indigo wash so December and the
+    modern January/February European weeks read at a glance. The honesty note: modern tracking
+    data (distance, sprints, GPS) has **no 2003/04 equivalent**, so it is excluded not
+    fabricated. (The earlier rest-gap bucket bar chart was cut in the slim.)
+- **`congestion.py` (Section C, folded into the fixture exploration)** - asks whether the
+  more compressed 2025/26 schedule actually cost points. Each of the 38 LEAGUE games per
+  season is split into "short rest" (`<= 3` days) or "normal rest" (`4+` days), rest measured
+  from the FULL fixture list across ALL competitions (a midweek cup or European game tires the
+  side too). PPG is league-only (cups have no points); the opener's long pre-season rest counts
+  as normal; each season's overall PPG is exported as a baseline. **The answer is
+  inconclusive:** short-rest PPG held (2.42 for 2025/26, 2.40 for 2003/04, against season
+  averages 2.24 / 2.37), but the short-rest buckets are only ~10-12 games, too small to be
+  decisive. The points-per-game bar chart was REMOVED in the slim; those figures now live in
+  the one-paragraph summary prose, with the sample-size caveat stated there. `congestion.json`
+  is still generated but no longer charted. No verdict is baked into the data.
 - **`synthesis.py`** - re-reads the measured expected-points model *through* the
   circumstances: not "did they beat their xG?" but "against a stronger or weaker field,
   and in what shape?". It only assembles measured numbers side by side. This now feeds the
