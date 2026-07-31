@@ -5,11 +5,12 @@ A full-stack data project that turns shot-level and match data into a repeatable
 and 2025/26 title winners (85 pts, 26-7-5) as a worked example.
 
 It reads start-to-finish as a personal analytical piece: Hook → Before we start: the data
-→ **A. The surface** → **B. The field** → **C. The physical picture** → **D. Performance
-against task** → **E. What this surfaces**. Built on StatsBomb and Understat data through a
-Poisson expected-points model, with every figure tagged **fact / model output /
-interpretation**. A second **Dashboard** view exposes every metric side by side, and a
-persistent toggle switches between the two.
+→ **A. The surface** → **B. External** (the competitive environment) → **C. Internal** (the
+squad and body) → **D. The synthesis** → **E. The verdict**. It frames the title task as
+**two forces** - an *external* one (how hard the field pushed, from a week-by-week title-race
+pressure index) and an *internal* one (squad upheaval and fixture load) - and then combines
+them into a single difficulty score. Built on StatsBomb and Understat data through a Poisson
+expected-points model, with every figure tagged **fact / measured / interpretation**.
 
 ![Hook](docs/hero.png)
 
@@ -42,7 +43,8 @@ physical-tracking data - it is **omitted or flagged, never fabricated**.
 
 ## The model - expected points, and why Poisson-from-xG is reasonable
 
-The measured core (Sections A and D) answers *"how many points did each team actually deserve?"*
+The measured core (Section A's surface stats, and the expected-points figures in the Section E
+verdict) answers *"how many points did each team actually deserve?"*
 
 1. **Goals are a Poisson process.** Goals per team per match are low-count, roughly
    independent events - the textbook Poisson use-case. Expected goals (xG) already
@@ -67,6 +69,47 @@ the GLM is calibrated, not hand-tuned (see `analysis.ipynb`).
 **Stated assumptions:** goals are Poisson; the two teams' goal counts in a match are
 independent (a known simplification - see *What we'd add*); xG is a sufficient single
 predictor of scoring rate.
+
+---
+
+## Measuring the task - two forces, one difficulty score
+
+The expected-points model says how *well* each side played. The rest of the report asks how
+*hard* the title was to win, split into two forces (external and internal) and then combined.
+
+**External - a week-by-week title-race pressure index (Section B).** A final table is only a
+snapshot, so pressure is measured **cumulatively across all 38 gameweeks** rather than from the
+end state. Each club's weekly points path is rebuilt (2025/26 from Understat's league page;
+2003/04 from a football-data.co.uk results CSV - the one source carrying every 2003/04 club's
+results). For each gameweek, every rival is weighted `exp(-|points gap to Arsenal| / tau)`
+(`tau = 10`), so it counts for most when level on points; rivals **behind** Arsenal and chasing
+it are amplified by `beta = 1.5`; and each gameweek is scaled by a season-progress ramp
+(`k / 38`) so a tight May weighs more than a tight August. Summed over every rival and week and
+shown as a relative index, **2003/04 = 1.00 and 2025/26 = 1.36** - about 36% more sustained
+pressure, because the 2025/26 race stayed contested to the finish while the Invincibles pulled
+clear. `tau`, `beta`, and the ramp are stated *choices*: the ordering (2025/26 higher) holds
+across the entire grid `tau = 5→20` **and** `beta = 1→2`, so it never flips. It is **measured**
+on league points, which exist for every club in both eras, and a validator refuses any rebuilt
+weekly table that fails to reproduce the known final table. The report shows the whole
+computation working: a per-gameweek worked-example table that sums to the index, plus a
+two-slider explorer for `tau` and `beta`.
+
+**Internal - squad upheaval and fixture load (Section C).** Two measures that exist cleanly for
+both eras: **squad stability** - retention, arrivals, and departures weighted by the minutes
+each leaver played the *season before* (the honest measure: a raw count says 2003/04 lost
+*more* players, but mostly fringe ones; minutes-weighted, the eras lost a similar **16.7% vs
+15.6%** of proven playing time, so the real gap is on the incoming side) - and
+**minutes-weighted squad age**. Fixture congestion is explored but demoted as inconclusive.
+
+**The synthesis (Section D).** The two forces reduce to one **difficulty score** per era: each
+component (title-race pressure, minutes-weighted departures, short-rest share) is min-max
+normalised across the two seasons and combined with reader-set weights. The default weighting
+(45 / 45 / 10, short-rest low because its points effect was inconclusive) puts **2025/26
+narrowly ahead, 0.55 to 0.45**. With only two seasons each component normalises to a 0-or-1
+extreme, so the score is coarse by design - read the direction, not the decimals - and an
+interactive tool recomputes it live for any weights. The closing **verdict is kept separate and
+tagged interpretation**: the author weights the unbeaten run above the model and lands on
+2003/04, while conceding that a reader who weights as the model does lands on 2025/26.
 
 ---
 
@@ -114,9 +157,10 @@ analysis/            data + model layer (importable, tested)
   loaders.py         raw StatsBomb / Understat  ->  canonical pandas frames
   transforms.py      groupby / merge / rolling aggregations
   model.py           PoissonRegressor xG->goals  ->  expected points
-  circumstances.py   Section B: title-race pressure index + squad stability
-  physical.py        Section C: minutes-weighted age + fixture congestion
-  synthesis.py       Section D: model output re-read against the circumstances
+  circumstances.py   Section B (external): week-by-week title-race pressure index (+ squad stability, shown in C)
+  physical.py        Section C (internal): minutes-weighted age + fixture congestion
+  synthesis.py       expected points re-read against the circumstances (feeds Section E)
+  synthesis_d.py     Section D: the two forces combined into one difficulty score
   facts.py           cited final league tables
   sources.py         cited fixture dates, squad lists, player birthdates
   build.py           orchestrates -> data/processed/*.json
@@ -148,9 +192,9 @@ queries. SQLite earns its place as the query layer without the overhead of a sta
 | `GET /api/matches?season=` | per-match rows incl. rolling form (SQL) |
 | `GET /api/players?season=&min_shots=&sort_by=` | player aggregates (SQL) |
 | `GET /api/model?season=` | expected-points output + calibration |
-| `GET /api/circumstances` | Section B: title-race pressure index + squad stability |
-| `GET /api/physical` | Section C: minutes-weighted age + fixture congestion |
-| `GET /api/synthesis` | Section D: model output re-read against the circumstances |
+| `GET /api/circumstances` | Section B (external): week-by-week title-race pressure index + squad stability |
+| `GET /api/physical` | Section C (internal): minutes-weighted age + fixture congestion |
+| `GET /api/synthesis` | expected points re-read against the circumstances (feeds Section E) |
 
 ---
 
