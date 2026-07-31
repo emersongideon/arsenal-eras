@@ -10,7 +10,7 @@ squad and body) → **D. The synthesis** → **E. The verdict**. It frames the t
 **two forces** - an *external* one (how hard the field pushed, from a week-by-week title-race
 pressure index) and an *internal* one (squad upheaval and fixture load) - and then combines
 them into a single difficulty score. Built on StatsBomb and Understat data through a Poisson
-expected-points model, with every figure tagged **fact / measured / interpretation**.
+expected-points model, with every figure tagged **fact / measured / model output / interpretation**.
 
 ![Hook](docs/hero.png)
 
@@ -30,14 +30,18 @@ the three kinds of claim are never blended.
 
 | Category | Meaning | Example in the app |
 |---|---|---|
-| 🟢 **Fact** | Looked-up historical record | Final tables, margins, squads, fixture dates |
-| 🔵 **Model output / measured** | Computed from the model, or directly from the data | Pressure index and expected points (model); squad stability, minutes-weighted age, congestion (measured) |
-| 🟠 **Interpretation** | A stated reading of the numbers | The "Read" note under a measured block, and the verdict |
+| 🟢 **Fact** | Looked-up historical record | Final tables, margins, squads, fixture dates (sourced in the data section) |
+| 🔵 **Measured** | Computed directly from the data | Squad stability, minutes-weighted age, fixture congestion |
+| 🟣 **Model output** | Computed from a model | The title-race pressure index; expected points |
+| 🟠 **Interpretation** | A stated reading of the numbers | The interpretation note under a measured block, and the verdict |
 
-Every figure carries its category as a badge, and each interpretation is walled off
-(dashed border, amber tint) from the measurement it reads. That separation *is* the
-exercise. Where a metric only exists for one era - rival-team xG for 2003/04, modern
-physical-tracking data - it is **omitted or flagged, never fabricated**.
+Measured, model-output, and interpretation figures each carry a category badge (the
+interpretation pill is a dashed amber tag); the underlying facts are sourced in the data
+section. Each interpretation is walled off in its own amber-tinted block, kept apart from
+the measurement it reads, and anything deliberately not measured gets a separate dashed
+"what this leaves out" note. That separation *is* the exercise. Where a metric only exists
+for one era - rival-team xG for 2003/04, modern physical-tracking data - it is **omitted or
+flagged, never fabricated**.
 
 ---
 
