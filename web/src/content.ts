@@ -135,7 +135,7 @@ export const content = {
   d: {
     eyebrow: "Section D · The synthesis",
     heading: "Putting the two forces together",
-    lead: "Sections B and C measured the two forces separately; this section combines them into one difficulty score per era. Each of the three dimensions is scaled across the two seasons, then averaged using weights you set: title-race pressure, squad departures, and fixture load.",
+    lead: "Sections B and C measured the two forces separately; this section combines them into one difficulty score per era. Each of the three dimensions is scaled across the two seasons, then averaged using weights you set: title-race pressure from outside, and squad departures and fixture load from inside.",
     synthTitle: "Building the difficulty score",
     weightIntro:
       "There is no single right way to weigh three dimensions, so the weighting is yours. The default leans on pressure and departures and weights short-rest low, since its effect on points was inconclusive. Move the sliders to see the answer shift.",

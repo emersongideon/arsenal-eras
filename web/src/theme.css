@@ -651,6 +651,24 @@ a {
   border-radius: 10px;
   padding: 10px 12px;
 }
+.raw-bucket {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+.raw-bucket.outside {
+  color: #2f5d8a; /* matches the Section A framework diagram */
+  background: #eaf1f8;
+}
+.raw-bucket.inside {
+  color: #8a5a2b;
+  background: #f6efe6;
+}
 .raw-metric-label {
   margin: 0 0 8px;
   font-size: 12px;
