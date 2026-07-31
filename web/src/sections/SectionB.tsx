@@ -1,5 +1,5 @@
 import { content } from "../content";
-import { PressureRobustnessChart } from "../components/charts";
+import { PressureWorkedExample } from "../components/charts";
 import { CategoryBadge, Reveal, Rich, Section } from "../components/ui";
 import type { Circumstances } from "../types";
 
@@ -43,10 +43,11 @@ export function SectionB({ c }: { c: Circumstances }) {
           </aside>
 
           <p className="chart-title" style={{ marginTop: 22 }}>
-            {t.sweepTitle}
+            {t.workedTitle}
           </p>
-          <p className="chart-sub">{t.sweepSub}</p>
-          <PressureRobustnessChart sweep={c.field_strength.sweep} />
+          <p className="chart-sub">{t.workedSub}</p>
+          <PressureWorkedExample weekly={c.field_strength.weekly} note={t.workedNote} />
+
           <Reading>{t.p1Reading}</Reading>
         </div>
       </Reveal>

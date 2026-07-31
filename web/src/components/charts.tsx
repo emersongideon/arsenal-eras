@@ -353,8 +353,8 @@ export function PressureRobustnessChart({
           <YAxis
             stroke={AXIS}
             tick={{ fontSize: 12 }}
-            domain={[0.9, 1.3]}
-            ticks={[0.9, 1.0, 1.1, 1.2, 1.3]}
+            domain={[0.9, 1.45]}
+            ticks={[0.9, 1.0, 1.1, 1.2, 1.3, 1.4]}
             label={{
               value: "pressure, indexed to 2003/04 = 1.00",
               angle: -90,
@@ -451,10 +451,289 @@ export function PressureRobustnessChart({
       </div>
 
       <p className="robust-interp">
-        The multiple shifts with tau, from about 1.18x to 1.13x, but never falls to parity.
+        The multiple shifts with tau, from about 1.38x to 1.25x, but never falls to parity.
         The honest takeaway is the direction, not the exact number: 2025/26 faced a more
         contested race on any reasonable setting.
       </p>
+    </div>
+  );
+}
+
+const WORKED_SHORT: Record<string, string> = {
+  "Manchester City": "Man City",
+  "Manchester United": "Man Utd",
+  "Newcastle United": "Newcastle",
+  "Nottingham Forest": "Forest",
+  "Tottenham Hotspur": "Tottenham",
+  "West Ham United": "West Ham",
+  "Brighton & Hove Albion": "Brighton",
+  "Wolverhampton Wanderers": "Wolves",
+  "Aston Villa": "Villa",
+  "Crystal Palace": "Palace",
+  "Charlton Athletic": "Charlton",
+  "Bolton Wanderers": "Bolton",
+  "Birmingham City": "Birmingham",
+  "Blackburn Rovers": "Blackburn",
+  "Leicester City": "Leicester",
+  "Leeds United": "Leeds",
+};
+
+/** Worked example that makes the pressure index transparent. For a chosen season and
+ *  gameweek it recomputes the exact per-rival weighting the metric uses (base
+ *  exp(-|gap|/tau), beta for rivals behind, and the k/38 season ramp) and plots each
+ *  week's ramped pressure across all 38 gameweeks. Shares ONE computation with the
+ *  index, so summing the 38 weeks reproduces 1.00 / 1.36. */
+export function PressureWorkedExample({
+  weekly,
+  note,
+}: {
+  weekly: Circumstances["field_strength"]["weekly"];
+  note?: string;
+}) {
+  const seasons = Object.keys(weekly.by_season) as Season[];
+  const [season, setSeason] = useState<Season>(seasons[seasons.length - 1]);
+  const [gw, setGw] = useState(20);
+  const [tau, setTau] = useState(weekly.tau); // default 10, slider 5-20
+  const [beta, setBeta] = useState(weekly.beta); // default 1.5, slider 1-2
+  const gwId = useId();
+  const tauId = useId();
+  const betaId = useId();
+  const N = 38;
+  const short = (c: string) => WORKED_SHORT[c] ?? c;
+
+  const weekPressure = (s: Season, i: number) => {
+    const sd = weekly.by_season[s];
+    const tp = sd.arsenal[i];
+    let wk = 0;
+    for (const r of sd.rivals) {
+      const rp = r.pts[i];
+      let w = Math.exp(-Math.abs(tp - rp) / tau);
+      if (rp < tp) w *= beta; // rival behind, chasing
+      wk += w;
+    }
+    return wk * ((i + 1) / N); // ramp is fixed on
+  };
+
+  const perWeek = Array.from({ length: N }, (_, i) => {
+    const row: { gw: number } & Record<string, number> = { gw: i + 1 };
+    for (const s of seasons) row[s] = weekPressure(s, i);
+    return row;
+  });
+  const totals = Object.fromEntries(
+    seasons.map((s) => [s, perWeek.reduce((a, r) => a + r[s], 0)]),
+  ) as Record<Season, number>;
+  const base = totals[seasons[0]]; // 2003/04 total is the 1.00 baseline
+  const idx = (s: Season) => totals[s] / base;
+
+  // the selected gameweek, worked through
+  const k = gw - 1;
+  const ramp = gw / N;
+  const d = weekly.by_season[season];
+  const arsPts = d.arsenal[k];
+  const rows = d.rivals
+    .map((r) => {
+      const rp = r.pts[k];
+      const gap = arsPts - rp; // >0 rival behind, <0 rival ahead
+      const behind = rp < arsPts;
+      const bw = Math.exp(-Math.abs(gap) / tau);
+      const weighted = behind ? bw * beta : bw;
+      return { club: r.club, rp, gap, behind, bw, contribution: weighted * ramp };
+    })
+    .sort((a, b) => b.contribution - a.contribution);
+  const TOP = 6;
+  const shown = rows.slice(0, TOP);
+  const rest = rows.slice(TOP);
+  const restC = rest.reduce((a, r) => a + r.contribution, 0);
+  const weekTotal = rows.reduce((a, r) => a + r.contribution, 0);
+  const gapLabel = (r: { gap: number; behind: boolean }) =>
+    r.gap === 0 ? "level" : r.behind ? `${r.gap} behind` : `${-r.gap} ahead`;
+
+  return (
+    <div className="worked">
+      <div className="worked-controls">
+        <div className="chart-toggle" role="group" aria-label="Season">
+          {seasons.map((s) => (
+            <button
+              key={s}
+              type="button"
+              className={season === s ? "active" : ""}
+              aria-pressed={season === s}
+              onClick={() => setSeason(s)}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+        <label className="worked-slider" htmlFor={gwId}>
+          <span className="dim">Gameweek</span>
+          <input
+            id={gwId}
+            type="range"
+            min={1}
+            max={38}
+            step={1}
+            value={gw}
+            onChange={(e) => setGw(Number(e.target.value))}
+            aria-label="gameweek"
+          />
+          <span className="worked-gw">GW {gw}</span>
+        </label>
+      </div>
+
+      <p className="worked-lead">
+        After <b>{gw}</b> games, {season} Arsenal are on <b>{arsPts} pts</b>. Every rival is
+        weighted by how close it sits, rivals behind are amplified by beta, and the whole
+        week is scaled by the ramp <code>{gw}/38 = {ramp.toFixed(2)}</code> (later weeks count
+        for more).
+      </p>
+
+      <div className="worked-scroll">
+        <table className="worked-table">
+          <thead>
+            <tr>
+              <th>Rival</th>
+              <th className="ta-c">Pts</th>
+              <th className="ta-c">Gap</th>
+              <th className="ta-c">
+                base = e<sup>-|gap|/{tau}</sup>
+              </th>
+              <th className="ta-c">behind ×{beta.toFixed(1)}</th>
+              <th className="ta-c">ramp ×{ramp.toFixed(2)}</th>
+              <th className="ta-c">contribution</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shown.map((r) => (
+              <tr key={r.club} className={r.behind ? "behind" : ""}>
+                <td>{short(r.club)}</td>
+                <td className="ta-c">{r.rp}</td>
+                <td className="ta-c">{gapLabel(r)}</td>
+                <td className="ta-c">{r.bw.toFixed(2)}</td>
+                <td className="ta-c">{r.behind ? `×${beta.toFixed(1)}` : "-"}</td>
+                <td className="ta-c">×{ramp.toFixed(2)}</td>
+                <td className="ta-c wt">{r.contribution.toFixed(2)}</td>
+              </tr>
+            ))}
+            <tr className="worked-rest">
+              <td colSpan={6}>+ {rest.length} more rivals, further back</td>
+              <td className="ta-c wt">{restC.toFixed(2)}</td>
+            </tr>
+            <tr className="worked-total">
+              <td colSpan={6}>Gameweek {gw} pressure (sum)</td>
+              <td className="ta-c wt">{weekTotal.toFixed(2)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p className="chart-title" style={{ marginTop: 22 }}>
+        Each week's pressure, all 38 gameweeks
+      </p>
+      <p className="chart-sub">
+        Per-week ramped pressure for both seasons. Sum every week across all 38 gives the
+        index: 2003/04 = <b>{idx("2003/04").toFixed(2)}</b>, 2025/26 ={" "}
+        <b>{idx("2025/26").toFixed(2)}</b>.
+      </p>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={perWeek} margin={{ top: 12, right: 18, bottom: 24, left: -6 }}>
+          <CartesianGrid stroke={GRID} />
+          <XAxis
+            dataKey="gw"
+            type="number"
+            domain={[1, 38]}
+            ticks={[1, 10, 20, 30, 38]}
+            stroke={AXIS}
+            tick={{ fontSize: 12 }}
+            label={{ value: "gameweek", position: "bottom", offset: 8, fill: AXIS, fontSize: 12 }}
+          />
+          <YAxis
+            stroke={AXIS}
+            tick={{ fontSize: 12 }}
+            label={{
+              value: "week pressure",
+              angle: -90,
+              position: "insideLeft",
+              offset: 14,
+              fill: AXIS,
+              fontSize: 12,
+            }}
+          />
+          <Tooltip
+            contentStyle={ttStyle}
+            formatter={(v: number) => v.toFixed(2)}
+            labelFormatter={(g) => `Gameweek ${g}`}
+          />
+          <Legend verticalAlign="top" height={28} />
+          <ReferenceLine x={gw} stroke="#1d2530" strokeWidth={1.5} />
+          <Line
+            type="monotone"
+            dataKey="2003/04"
+            stroke={GOLD}
+            strokeWidth={2.5}
+            dot={false}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="2025/26"
+            stroke={RED}
+            strokeWidth={2.5}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+
+      {note && <p className="chart-note">{note}</p>}
+
+      <div className="explorer">
+        <p className="explorer-title">Adjust the model</p>
+        <div className="explorer-row">
+          <div className="explorer-head">
+            <label htmlFor={tauId}>How far down the table pressure reaches</label>
+            <span className="explorer-val">τ = {tau}</span>
+          </div>
+          <input
+            id={tauId}
+            type="range"
+            min={5}
+            max={20}
+            step={1}
+            value={tau}
+            onChange={(e) => setTau(Number(e.target.value))}
+          />
+          <p className="explorer-help">
+            Lower: only rivals very close to Arsenal count. Higher: rivals further back still
+            add some pressure.
+          </p>
+        </div>
+        <div className="explorer-row">
+          <div className="explorer-head">
+            <label htmlFor={betaId}>How much harder being chased feels</label>
+            <span className="explorer-val">β = {beta.toFixed(1)}</span>
+          </div>
+          <input
+            id={betaId}
+            type="range"
+            min={1}
+            max={2}
+            step={0.1}
+            value={beta}
+            onChange={(e) => setBeta(Number(e.target.value))}
+          />
+          <p className="explorer-help">
+            At 1.0 a rival just behind and just ahead count the same. Higher: a rival chasing
+            from behind presses harder.
+          </p>
+        </div>
+        <p className="explorer-ramp">
+          Later weeks always count more than August; that is fixed.
+        </p>
+        <p className="explorer-live">
+          Wherever you set these, 2025/26 stays higher. The direction holds; only the size of
+          the gap moves (1.25x to 1.38x across these ranges).
+        </p>
+      </div>
     </div>
   );
 }

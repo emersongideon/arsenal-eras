@@ -1097,6 +1097,152 @@ a {
   color: var(--body);
 }
 
+/* Section B: pressure worked example (per-gameweek calculation + 38-GW chart) */
+.worked {
+  margin-top: 8px;
+}
+.worked-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.worked-slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 240px;
+}
+.worked-slider input[type="range"] {
+  flex: 1 1 auto;
+  accent-color: #4f46e5;
+}
+.worked-gw {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  min-width: 52px;
+}
+.worked-lead {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--body);
+  margin: 0 0 12px;
+}
+.worked-lead code {
+  font-size: 0.92em;
+}
+.worked-scroll {
+  overflow-x: auto;
+}
+.worked-table {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.worked-table th {
+  text-align: left;
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 11.5px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.worked-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #eef1f5;
+  color: var(--body);
+  font-variant-numeric: tabular-nums;
+}
+.worked-table .ta-c {
+  text-align: center;
+}
+.worked-table .wt {
+  font-weight: 700;
+  color: var(--ink);
+}
+.worked-table tr.behind td {
+  background: #f6f7fb;
+}
+.worked-rest td {
+  color: var(--muted);
+  font-style: italic;
+}
+.worked-total td {
+  border-top: 2px solid var(--line);
+  border-bottom: none;
+  font-weight: 800;
+  color: var(--ink);
+  padding-top: 9px;
+}
+.worked-total .wt {
+  font-size: 15px;
+}
+
+/* two-knob explorer (tau + beta) that drives the worked example live */
+.explorer {
+  margin-top: 24px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fafbfc;
+}
+.explorer-title {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.explorer-row {
+  margin-bottom: 16px;
+}
+.explorer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 5px;
+}
+.explorer-head label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.explorer-val {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.explorer-row input[type="range"] {
+  width: 100%;
+  accent-color: #4f46e5;
+}
+.explorer-help {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.explorer-ramp {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-style: italic;
+}
+.explorer-live {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--body);
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
 /* interactive robustness chart (Section B pressure index) */
 .robust {
   margin-top: 6px;

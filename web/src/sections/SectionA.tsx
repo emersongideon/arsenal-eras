@@ -1,8 +1,6 @@
 import { content } from "../content";
-import { CumulativePointsChart } from "../components/charts";
 import { Reveal, Rich, Section, seasonClass } from "../components/ui";
 import type { SeasonSummary } from "../types";
-import type { MatchRow } from "../types";
 
 const t = content.a;
 
@@ -66,13 +64,7 @@ function TeamCard({
   );
 }
 
-export function SectionA({
-  seasons,
-  matches,
-}: {
-  seasons: SeasonSummary[];
-  matches: MatchRow[];
-}) {
+export function SectionA({ seasons }: { seasons: SeasonSummary[] }) {
   const s0 = seasons.find((s) => s.season === "2003/04")!;
   const s1 = seasons.find((s) => s.season === "2025/26")!;
 
@@ -116,22 +108,8 @@ export function SectionA({
       </Reveal>
 
       <Reveal delay={70}>
-        <p className="narrow" style={{ margin: "6px auto 14px" }}>
-          {t.cumeLeadIn}
-        </p>
-      </Reveal>
-
-      <Reveal delay={80}>
-        <div className="chart-card" style={{ marginBottom: 18 }}>
-          <p className="chart-title">{t.cumeTitle}</p>
-          <p className="chart-sub">{t.cumeCaption}</p>
-          <CumulativePointsChart matches={matches} />
-        </div>
-      </Reveal>
-
-      <Reveal delay={60}>
         <p className="narrow" style={{ margin: "22px auto" }}>
-          <Rich>{t.link}</Rich>
+          {t.bridge}
         </p>
       </Reveal>
 

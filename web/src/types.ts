@@ -87,7 +87,7 @@ export interface PressureContribution {
 export interface Circumstances {
   field_strength: {
     tau: number;
-    ahead_multiplier: number;
+    beta: number;
     method: string;
     xg_note: string;
     sweep: {
@@ -96,6 +96,14 @@ export interface Circumstances {
       step: number;
       n_rivals: number;
       points: ({ tau: number } & Record<Season, number>)[];
+    };
+    weekly: {
+      tau: number;
+      beta: number;
+      by_season: Record<
+        Season,
+        { arsenal: number[]; rivals: { club: string; pts: number[] }[] }
+      >;
     };
     by_season: Record<
       Season,

@@ -46,7 +46,8 @@ from .config import S0304, S2526
 
 SEASONS = (S0304, S2526)
 PRESSURE_TAU = 10.0  # points: closeness sensitivity of the weekly pressure weight
-AHEAD_MULT = 2.0  # a rival ABOVE Arsenal that week counts double (chasing > leading)
+BETA = 1.5  # rivals BEHIND Arsenal (chasing it) are amplified by beta; for a leader
+# the live threat is the pack immediately behind, not sides already ahead
 TAU_GRID = (7.0, 10.0, 13.0)  # robustness check
 # Interactive robustness sweep. Below 5 the weekly weights collapse toward only
 # level-on-points rivals; above 20 they flatten so distant teams begin to count as
@@ -63,23 +64,29 @@ def _final_pressure_index(champ_points: int, rival_points: list[int], tau: float
 
 
 def _cumulative_pressure(weekly: dict[str, list[int]], target: str, tau: float,
-                         mult: float = AHEAD_MULT) -> float:
+                         beta: float = BETA, ramp: bool = True) -> float:
     """Title-race pressure ENDURED by `target` across the whole season. Each week
     (after k games played, k = 1..38), every rival is weighted exp(-|gap|/tau) by
-    how close it sits to `target` on points, doubled if the rival is ABOVE `target`
-    that week. Summed across all rivals and all 38 weeks."""
+    how close it sits to `target` on points, peaking at gap 0, with rivals BEHIND
+    `target` (chasing it) amplified by beta. Each week is then weighted by a linear
+    season-progress ramp, k/38 (week 1 counts ~3%, week 38 counts 100%), since teams
+    sitting level in August is an artefact of the season not having started, not a
+    real title race. Summed across all rivals and all 38 weeks."""
     seq_t = weekly[target]
+    n = len(seq_t)
     total = 0.0
-    for k in range(len(seq_t)):
+    for k in range(n):
         tp = seq_t[k]
+        week = 0.0
         for club, seq in weekly.items():
             if club == target:
                 continue
             rp = seq[k]
             w = math.exp(-abs(tp - rp) / tau)
-            if rp > tp:
-                w *= mult
-            total += w
+            if rp < tp:  # rival is behind target, chasing it
+                w *= beta
+            week += w
+        total += week * ((k + 1) / n if ramp else 1.0)  # linear ramp: GW(k+1) weight = (k+1)/38
     return total
 
 
@@ -103,6 +110,24 @@ def _validate_weekly(weekly: dict[str, dict[str, list[int]]]) -> None:
                 f"{s}: rebuilt {champ} final = {weekly[s].get(champ, ['?'])[-1]} "
                 f"!= known table {champ_pts}"
             )
+
+
+def _weekly_export(weekly: dict[str, dict[str, list[int]]]) -> dict:
+    """Per-club cumulative points after each of the 38 gameweeks, plus the params,
+    so the frontend worked example can recompute the exact per-week pressure the
+    index uses (one computation, shared)."""
+    out = {}
+    for s in SEASONS:
+        tbl = weekly[s]
+        rivals = sorted(
+            ([club, pts] for club, pts in tbl.items() if club != C.TEAM),
+            key=lambda kv: -kv[1][-1],  # final points, so rivals read in table order
+        )
+        out[s] = {
+            "arsenal": tbl[C.TEAM],
+            "rivals": [{"club": club, "pts": pts} for club, pts in rivals],
+        }
+    return {"tau": PRESSURE_TAU, "beta": BETA, "by_season": out}
 
 
 def _pressure_sweep(weekly: dict[str, dict[str, list[int]]]) -> dict:
@@ -132,8 +157,8 @@ def field_strength() -> dict:
     """Cumulative week-by-week title-race pressure Arsenal endured, per season.
 
     Each gameweek, every rival is weighted by how close it sat to Arsenal on the
-    table, exp(-gap/tau), with rivals ABOVE Arsenal counted 2x (chasing is harder
-    than leading), summed across all 38 weeks. Reported as a relative index
+    table, exp(-gap/tau) peaking at gap 0, with rivals BEHIND Arsenal (chasing it)
+    amplified by beta=1.5, summed across all 38 weeks. Reported as a relative index
     (2003/04 = 1.00); the raw summed values are kept alongside for the repo."""
     weekly = _weekly_tables()
     _validate_weekly(weekly)
@@ -151,20 +176,22 @@ def field_strength() -> dict:
     out = {
         "metric": "field_strength",
         "tau": PRESSURE_TAU,
-        "ahead_multiplier": AHEAD_MULT,
+        "beta": BETA,
         "method": (
             "Cumulative week by week: each of the 38 gameweeks, every rival is weighted "
-            "exp(-|points gap to Arsenal| / tau) with tau=10, and rivals above Arsenal "
-            "that week count 2x, summed across all rivals and all weeks. Shown as a "
+            "exp(-|points gap to Arsenal| / tau) with tau=10, peaking when level on points, "
+            "and rivals behind Arsenal (chasing it) amplified by beta=1.5. Each gameweek is "
+            "then scaled by a linear season-progress ramp (k/38), so late-season closeness "
+            "counts more than August. Summed across all rivals and all weeks, shown as a "
             "relative index (2003/04 = 1.00). The direction (2025/26 higher) holds across "
-            "tau 5 to 20 and with or without the 2x, so it does not depend on those "
-            "stated choices."
+            "tau 5 to 20 and beta 1 to 2, so it does not depend on those stated choices."
         ),
         "xg_note": (
             "Pressure is measured on league points, which exist for every club in both "
             "eras, so the two seasons are compared on the same basis."
         ),
         "sweep": _pressure_sweep(weekly),
+        "weekly": _weekly_export(weekly),
         "by_season": {},
     }
     for s in SEASONS:
