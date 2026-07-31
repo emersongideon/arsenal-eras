@@ -30,7 +30,7 @@ export const content = {
   },
 
   data: {
-    eyebrow: "Before we start · the data",
+    eyebrow: "Before we start",
     heading: "Where every number comes from",
     lead: "Everything here comes from public records, so any figure can be checked. Two things to keep in mind.",
     // Each row is [what the data is, where it comes from]. Edit freely.
@@ -60,11 +60,10 @@ export const content = {
         body: "Shot data for Arsenal's rivals does not exist for 2003/04, so rival strength is measured by league points, which exist for both eras.",
       },
     ],
-    handoff: "With the sources named, the surface. ↓",
   },
 
   a: {
-    eyebrow: "Section A · The surface",
+    eyebrow: "Section A",
     heading: "What the table already tells us",
     lead: "The Invincibles finished on **90 points unbeaten**, plus 47 goal difference, 2.37 points per game. The 2025/26 team won the title on **85 points**, 26 wins and 5 losses, plus 44, 2.24 per game. By numbers alone, 2003/04 is the more dominant season.",
     bridge:
@@ -95,7 +94,6 @@ export const content = {
     workedNote: "Per-week pressure peaks mid-season for both, when the table is bunched around Arsenal. But 2003/04 then cools as Arsenal pulls clear, while 2025/26 stays contested to the finish. That sustained late pressure is where the 36% gap comes from.",
     p1Reading:
       "In plain terms: 2003/04's nearest rival finished 11 points back and out of it early, while 2025/26's finished 7 back and in the race late, so the title stayed contested longer.",
-    handoff: "That is the field. The other force is the squad that carried the season. ↓",
   },
 
   c: {
@@ -129,12 +127,10 @@ export const content = {
     timelineSub: "Each tick is a competitive game, Aug to May. Short-rest games are highlighted; shaded bands mark congested stretches, so the December and modern January/February bunching is visible. Hover any tick for the opponent, date and rest (league games; cup and European fixtures show the competition only).",
     calGpsLimitation:
       "Distance, sprints, GPS and recovery data have no 2003/04 equivalent, so none is compared here rather than invented.",
-
-    handoff: "Both forces are now measured. Section D combines them. ↓",
   },
 
   d: {
-    eyebrow: "Section D · The synthesis",
+    eyebrow: "Section D",
     heading: "Putting the two forces together",
     lead: "Sections B and C measured the two forces separately; this section combines them into one difficulty score per era. Each of the three dimensions is scaled across the two seasons, then averaged using weights you set: title-race pressure (external), plus squad departures and fixture load (internal).",
     synthTitle: "Building the difficulty score",
@@ -142,12 +138,10 @@ export const content = {
       "The default leans on pressure and departures and weights short-rest low. Move the slider to see how different weights model the difficulty score.",
     weightNote:
       "The score is coarse by design; read the direction, not the decimals: pressure and congestion lean 2025/26, departures lean slightly to 2003/04.",
-    handoff:
-      "So the model, weighing evenly-ish, gives 2025/26 the harder task, narrowly. Section E weighs it as a person would. ↓",
   },
 
   e: {
-    eyebrow: "Section E · What this surfaces",
+    eyebrow: "Section E",
     heading: "The verdict",
     lead: "Everything measured, in one place, then a call, marked clearly as a judgement, not a finding.",
     tableColDim: "Dimension of difficulty",

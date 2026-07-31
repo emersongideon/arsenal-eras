@@ -29,10 +29,6 @@ export function SectionD({ synthesisD }: { synthesisD: SynthesisD }) {
           <p className="chart-note">{t.weightNote}</p>
         </div>
       </Reveal>
-
-      <Reveal delay={60}>
-        <p className="narrow dim handoff">{t.handoff}</p>
-      </Reveal>
     </Section>
   );
 }

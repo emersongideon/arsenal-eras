@@ -49,10 +49,6 @@ export function DataSources() {
           ))}
         </div>
       </Reveal>
-
-      <Reveal delay={80}>
-        <p className="narrow dim handoff">{t.handoff}</p>
-      </Reveal>
     </Section>
   );
 }

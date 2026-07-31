@@ -5,6 +5,7 @@ import { GitHubLink } from "./ui";
 // labels the mobile dropdown (which has room). Section E's summary table links
 // back to these same ids.
 const NAV = [
+  { id: "hook", short: "Home", long: "Home" },
   { id: "section-data", short: "Data", long: "The data" },
   { id: "section-a", short: "A · Surface", long: "A · The surface" },
   { id: "section-b", short: "B · External", long: "B · External" },

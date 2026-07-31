@@ -94,10 +94,6 @@ export function SectionC({ c, p }: { c: Circumstances; p: Physical }) {
           <LimitationNote>{t.calGpsLimitation}</LimitationNote>
         </Collapsible>
       </Reveal>
-
-      <Reveal delay={60}>
-        <p className="narrow dim handoff">{t.handoff}</p>
-      </Reveal>
     </Section>
   );
 }

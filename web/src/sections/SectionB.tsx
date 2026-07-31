@@ -51,10 +51,6 @@ export function SectionB({ c }: { c: Circumstances }) {
           <Reading>{t.p1Reading}</Reading>
         </div>
       </Reveal>
-
-      <Reveal delay={60}>
-        <p className="narrow dim handoff">{t.handoff}</p>
-      </Reveal>
     </Section>
   );
 }

@@ -1532,13 +1532,6 @@ a {
   font-weight: 700;
 }
 
-/* connective-tissue handoff paragraph */
-.handoff {
-  margin-top: 26px;
-  font-style: italic;
-  font-size: 15px;
-}
-
 /* ---------- Two-column verdict ---------- */
 .verdict {
   display: grid;

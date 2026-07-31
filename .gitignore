@@ -24,3 +24,6 @@ data/raw/matches_*.json
 # NOTE: data/processed/*.json and web/public/data/*.json ARE committed on purpose
 # (~0.5 MB total) so the app + notebook run fully offline with no build-time
 # downloads. Regenerate anytime with `python -m analysis.build`.
+
+# Personal application docs - never publish
+CV/
