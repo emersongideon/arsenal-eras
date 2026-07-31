@@ -198,7 +198,7 @@ queries. SQLite earns its place as the query layer without the overhead of a sta
 
 ---
 
-## Tech stack / skills demonstrated
+## Tech stack
 
 - **Data & modelling:** pandas (groupby/merge/rolling), numpy, scikit-learn
   (`PoissonRegressor`), scipy, matplotlib - narrated in a Colab-ready notebook.
@@ -210,31 +210,30 @@ queries. SQLite earns its place as the query layer without the overhead of a sta
 
 ---
 
-## How this maps to the Research Engineer role
+## Engineering approach
 
-We built this as a self-contained demonstration of the exact skill set the role calls
-for - end-to-end, from data acquisition to a deployed full-stack product - and to show
-*how we think*, not just what we can wire together.
+The project is deliberately end-to-end - raw data acquisition through to a deployed
+full-stack product - so it reflects *how the problem was thought through*, not just what was
+wired together. The table below maps each capability to where it lives in the repo.
 
-| What the role asks for | Where we demonstrate it |
+| Capability | Where it lives |
 |---|---|
 | **Python + the PyData stack** | `analysis/` package and `analysis.ipynb`: pandas (groupby/merge/rolling), numpy, scikit-learn, scipy, matplotlib |
 | **SQL** | `backend/db.py`: processed data loaded into SQLite and served through hand-written SQL queries |
 | **JavaScript / TypeScript** | `web/`: React 18 in strict TypeScript - typed components, props, and a typed data layer mirroring the API schema |
-| **Full-stack, end-to-end internal products** | one repo takes raw shot data → pandas/sklearn pipeline → FastAPI + SQLite API → React SPA, with a one-command build and a single-URL deploy |
+| **Full-stack, end-to-end** | one repo takes raw shot data → pandas/sklearn pipeline → FastAPI + SQLite API → React SPA, with a one-command build and a single-URL deploy |
 | **Applied machine learning** | `analysis/model.py`: a Poisson GLM (`PoissonRegressor`) mapping xG→goals, propagated to expected points - fit, calibrated, validated, and unit-tested rather than treated as a black box |
 | **Data design & visualization** | a deliberate visual language: consistent team colours, per-match xG scatters, a fact/measured/interpretation badge system, and matplotlib EDA in the notebook |
 | **Communicating to technical *and* non-technical audiences** | the story explains the model in plain English inline; the notebook narrates the reasoning; this README defends the methodology |
-| **Grounding work in real-world constraints** | the whole intellectual-honesty spine - never presenting a speculative number as a measured one - is exactly the discipline an analyst needs to trust a tool |
+| **Grounding work in real-world constraints** | the intellectual-honesty spine - never presenting a speculative number as a measured one - is the discipline that makes a tool trustworthy |
 | **Engineering mindset / scalable** | modular `data / model / api / web` split, type hints, pytest, pinned dependencies |
-| **Football knowledge & passion** | the question, the framing, and the reading of the results |
+| **Domain knowledge** | the question, the framing, and the reading of the results |
 
-**On deep learning (a *desirable*, not a requirement).** This dataset is 38 matches per
-season, so we deliberately used a calibrated Poisson GLM rather than a neural network -
-the right tool for the data. We'd reach for deep learning where the role actually points
-(sequence models over event streams, Geometric Deep Learning on player-graph / tracking
-data); see *What we'd add* for where that fits. Knowing *when not to* deep-learn is part of
-the job.
+**On deep learning.** This dataset is 38 matches per season, so a calibrated Poisson GLM is
+the right tool rather than a neural network. Deep learning earns its place where the data
+justifies it - sequence models over event streams, or Geometric Deep Learning on the
+player-position graph / tracking data (see *What we'd add*). Knowing *when not to* reach for
+it is part of the discipline.
 
 ---
 
@@ -286,7 +285,7 @@ demonstrate the FastAPI/SQL layer and to serve the data programmatically.
 ## What we'd add with more time
 
 - **Deep learning where the data justifies it.** With event/tracking data (not just
-  38 match-level xG totals), this is where we'd apply the techniques the role centres on:
+  38 match-level xG totals), this is where modern sequence and graph methods fit:
   a **Transformer** over possession/event sequences to model chance quality in context,
   or **Geometric Deep Learning** on the player-position graph for pitch control - using
   **PyTorch**. On this small, aggregate dataset a calibrated GLM is the honest choice;
