@@ -1691,13 +1691,6 @@ a {
     display: none;
   }
 }
-.scroll-hint {
-  margin-top: 40px;
-  color: #8a93a0;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
 
 /* ---------- View source on GitHub ---------- */
 .gh-link {

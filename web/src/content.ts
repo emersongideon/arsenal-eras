@@ -26,7 +26,6 @@ export const content = {
     cap2526Year: "2025/26",
     cap2526Line: "Champions · 85 pts",
     vs: "vs",
-    scrollHint: "↓ Start with where the data comes from",
   },
 
   data: {

@@ -38,9 +38,6 @@ export function Hero() {
         <Reveal delay={160}>
           <p className="lead">{t.subline}</p>
         </Reveal>
-        <Reveal delay={240}>
-          <p className="scroll-hint">{t.scrollHint}</p>
-        </Reveal>
       </div>
     </section>
   );
