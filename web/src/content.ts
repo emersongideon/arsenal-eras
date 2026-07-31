@@ -70,7 +70,7 @@ export const content = {
     bridge:
       "The table settles which season was more dominant: 2003/04, on every measure. It does not settle which was harder to win, and that is a different question with no official answer. This report builds one, from two forces measured in the sections that follow and combined at the end.",
     forceOutsideTag: "External",
-    forceOutsideName: "The field",
+    forceOutsideName: "The competitive environment",
     forceOutsideDesc:
       "A stronger, closer field of rivals. The more the chasing pack pressed, the harder the title was to win.",
     forceInsideTag: "Internal",
@@ -78,12 +78,12 @@ export const content = {
     forceInsideDesc:
       "A less settled, more stretched squad: new signings to integrate, a younger or older core, a heavier calendar, all making it harder to carry.",
     forceOutcome: "How hard the title was to win",
-    forcesHandoff: "Start with the external: the field. ↓",
+    forcesHandoff: "Start with the external. ↓",
   },
 
   b: {
-    eyebrow: "Section B · The field",
-    heading: "Resistance map",
+    eyebrow: "Section B",
+    heading: "External",
     lead: "The first force is external: how strong the rest of the league was. A points total is harder to reach in a strong league, so a title is only as good as the field it beat. We measure that field as the pressure the chasing pack applied, week by week.",
     p1Title: "Title-race pressure index",
     p1Body: "Pressure is measured every week, not from the final table. Each gameweek, every rival counts for more the closer it sits to Arsenal; rivals just behind count extra, since being chased presses harder than chasing; and later weeks count more than August. Summed across the season and indexed to 2003/04 = 1.00, the 2025/26 side comes out at 1.36: about 36% more pressure.",
@@ -99,8 +99,8 @@ export const content = {
   },
 
   c: {
-    eyebrow: "Section C · The squad and body",
-    heading: "The squad and body",
+    eyebrow: "Section C",
+    heading: "Internal",
     lead: "The second force is internal: the squad Arsenal fielded, and whether it could carry the season. Two measures separate the eras, how settled the squad was and how old. We also looked at the fixture load, but it did not matter much, so it sits as an exploration at the end.",
 
     // Part 1 - squad stability (moved from Section B)

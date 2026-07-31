@@ -7,8 +7,8 @@ import { GitHubLink } from "./ui";
 const NAV = [
   { id: "section-data", short: "Data", long: "The data" },
   { id: "section-a", short: "A · Surface", long: "A · The surface" },
-  { id: "section-b", short: "B · Field", long: "B · The field" },
-  { id: "section-c", short: "C · Squad", long: "C · The squad and body" },
+  { id: "section-b", short: "B · External", long: "B · External" },
+  { id: "section-c", short: "C · Internal", long: "C · Internal" },
   { id: "section-d", short: "D · Synthesis", long: "D · Combining the forces" },
   { id: "section-e", short: "E · Verdict", long: "E · What this surfaces" },
 ] as const;
