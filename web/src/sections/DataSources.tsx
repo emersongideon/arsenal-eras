@@ -22,7 +22,6 @@ export function DataSources() {
         <div className="grid2" style={{ marginTop: 22 }}>
           {ERAS.map(([era, cls]) => (
             <div className={`card team-card ${cls}`} key={era}>
-              <span className="rail" />
               <span className="season-tag">{era}</span>
               <div className="src-list">
                 {t.sources[era].map(([what, from]) => (
@@ -38,7 +37,7 @@ export function DataSources() {
       </Reveal>
 
       <Reveal delay={120}>
-        <div className="caveats narrow">
+        <div className="caveats">
           {t.caveats.map((c, i) => (
             <div className="caveat" key={i}>
               <p className="caveat-title">

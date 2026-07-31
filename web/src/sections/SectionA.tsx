@@ -26,7 +26,6 @@ function TeamCard({
   const pointsWin = leaders.points === idx;
   return (
     <div className={`card team-card ${cls}`}>
-      <span className="rail" />
       <div
         style={{
           display: "flex",
@@ -101,14 +100,14 @@ export function SectionA({ seasons }: { seasons: SeasonSummary[] }) {
           <TeamCard s={s0} idx={0} leaders={leaders} />
           <TeamCard s={s1} idx={1} leaders={leaders} />
         </div>
-        <p className="dim narrow" style={{ fontSize: 13, textAlign: "center" }}>
+        <p className="dim narrow" style={{ fontSize: 13 }}>
           ▲ marks the higher figure. On every dominance measure, 2003/04 leads. (xG is a
           model estimate, read within a season, so it is not marked.)
         </p>
       </Reveal>
 
       <Reveal delay={70}>
-        <p className="narrow" style={{ margin: "22px auto" }}>
+        <p className="narrow" style={{ margin: "22px 0" }}>
           {t.bridge}
         </p>
       </Reveal>
@@ -138,10 +137,6 @@ export function SectionA({ seasons }: { seasons: SeasonSummary[] }) {
               <p className="force-name">{t.forceOutcome}</p>
             </div>
           </div>
-
-          <p className="narrow dim handoff" style={{ marginTop: 24 }}>
-            {t.forcesHandoff}
-          </p>
         </div>
       </Reveal>
     </Section>

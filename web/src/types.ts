@@ -177,6 +177,8 @@ export interface Physical {
           competition: string;
           rest_days: number | null;
           short: boolean;
+          opponent: string | null; // league games only; null for cups/European
+          venue: "H" | "A" | null;
         }[];
       }
     >;

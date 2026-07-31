@@ -68,7 +68,7 @@ export const content = {
     heading: "What the table already tells us",
     lead: "The Invincibles finished on **90 points unbeaten**, plus 47 goal difference, 2.37 points per game. The 2025/26 team won the title on **85 points**, 26 wins and 5 losses, plus 44, 2.24 per game. By numbers alone, 2003/04 is the more dominant season.",
     bridge:
-      "The table settles which season was more dominant: 2003/04, on every measure. It does not settle which was harder to win, and that is a different question with no official answer. This report builds one, from two forces measured in the sections that follow and combined at the end.",
+      "The table shows which season was more dominant: 2003/04, on every measure. It does not show which was harder to win, and that is a different question with no official answer. This report builds one, from two forces measured in the sections that follow.",
     forceOutsideTag: "External",
     forceOutsideName: "The competitive environment",
     forceOutsideDesc:
@@ -77,16 +77,16 @@ export const content = {
     forceInsideName: "The squad and body",
     forceInsideDesc:
       "A less settled, more stretched squad: new signings to integrate, a younger or older core, a heavier calendar, all making it harder to carry.",
-    forceOutcome: "How hard the title was to win",
-    forcesHandoff: "Start with the external. ↓",
+    forceOutcome: "How hard it was to win the title",
+    forcesHandoff: "",
   },
 
   b: {
     eyebrow: "Section B",
     heading: "External",
-    lead: "The first force is external: how strong the rest of the league was. A points total is harder to reach in a strong league, so a title is only as good as the field it beat. We measure that field as the pressure the chasing pack applied, week by week.",
+    lead: "The first force is external: how strong the rest of the league was. Points total is harder to reach in a strong league. We measure that field as the pressure the chasing pack applied, week by week.",
     p1Title: "Title-race pressure index",
-    p1Body: "Pressure is measured every week, not from the final table. Each gameweek, every rival counts for more the closer it sits to Arsenal; rivals just behind count extra, since being chased presses harder than chasing; and later weeks count more than August. Summed across the season and indexed to 2003/04 = 1.00, the 2025/26 side comes out at 1.36: about 36% more pressure.",
+    p1Body: "Each gameweek, every rival counts for more the closer it sits to Arsenal; rivals just behind count extra, since being chased presses harder than chasing; and later weeks count more than August. Summed across the season and indexed to 2003/04 = 1.00, the 2025/26 side comes out at 1.36: about 36% more pressure.",
     mathsLabel: "The maths",
     mathsBody:
       "Each rival's weekly weight is `exp(-|gap| / tau)`, peaking when it is level with Arsenal and fading as the gap grows. Rivals behind Arsenal are multiplied by `beta`. Each week is scaled by `k/38`, so late-season closeness counts more than August.",
@@ -106,11 +106,12 @@ export const content = {
     // Part 1 - squad stability (moved from Section B)
     stabTitle: "1. Squad stability",
     stabBody1: "A squad that has played together knows its movement and the manager's system; a rebuilt one must build that from scratch, which takes time. So we measure the upheaval three ways: players retained, joined, and departed.",
-    stabBody2: "The 2003/04 title squad was highly settled: **81.8%** carried over from the previous season, with only 4 new faces. The 2025/26 squad was far less so: **64.0%** carried over, with 9 new players. But the number of players tells you less than how important they were. When a player leaves, the club loses whatever they contributed on the pitch, and a regular leaves a bigger hole than a reserve. So we measure how much of last season's actual playing time walked out the door. By that measure the two eras are close: the players who left before 2003/04 had covered about **17%** of the previous season's minutes, and before 2025/26 about **16%**. Roughly the same size of hole, even though 2025/26 changed far more players.",
+    stabBody2: "The 2003/04 title squad was familiar: **81.8%** carried over from the previous season, with only 4 new faces. The 2025/26 squad was far less so: **64.0%** carried over, with 9 new players. A regular also leaves a bigger hole than a reserve. So we measure how much of last season's actual playing time walked out the door. By that measure the two eras are actually close: the players who left before 2003/04 covered about **17%** of the previous season's minutes, and before 2025/26 about **16%**.",
+    stabCoda: "Roughly the same size of hole, even though 2025/26 changed far more players.",
     stabLimitation:
       "Squad depth and positional cover matter too, but reliable position-by-position data does not exist for 2003/04, and a measure for only one era would not make a fair comparison.",
     stabReading:
-      "Both eras lost a similar share of their core; what set 2025/26 apart was integrating more new players, not a bigger loss of proven quality.",
+      "Both eras lost a similar share of familiar playing time, even though 2025/26 had more player changes.",
 
     // Part 2 - squad age
     ageTitle: "2. Squad age, weighted by minutes played",
@@ -121,11 +122,11 @@ export const content = {
 
     // Demoted, collapsible exploration - the fixture calendar
     calHeader:
-      "We also explored the fixture calendar. It turned out not to move the picture, so it sits here rather than above.",
+      "We also explored fixture calendar, but was less relevant in this.",
     calBody:
       "The 2025/26 calendar was heavier and more compressed: 63 games to the Invincibles' 59, and 30 on three days' rest or fewer against 19, driven mainly by the larger modern Champions League. The question was whether that cost points. It did not visibly. Points per game held on short rest for both sides (2.42 for 2025/26 and 2.40 for 2003/04, against season averages of 2.24 and 2.37), and with only 10 to 12 short-rest league games each the sample is too small to be decisive. So the calendar was heavier, but there is no clear points cost, and the report does not lean on it.",
     timelineTitle: "The season, match by match",
-    timelineSub: "Each tick is a competitive game, Aug to May. Short-rest games are highlighted; shaded bands mark congested stretches, so the December and modern January/February bunching is visible.",
+    timelineSub: "Each tick is a competitive game, Aug to May. Short-rest games are highlighted; shaded bands mark congested stretches, so the December and modern January/February bunching is visible. Hover any tick for the opponent, date and rest (league games; cup and European fixtures show the competition only).",
     calGpsLimitation:
       "Distance, sprints, GPS and recovery data have no 2003/04 equivalent, so none is compared here rather than invented.",
 
@@ -138,9 +139,9 @@ export const content = {
     lead: "Sections B and C measured the two forces separately; this section combines them into one difficulty score per era. Each of the three dimensions is scaled across the two seasons, then averaged using weights you set: title-race pressure (external), plus squad departures and fixture load (internal).",
     synthTitle: "Building the difficulty score",
     weightIntro:
-      "There is no single right way to weigh three dimensions, so the weighting is yours. The default leans on pressure and departures and weights short-rest low, since its effect on points was inconclusive. Move the sliders to see the answer shift.",
+      "The default leans on pressure and departures and weights short-rest low. Move the slider to see how different weights model the difficulty score.",
     weightNote:
-      "The score is coarse by design; read the direction, not the decimals: pressure and congestion lean 2025/26, departures lean slightly to 2003/04, and which matters most is the one call the data cannot make for you.",
+      "The score is coarse by design; read the direction, not the decimals: pressure and congestion lean 2025/26, departures lean slightly to 2003/04.",
     handoff:
       "So the model, weighing evenly-ish, gives 2025/26 the harder task, narrowly. Section E weighs it as a person would. ↓",
   },
@@ -165,7 +166,7 @@ export const content = {
     overPerfNote:
       "Separately, and not a difficulty measure: Arsenal beat the model by +20.6 in 2003/04 and +15.8 in 2025/26, how well it did, not how hard the task was.",
     e2Title: "What the default weighting concludes",
-    e2Body: "Under the default weighting, the model gives 2025/26 the harder task, but narrowly: 0.55 to 0.45. The eras differ sharply on one dimension, title-race pressure, where 2025/26 faced about 36% more. But difficulty here is the average of three dimensions, and on the other two the eras are close: departures slightly favour 2003/04, and the short-rest calendar is weighted down as inconclusive. So a large gap on one dimension averages into a small gap overall. The combined verdict is narrow not because the seasons were alike, but because their differences point in different directions.",
+    e2Body: "Under the default weighting, the model gave the 2025/26 season a higher difficulty score, but only narrowly: 0.55 to 0.45. The eras differ sharply on one dimension, title-race pressure, where 2025/26 faced about 36% more. But on the other two metrics, the eras are close: departures slightly favour 2003/04, and the short-rest calendar is weighted down as inconclusive.",
     e3Title: "The verdict, and it is a view",
     e3: [
       "Here I step in with a view. The model puts 2025/26 narrowly ahead. I do not. Going unbeaten across 38 games is not one dimension to be averaged in; it is a different category of hard. It allows no margin, one poor afternoon ends it, and no side has done it since. By the weighting I find most convincing, that makes 2003/04 the harder task.",

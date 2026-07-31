@@ -61,7 +61,7 @@ def run() -> dict:
 
     # --- circumstances (B), physical (C), congestion (D), synthesis -------
     circ_payload = circumstances.build()
-    phys_payload = physical.build(players_tbl)
+    phys_payload = physical.build(players_tbl, matches)
     cong_payload = congestion.build(matches)
     synth_payload = synthesis.build(model_by_season, circ_payload)
     synth_d_payload = synthesis_d.build(circ_payload, phys_payload)

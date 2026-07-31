@@ -337,355 +337,473 @@
             "date": "2003-08-10",
             "competition": "Community Shield",
             "rest_days": null,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-08-16",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Everton",
+            "venue": "H"
           },
           {
             "date": "2003-08-24",
             "competition": "Premier League",
             "rest_days": 8,
-            "short": false
+            "short": false,
+            "opponent": "Middlesbrough",
+            "venue": "A"
           },
           {
             "date": "2003-08-27",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Aston Villa",
+            "venue": "H"
           },
           {
             "date": "2003-08-31",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Manchester City",
+            "venue": "A"
           },
           {
             "date": "2003-09-13",
             "competition": "Premier League",
             "rest_days": 13,
-            "short": false
+            "short": false,
+            "opponent": "Portsmouth",
+            "venue": "H"
           },
           {
             "date": "2003-09-17",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-09-21",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Manchester United",
+            "venue": "A"
           },
           {
             "date": "2003-09-26",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Newcastle United",
+            "venue": "H"
           },
           {
             "date": "2003-09-30",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-10-04",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Liverpool",
+            "venue": "A"
           },
           {
             "date": "2003-10-18",
             "competition": "Premier League",
             "rest_days": 14,
-            "short": false
+            "short": false,
+            "opponent": "Chelsea",
+            "venue": "H"
           },
           {
             "date": "2003-10-21",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-10-26",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Charlton Athletic",
+            "venue": "A"
           },
           {
             "date": "2003-10-28",
             "competition": "League Cup",
             "rest_days": 2,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-11-01",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Leeds United",
+            "venue": "A"
           },
           {
             "date": "2003-11-05",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-11-08",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Tottenham Hotspur",
+            "venue": "H"
           },
           {
             "date": "2003-11-22",
             "competition": "Premier League",
             "rest_days": 14,
-            "short": false
+            "short": false,
+            "opponent": "Birmingham City",
+            "venue": "A"
           },
           {
             "date": "2003-11-25",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-11-30",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Fulham",
+            "venue": "H"
           },
           {
             "date": "2003-12-02",
             "competition": "League Cup",
             "rest_days": 2,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-12-06",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Leicester City",
+            "venue": "A"
           },
           {
             "date": "2003-12-10",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-12-14",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Blackburn Rovers",
+            "venue": "H"
           },
           {
             "date": "2003-12-16",
             "competition": "League Cup",
             "rest_days": 2,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2003-12-20",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Bolton Wanderers",
+            "venue": "A"
           },
           {
             "date": "2003-12-26",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Wolverhampton Wanderers",
+            "venue": "H"
           },
           {
             "date": "2003-12-29",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Southampton",
+            "venue": "A"
           },
           {
             "date": "2004-01-04",
             "competition": "FA Cup",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-01-07",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Everton",
+            "venue": "A"
           },
           {
             "date": "2004-01-10",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Middlesbrough",
+            "venue": "H"
           },
           {
             "date": "2004-01-18",
             "competition": "Premier League",
             "rest_days": 8,
-            "short": false
+            "short": false,
+            "opponent": "Aston Villa",
+            "venue": "A"
           },
           {
             "date": "2004-01-20",
             "competition": "League Cup",
             "rest_days": 2,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-01-24",
             "competition": "FA Cup",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-02-01",
             "competition": "Premier League",
             "rest_days": 8,
-            "short": false
+            "short": false,
+            "opponent": "Manchester City",
+            "venue": "H"
           },
           {
             "date": "2004-02-03",
             "competition": "League Cup",
             "rest_days": 2,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-02-07",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Wolverhampton Wanderers",
+            "venue": "A"
           },
           {
             "date": "2004-02-10",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Southampton",
+            "venue": "H"
           },
           {
             "date": "2004-02-15",
             "competition": "FA Cup",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-02-21",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Chelsea",
+            "venue": "A"
           },
           {
             "date": "2004-02-24",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-02-28",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Charlton Athletic",
+            "venue": "H"
           },
           {
             "date": "2004-03-06",
             "competition": "FA Cup",
             "rest_days": 7,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-03-10",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-03-13",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Blackburn Rovers",
+            "venue": "A"
           },
           {
             "date": "2004-03-20",
             "competition": "Premier League",
             "rest_days": 7,
-            "short": false
+            "short": false,
+            "opponent": "Bolton Wanderers",
+            "venue": "H"
           },
           {
             "date": "2004-03-24",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-03-28",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Manchester United",
+            "venue": "H"
           },
           {
             "date": "2004-04-03",
             "competition": "FA Cup",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-04-06",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2004-04-09",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Liverpool",
+            "venue": "H"
           },
           {
             "date": "2004-04-11",
             "competition": "Premier League",
             "rest_days": 2,
-            "short": true
+            "short": true,
+            "opponent": "Newcastle United",
+            "venue": "A"
           },
           {
             "date": "2004-04-16",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Leeds United",
+            "venue": "H"
           },
           {
             "date": "2004-04-25",
             "competition": "Premier League",
             "rest_days": 9,
-            "short": false
+            "short": false,
+            "opponent": "Tottenham Hotspur",
+            "venue": "A"
           },
           {
             "date": "2004-05-01",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Birmingham City",
+            "venue": "H"
           },
           {
             "date": "2004-05-04",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Portsmouth",
+            "venue": "A"
           },
           {
             "date": "2004-05-09",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Fulham",
+            "venue": "A"
           },
           {
             "date": "2004-05-15",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Leicester City",
+            "venue": "H"
           }
         ]
       },
@@ -766,379 +884,505 @@
             "date": "2025-08-17",
             "competition": "Premier League",
             "rest_days": null,
-            "short": false
+            "short": false,
+            "opponent": "Manchester United",
+            "venue": "A"
           },
           {
             "date": "2025-08-23",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Leeds United",
+            "venue": "H"
           },
           {
             "date": "2025-08-31",
             "competition": "Premier League",
             "rest_days": 8,
-            "short": false
+            "short": false,
+            "opponent": "Liverpool",
+            "venue": "A"
           },
           {
             "date": "2025-09-13",
             "competition": "Premier League",
             "rest_days": 13,
-            "short": false
+            "short": false,
+            "opponent": "Nottingham Forest",
+            "venue": "H"
           },
           {
             "date": "2025-09-16",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-09-21",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Manchester City",
+            "venue": "H"
           },
           {
             "date": "2025-09-24",
             "competition": "League Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-09-28",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Newcastle United",
+            "venue": "A"
           },
           {
             "date": "2025-10-01",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-10-04",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "West Ham United",
+            "venue": "H"
           },
           {
             "date": "2025-10-18",
             "competition": "Premier League",
             "rest_days": 14,
-            "short": false
+            "short": false,
+            "opponent": "Fulham",
+            "venue": "A"
           },
           {
             "date": "2025-10-21",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-10-26",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Crystal Palace",
+            "venue": "H"
           },
           {
             "date": "2025-10-29",
             "competition": "League Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-11-01",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Burnley",
+            "venue": "A"
           },
           {
             "date": "2025-11-04",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-11-08",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Sunderland",
+            "venue": "A"
           },
           {
             "date": "2025-11-23",
             "competition": "Premier League",
             "rest_days": 15,
-            "short": false
+            "short": false,
+            "opponent": "Tottenham Hotspur",
+            "venue": "H"
           },
           {
             "date": "2025-11-26",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-11-30",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Chelsea",
+            "venue": "A"
           },
           {
             "date": "2025-12-03",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Brentford",
+            "venue": "H"
           },
           {
             "date": "2025-12-06",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Aston Villa",
+            "venue": "A"
           },
           {
             "date": "2025-12-10",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-12-13",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Wolverhampton Wanderers",
+            "venue": "H"
           },
           {
             "date": "2025-12-20",
             "competition": "Premier League",
             "rest_days": 7,
-            "short": false
+            "short": false,
+            "opponent": "Everton",
+            "venue": "A"
           },
           {
             "date": "2025-12-23",
             "competition": "League Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2025-12-27",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Brighton & Hove Albion",
+            "venue": "H"
           },
           {
             "date": "2025-12-30",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Aston Villa",
+            "venue": "H"
           },
           {
             "date": "2026-01-03",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Bournemouth",
+            "venue": "A"
           },
           {
             "date": "2026-01-08",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Liverpool",
+            "venue": "H"
           },
           {
             "date": "2026-01-11",
             "competition": "FA Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-01-14",
             "competition": "League Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-01-17",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Nottingham Forest",
+            "venue": "A"
           },
           {
             "date": "2026-01-20",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-01-25",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Manchester United",
+            "venue": "H"
           },
           {
             "date": "2026-01-28",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-01-31",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Leeds United",
+            "venue": "A"
           },
           {
             "date": "2026-02-03",
             "competition": "League Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-02-07",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Sunderland",
+            "venue": "H"
           },
           {
             "date": "2026-02-12",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "Brentford",
+            "venue": "A"
           },
           {
             "date": "2026-02-15",
             "competition": "FA Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-02-18",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Wolverhampton Wanderers",
+            "venue": "A"
           },
           {
             "date": "2026-02-22",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Tottenham Hotspur",
+            "venue": "A"
           },
           {
             "date": "2026-03-01",
             "competition": "Premier League",
             "rest_days": 7,
-            "short": false
+            "short": false,
+            "opponent": "Chelsea",
+            "venue": "H"
           },
           {
             "date": "2026-03-04",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Brighton & Hove Albion",
+            "venue": "A"
           },
           {
             "date": "2026-03-07",
             "competition": "FA Cup",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-03-11",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-03-14",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Everton",
+            "venue": "H"
           },
           {
             "date": "2026-03-17",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-03-22",
             "competition": "League Cup",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-04-04",
             "competition": "FA Cup",
             "rest_days": 13,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-04-07",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-04-11",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Bournemouth",
+            "venue": "H"
           },
           {
             "date": "2026-04-15",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-04-19",
             "competition": "Premier League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": "Manchester City",
+            "venue": "A"
           },
           {
             "date": "2026-04-25",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Newcastle United",
+            "venue": "H"
           },
           {
             "date": "2026-04-29",
             "competition": "Champions League",
             "rest_days": 4,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-05-02",
             "competition": "Premier League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": "Fulham",
+            "venue": "H"
           },
           {
             "date": "2026-05-05",
             "competition": "Champions League",
             "rest_days": 3,
-            "short": true
+            "short": true,
+            "opponent": null,
+            "venue": null
           },
           {
             "date": "2026-05-10",
             "competition": "Premier League",
             "rest_days": 5,
-            "short": false
+            "short": false,
+            "opponent": "West Ham United",
+            "venue": "A"
           },
           {
             "date": "2026-05-18",
             "competition": "Premier League",
             "rest_days": 8,
-            "short": false
+            "short": false,
+            "opponent": "Burnley",
+            "venue": "H"
           },
           {
             "date": "2026-05-24",
             "competition": "Premier League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": "Crystal Palace",
+            "venue": "A"
           },
           {
             "date": "2026-05-30",
             "competition": "Champions League",
             "rest_days": 6,
-            "short": false
+            "short": false,
+            "opponent": null,
+            "venue": null
           }
         ]
       }

@@ -57,6 +57,7 @@ export function SectionC({ c, p }: { c: Circumstances; p: Physical }) {
           <p>
             <Rich>{t.stabBody2}</Rich>
           </p>
+          <p>{t.stabCoda}</p>
           <SquadStabilityChart bySeason={stab} />
           <LimitationNote>{t.stabLimitation}</LimitationNote>
           <Reading>{t.stabReading}</Reading>

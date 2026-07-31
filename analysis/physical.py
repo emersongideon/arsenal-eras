@@ -88,22 +88,30 @@ def _rest_bucket(gap: int) -> str:
     return "8+ days"
 
 
-def fixture_congestion() -> dict:
+def fixture_congestion(matches_frame: pd.DataFrame) -> dict:
     """Games-per-month and rest-gaps across ALL competitions, from real dates.
 
     The section is about COMPRESSION, so alongside the raw totals we export the
     rest-gap distribution (how many games followed a short vs long rest) and the
     full per-match list, both driven by the gap in days between consecutive
     competitive matches. The season opener has no preceding match, so it carries
-    no rest gap and is excluded from the buckets."""
+    no rest gap and is excluded from the buckets.
+
+    Opponent and home/away are joined in by date for the 38 LEAGUE games (the only
+    ones with per-match detail in the source); cup and European fixtures exist only
+    as (date, competition), so their opponent is left null rather than invented."""
     out = {"metric": "fixture_congestion", "note": TRACKING_NOTE, "by_season": {}}
     for s in SEASONS:
         fixtures = sorted(sources.FIXTURES[s])  # (ISO date, competition), chronological
         dates = pd.to_datetime([d for d, _ in fixtures])
         gaps = dates.to_series().diff().dt.days.dropna().astype(int).to_numpy()
 
+        # date -> (opponent, venue) for this season's league games
+        sub = matches_frame[matches_frame["season"] == s]
+        league = {str(r.date)[:10]: (r.opponent, r.venue) for r in sub.itertuples()}
+
         # Per-match rows for the timeline; rest_days = gap to the previous match.
-        matches = []
+        match_rows = []
         buckets = dict.fromkeys(REST_BUCKET_ORDER, 0)
         prev = None
         for d, comp in fixtures:
@@ -112,8 +120,16 @@ def fixture_congestion() -> dict:
             short = rest is not None and rest <= 3
             if rest is not None:
                 buckets[_rest_bucket(rest)] += 1
-            matches.append(
-                {"date": d, "competition": comp, "rest_days": rest, "short": short}
+            opp, venue = league.get(d, (None, None))
+            match_rows.append(
+                {
+                    "date": d,
+                    "competition": comp,
+                    "rest_days": rest,
+                    "short": short,
+                    "opponent": opp,
+                    "venue": venue,
+                }
             )
             prev = cur
 
@@ -138,15 +154,15 @@ def fixture_congestion() -> dict:
             # quick-turnaround games: <=3 clear days between matches
             "short_rest_count": int((gaps <= 3).sum()),
             "rest_buckets": [{"label": b, "count": buckets[b]} for b in REST_BUCKET_ORDER],
-            "matches": matches,
+            "matches": match_rows,
         }
     return out
 
 
-def build(players: pd.DataFrame) -> dict:
+def build(players: pd.DataFrame, matches: pd.DataFrame) -> dict:
     return {
         "squad_age": squad_age(players),
-        "fixture_congestion": fixture_congestion(),
+        "fixture_congestion": fixture_congestion(matches),
         "tracking_note": TRACKING_NOTE,
         "sources": {
             "fixtures": [sources.SOURCES["arsenal_2003_04"], sources.SOURCES["arsenal_2025_26"]],

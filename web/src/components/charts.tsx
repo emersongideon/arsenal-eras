@@ -1181,6 +1181,12 @@ function congestedBands(matches: TLMatch[]): { start: number; end: number }[] {
 /** Visual B: season congestion timeline. One strip per season, Aug->May, every
  *  competitive match a tick placed by date; short-rest games (<=3 days) in a hot
  *  colour so clusters (December, modern European weeks) jump out. */
+const TL_MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const tlDate = (iso: string) => {
+  const [y, m, d] = iso.split("-");
+  return `${Number(d)} ${TL_MON[Number(m) - 1]} ${y}`;
+};
+
 export function CongestionTimeline({
   bySeason,
 }: {
@@ -1188,8 +1194,10 @@ export function CongestionTimeline({
 }) {
   const seasons = Object.keys(bySeason) as Season[];
   const [hover, setHover] = useState<{
-    x: number;
-    text: string;
+    left: number;
+    season: Season;
+    title: string;
+    sub: string;
     short: boolean;
   } | null>(null);
 
@@ -1236,22 +1244,34 @@ export function CongestionTimeline({
                 {(bySeason[s].matches as TLMatch[]).map((m, i) => {
                   const left = axisFrac(m.date) * 100;
                   const rest =
-                    m.rest_days === null ? "season opener" : `${m.rest_days} days rest`;
-                  const text = `${m.competition} · ${m.date} · ${rest}`;
+                    m.rest_days === null ? "season opener" : `${m.rest_days} days' rest`;
+                  const title = m.opponent ? `${m.opponent} (${m.venue})` : m.competition;
+                  const sub = m.opponent
+                    ? `${m.competition} · ${tlDate(m.date)} · ${rest}`
+                    : `${tlDate(m.date)} · ${rest}`;
                   return (
                     <button
                       type="button"
                       key={`${m.date}-${i}`}
                       className={`tl-tick ${m.short ? "short" : ""}`}
                       style={{ left: `${left}%` }}
-                      aria-label={text}
-                      onMouseEnter={() => setHover({ x: left, text, short: m.short })}
+                      aria-label={`${title}. ${sub}`}
+                      onMouseEnter={() => setHover({ left, season: s, title, sub, short: m.short })}
                       onMouseLeave={() => setHover(null)}
-                      onFocus={() => setHover({ x: left, text, short: m.short })}
+                      onFocus={() => setHover({ left, season: s, title, sub, short: m.short })}
                       onBlur={() => setHover(null)}
                     />
                   );
                 })}
+                {hover && hover.season === s && (
+                  <div
+                    className={`tl-tip ${hover.short ? "short" : ""}`}
+                    style={{ left: `${hover.left}%` }}
+                  >
+                    <b>{hover.title}</b>
+                    <span>{hover.sub}</span>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -1266,14 +1286,6 @@ export function CongestionTimeline({
               </span>
             ))}
           </div>
-          {hover && (
-            <div
-              className={`tl-tip ${hover.short ? "short" : ""}`}
-              style={{ left: `${hover.x}%` }}
-            >
-              {hover.text}
-            </div>
-          )}
         </div>
       </div>
     </div>
