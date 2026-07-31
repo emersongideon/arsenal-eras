@@ -661,11 +661,11 @@ a {
   padding: 2px 7px;
   border-radius: 5px;
 }
-.raw-bucket.outside {
+.raw-bucket.external {
   color: #2f5d8a; /* matches the Section A framework diagram */
   background: #eaf1f8;
 }
-.raw-bucket.inside {
+.raw-bucket.internal {
   color: #8a5a2b;
   background: #f6efe6;
 }

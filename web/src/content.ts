@@ -69,22 +69,22 @@ export const content = {
     lead: "The Invincibles finished on **90 points unbeaten**, plus 47 goal difference, 2.37 points per game. The 2025/26 team won the title on **85 points**, 26 wins and 5 losses, plus 44, 2.24 per game. By numbers alone, 2003/04 is the more dominant season.",
     bridge:
       "The table settles which season was more dominant: 2003/04, on every measure. It does not settle which was harder to win, and that is a different question with no official answer. This report builds one, from two forces measured in the sections that follow and combined at the end.",
-    forceOutsideTag: "Outside",
+    forceOutsideTag: "External",
     forceOutsideName: "The field",
     forceOutsideDesc:
       "A stronger, closer field of rivals. The more the chasing pack pressed, the harder the title was to win.",
-    forceInsideTag: "Inside",
+    forceInsideTag: "Internal",
     forceInsideName: "The squad and body",
     forceInsideDesc:
       "A less settled, more stretched squad: new signings to integrate, a younger or older core, a heavier calendar, all making it harder to carry.",
     forceOutcome: "How hard the title was to win",
-    forcesHandoff: "Start on the outside: the field. ↓",
+    forcesHandoff: "Start with the external: the field. ↓",
   },
 
   b: {
     eyebrow: "Section B · The field",
     heading: "Resistance map",
-    lead: "The first force is outside Arsenal: how strong the rest of the league was. A points total is harder to reach in a strong league, so a title is only as good as the field it beat. We measure that field as the pressure the chasing pack applied, week by week.",
+    lead: "The first force is external: how strong the rest of the league was. A points total is harder to reach in a strong league, so a title is only as good as the field it beat. We measure that field as the pressure the chasing pack applied, week by week.",
     p1Title: "Title-race pressure index",
     p1Body: "Pressure is measured every week, not from the final table. Each gameweek, every rival counts for more the closer it sits to Arsenal; rivals just behind count extra, since being chased presses harder than chasing; and later weeks count more than August. Summed across the season and indexed to 2003/04 = 1.00, the 2025/26 side comes out at 1.36: about 36% more pressure.",
     mathsLabel: "The maths",
@@ -135,7 +135,7 @@ export const content = {
   d: {
     eyebrow: "Section D · The synthesis",
     heading: "Putting the two forces together",
-    lead: "Sections B and C measured the two forces separately; this section combines them into one difficulty score per era. Each of the three dimensions is scaled across the two seasons, then averaged using weights you set: title-race pressure from outside, and squad departures and fixture load from inside.",
+    lead: "Sections B and C measured the two forces separately; this section combines them into one difficulty score per era. Each of the three dimensions is scaled across the two seasons, then averaged using weights you set: title-race pressure (external), plus squad departures and fixture load (internal).",
     synthTitle: "Building the difficulty score",
     weightIntro:
       "There is no single right way to weigh three dimensions, so the weighting is yours. The default leans on pressure and departures and weights short-rest low, since its effect on points was inconclusive. Move the sliders to see the answer shift.",
@@ -175,7 +175,7 @@ export const content = {
     e4Bullets: [
       "Run the pressure and squad-stability measures across every past title race, for a season-difficulty baseline any campaign can be judged against.",
       "Point the squad-stability measure forward, to estimate what a summer of heavy signings might cost in points before a new group settles.",
-      "Widen the inside dimensions with richer data: genuine squad depth, positional cover, and physical tracking, none of which exist cleanly for older seasons yet.",
+      "Widen the internal dimensions with richer data: genuine squad depth, positional cover, and physical tracking, none of which exist cleanly for older seasons yet.",
       "Fold in factors the model cannot yet see, such as opponent-adjusted strength and match state, as data allows.",
     ],
   },

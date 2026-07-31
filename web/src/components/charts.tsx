@@ -1527,12 +1527,12 @@ export function ArsenalCombinedChart({
   const metrics: {
     key: "field" | "departures" | "short_rest";
     label: string;
-    bucket: "outside" | "inside";
+    bucket: "external" | "internal";
     fmt: (v: number) => string;
   }[] = [
-    { key: "field", label: "Title-race pressure (index)", bucket: "outside", fmt: (v) => v.toFixed(2) },
-    { key: "departures", label: "Minutes-weighted departures", bucket: "inside", fmt: (v) => `${v.toFixed(1)}%` },
-    { key: "short_rest", label: "Short-rest share of games", bucket: "inside", fmt: (v) => `${v.toFixed(1)}%` },
+    { key: "field", label: "Title-race pressure (index)", bucket: "external", fmt: (v) => v.toFixed(2) },
+    { key: "departures", label: "Minutes-weighted departures", bucket: "internal", fmt: (v) => `${v.toFixed(1)}%` },
+    { key: "short_rest", label: "Short-rest share of games", bucket: "internal", fmt: (v) => `${v.toFixed(1)}%` },
   ];
   return (
     <div className="combined-chart">
@@ -1545,7 +1545,7 @@ export function ArsenalCombinedChart({
           return (
             <div className="raw-metric" key={m.key}>
               <span className={`raw-bucket ${m.bucket}`}>
-                {m.bucket === "outside" ? "Outside · Section B" : "Inside · Section C"}
+                {m.bucket === "external" ? "External · Section B" : "Internal · Section C"}
               </span>
               <p className="raw-metric-label">{m.label}</p>
               {(
